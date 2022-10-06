@@ -20,7 +20,7 @@ export default function handler(req, res) {
   });
 
   if (category == "all") {
-    res.status(200).json({ catalogs });
+    res.status(200).json(catalogs);
   }
 
   res.status(200).json({ error: "Product not found" });
