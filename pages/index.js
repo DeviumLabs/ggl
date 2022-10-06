@@ -16,6 +16,9 @@ import ReactPlayer from "react-player";
 //icons
 import { AiOutlineCloudDownload } from "react-icons/ai";
 
+//api
+import api from "../services/api";
+
 const banners = [
   <div className="tw-flex tw-items-center tw-justify-around">
     <div className="tw-flex tw-flex-col">
@@ -64,7 +67,19 @@ const videos = [
   </div>,
 ];
 
-export default function Home() {
+export async function getStaticProps() {
+  const res = await api.get("/category");
+
+  return {
+    props: {
+      categories: res.data,
+    },
+    revalidate: 5,
+  };
+}
+
+export default function Home({ categories }) {
+  console.log(categories);
   return (
     <div className="">
       <Head>
