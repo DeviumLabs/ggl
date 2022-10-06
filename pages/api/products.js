@@ -13,6 +13,12 @@ export default function handler(req, res) {
     if (c.slug === category) {
       c.products.map((p) => {
         if (p.slug === product) {
+          res.setHeader("Access-Control-Allow-Origin", "*");
+          res.setHeader(
+            "Access-Control-Allow-Headers",
+            "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+          );
+          res.setHeader("Access-Control-Allow-Methods", "GET");
           res.status(200).json(p);
         }
       });
@@ -20,6 +26,12 @@ export default function handler(req, res) {
   });
 
   if (category == "all") {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+    );
+    res.setHeader("Access-Control-Allow-Methods", "GET");
     res.status(200).json(catalogs);
   }
 
