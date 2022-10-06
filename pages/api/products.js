@@ -14,7 +14,6 @@ export default function handler(req, res) {
       c.products.map((p) => {
         if (p.slug === product) {
           res.status(200).json(p);
-          find_product = 1;
         }
       });
     }
