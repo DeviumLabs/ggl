@@ -13,29 +13,17 @@ export default function handler(req, res) {
     if (c.slug === category) {
       c.products.map((p) => {
         if (p.slug === product) {
-          res.setHeader("Access-Control-Allow-Origin", "*");
-          res.setHeader(
-            "Access-Control-Allow-Headers",
-            "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-          );
-          res.setHeader("Access-Control-Allow-Methods", "GET");
-          res.status(200).json(p);
+          return res.status(200).json(p);
         }
       });
     }
   });
 
   if (category == "all") {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader(
-      "Access-Control-Allow-Headers",
-      "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-    );
-    res.setHeader("Access-Control-Allow-Methods", "GET");
-    res.status(200).json(catalogs);
+    return res.status(200).json(catalogs);
   }
 
-  res.status(200).json({ error: "Product not found" });
+  return res.status(200).json({ error: "Product not found" });
 }
 
 const catalogs = [
