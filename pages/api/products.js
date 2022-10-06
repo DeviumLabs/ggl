@@ -2,6 +2,13 @@ export default function handler(req, res) {
   const category = req.query.category;
   const product = req.query.product;
 
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  res.setHeader("Access-Control-Allow-Methods", "GET");
+
   catalogs.map((c) => {
     if (c.slug === category) {
       c.products.map((p) => {
@@ -16,13 +23,6 @@ export default function handler(req, res) {
   if (category == "all") {
     res.status(200).json({ catalogs });
   }
-
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  );
-  res.setHeader("Access-Control-Allow-Methods", "GET");
 
   res.status(200).json({ error: "Product not found" });
 }
