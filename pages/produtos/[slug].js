@@ -1,5 +1,5 @@
+import React, { useState } from "react";
 import api from "../../services/api";
-
 import Head from "next/head";
 import Image from "next/image";
 
@@ -14,7 +14,7 @@ export async function getServerSideProps(context) {
   const slug = context.query.product;
 
   const res = await api.get(`/products?category=${category}&product=${slug}`);
-  const categories = await api.get(`/category`);
+  const categories = await api.get(`/category?category=${category}`);
 
   return {
     props: {
@@ -26,6 +26,12 @@ export async function getServerSideProps(context) {
 
 export default function SingleProduct({ product, categories }) {
   console.log(product);
+  const [principalImage, setPrincipalImage] = useState(product.images[0]);
+  const [titlePrincipal, setTitlePrincipal] = useState(product.models[0].name);
+
+  // function handlePrincipalImage(image) {
+  //   setPrincipalImage(image);
+  // }
 
   if (product.error) {
     return (
@@ -54,20 +60,59 @@ export default function SingleProduct({ product, categories }) {
         >
           <div className="tw-w-[50%] ">
             <div id="principal-image">
-              <img src={product.images[0]} />
+              <img
+                src={principalImage}
+                className="tw-w-[450px] tw-h-[430px] tw-object-cover"
+              />
+              <div className="tw-flex  tw-mt-[20px]">
+                {product.images.length > 1
+                  ? product.images.map((image, i) => (
+                      <img
+                        src={image}
+                        key={i}
+                        className="tw-w-[80px] tw-h-[80px] tw-object-cover tw-mr-[10px] hover:tw-scale-[1.1] tw-cursor-pointer"
+                        onClick={() => {
+                          setPrincipalImage(image);
+                          if (!!product.models[i]) {
+                            setTitlePrincipal(product.models[i].name);
+                          }
+                        }}
+                      />
+                    ))
+                  : ""}
+              </div>
             </div>
             <div id="carousel-images"></div>
           </div>
           <div className="tw-w-[50%]">
-            <h1 className="tw-text-[38px]">{product.name}</h1>
+            <h1 className="tw-text-[38px]">{titlePrincipal}</h1>
             <p>{product.description}</p>
             <h1 className="tw-text-[32px] tw-mt-[50px]">Medidas</h1>
             <table className="tw-font-light tw-w-full">
-              <tr className="">
-                <th className="tw-w-[50%] tw-border-[1px] tw-border-black tw-py-[10px] tw-px-[15px] tw-text-start tw-font-light">
+              <tbody>
+                <tr className="tw-w-full">
+                  <td>Modelo</td>
+                  <td>Altura</td>
+                  <td>Largura</td>
+                  <td>Profundidade</td>
+                </tr>
+                {product.models.map((model, i) => (
+                  <tr>
+                    <td>{model.name}</td>
+                    <td>{model.scale.height}</td>
+                    <td>{model.scale.width}</td>
+                    <td>{model.scale.depth}</td>
+                  </tr>
+                ))}
+              </tbody>
+              {/* <tr className="tw-w-full">
+                <th className="tw-w-[33%] tw-border-[1px] tw-border-black tw-py-[10px] tw-px-[15px] tw-text-start tw-font-light">
                   Altura
                 </th>
-                <th className="tw-w-[50%] tw-border-[1px] tw-border-black tw-py-[10px] tw-px-[15px] tw-text-start tw-font-light">
+                <th className="tw-w-[33%] tw-border-[1px] tw-border-black tw-py-[10px] tw-px-[15px] tw-text-start tw-font-light">
+                  Altura
+                </th>
+                <th className="tw-w-[33%] tw-border-[1px] tw-border-black tw-py-[10px] tw-px-[15px] tw-text-start tw-font-light">
                   {product.scale.height}
                 </th>
               </tr>
@@ -83,17 +128,18 @@ export default function SingleProduct({ product, categories }) {
                 <th className="tw-w-[50%] tw-border-[1px] tw-border-black tw-py-[10px] tw-px-[15px] tw-text-start tw-font-light">
                   Profundidade
                 </th>
+
                 <th className="tw-w-[50%] tw-border-[1px] tw-border-black tw-py-[10px] tw-px-[15px] tw-text-start tw-font-light">
                   {product.scale.depth}
                 </th>
-              </tr>
-              <button
-                type="submit"
-                className="tw-bg-blue tw-mt-[30px] tw-text-white tw-w-[240px] tw-h-[50px] hover:tw-bg-white hover:tw-border-blue hover:tw-border-[1px] hover:tw-text-blue tw-transition-300"
-              >
-                Fazer Orçamento
-              </button>
+              </tr> */}
             </table>
+            <button
+              type="submit"
+              className="tw-bg-blue tw-mt-[30px] tw-text-white tw-w-[240px] tw-h-[50px] hover:tw-bg-white hover:tw-border-blue hover:tw-border-[1px] hover:tw-text-blue tw-transition-300"
+            >
+              Fazer Orçamento
+            </button>
           </div>
         </section>
         <Contact />

@@ -10,7 +10,7 @@ import Contact from "../../components/contact";
 import Navbar from "../../components/navbar";
 
 export async function getStaticProps() {
-  const res = await api.get("/category");
+  const res = await api.get("/category?category=all");
 
   return {
     props: {
@@ -44,7 +44,7 @@ export default function Produtos({ categories }) {
           </div>
         </section>
         <section className="tw-px-[5%] tw-grid tw-grid-cols-3 tw-gap-y-[80px] tw-gap-x-[40px] tw-mt-[80px]">
-          {categories.categories.map((category, i) => (
+          {categories.categoryArray.map((category, i) => (
             <a
               key={i}
               href={`/produtos/${category.slug}?product=${category.products[0].slug}`}

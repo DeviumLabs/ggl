@@ -649,16 +649,28 @@ video {
   margin-left: 15%;
 }
 
+.tw-mr-\[10px\] {
+  margin-right: 10px;
+}
+
 .tw-mt-\[50px\] {
   margin-top: 50px;
 }
 
-.tw-mt-\[100px\] {
-  margin-top: 100px;
+.tw-mt-\[120px\] {
+  margin-top: 120px;
 }
 
 .tw-mb-\[10px\] {
   margin-bottom: 10px;
+}
+
+.tw-mt-\[80px\] {
+  margin-top: 80px;
+}
+
+.tw-mt-\[100px\] {
+  margin-top: 100px;
 }
 
 .tw-mb-\[6px\] {
@@ -689,14 +701,6 @@ video {
   margin-top: 5px;
 }
 
-.tw-mt-\[120px\] {
-  margin-top: 120px;
-}
-
-.tw-mt-\[80px\] {
-  margin-top: 80px;
-}
-
 .tw-flex {
   display: flex;
 }
@@ -709,16 +713,36 @@ video {
   height: 100vh;
 }
 
+.tw-h-\[460px\] {
+  height: 460px;
+}
+
+.tw-h-\[80px\] {
+  height: 80px;
+}
+
 .tw-h-\[50px\] {
   height: 50px;
+}
+
+.tw-h-\[300px\] {
+  height: 300px;
 }
 
 .tw-h-\[1px\] {
   height: 1px;
 }
 
-.tw-h-\[300px\] {
-  height: 300px;
+.tw-h-\[400px\] {
+  height: 400px;
+}
+
+.tw-h-\[450px\] {
+  height: 450px;
+}
+
+.tw-h-\[430px\] {
+  height: 430px;
 }
 
 .tw-w-\[300px\] {
@@ -749,8 +773,24 @@ video {
   width: 50%;
 }
 
+.tw-w-\[500px\] {
+  width: 500px;
+}
+
+.tw-w-\[80px\] {
+  width: 80px;
+}
+
+.tw-w-\[33\%\] {
+  width: 33%;
+}
+
 .tw-w-\[240px\] {
   width: 240px;
+}
+
+.tw-w-\[60\%\] {
+  width: 60%;
 }
 
 .tw-w-\[70\%\] {
@@ -777,8 +817,16 @@ video {
   width: 15%;
 }
 
-.tw-w-\[60\%\] {
-  width: 60%;
+.tw-w-\[450px\] {
+  width: 450px;
+}
+
+.tw-w-\[470px\] {
+  width: 470px;
+}
+
+.tw-cursor-pointer {
+  cursor: pointer;
 }
 
 .tw-grid-cols-3 {
@@ -807,28 +855,6 @@ video {
 
 .tw-gap-\[40px\] {
   gap: 40px;
-}
-
-.tw-gap-3 {
-  gap: 0.75rem;
-}
-
-.tw-gap-8 {
-  gap: 2rem;
-}
-
-.tw-gap-y-\[30px\] {
-  row-gap: 30px;
-}
-
-.tw-gap-x-\[60px\] {
-  -moz-column-gap: 60px;
-       column-gap: 60px;
-}
-
-.tw-gap-x-\[80px\] {
-  -moz-column-gap: 80px;
-       column-gap: 80px;
 }
 
 .tw-gap-y-\[80px\] {
@@ -979,16 +1005,16 @@ video {
   font-size: 32px;
 }
 
-.tw-text-\[14px\] {
-  font-size: 14px;
-}
-
 .tw-text-\[35px\] {
   font-size: 35px;
 }
 
 .tw-text-\[22px\] {
   font-size: 22px;
+}
+
+.tw-text-\[14px\] {
+  font-size: 14px;
 }
 
 .tw-font-light {
@@ -1087,6 +1113,22 @@ button{
 
 .alice-carousel__dots{
   display: none !important;
+}
+
+td{
+  border: 1px solid black;
+  width:25%;
+  padding: 5px 5px 5px 10px
+}
+
+img{
+  transition: all ease 0.5s;
+}
+
+.hover\:tw-scale-\[1\.1\]:hover {
+  --tw-scale-x: 1.1;
+  --tw-scale-y: 1.1;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
 .hover\:tw-border-\[1px\]:hover {

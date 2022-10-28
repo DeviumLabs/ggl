@@ -73,3 +73,13 @@ button{
  .alice-carousel__dots{
     display: none !important;
  }
+
+ td{
+    border: 1px solid black;
+    width:25%;
+    padding: 5px 5px 5px 10px
+ }
+
+ img{
+    transition: all ease 0.5s;
+ }
