@@ -6,7 +6,30 @@ export default function handler(req, res) {
   );
   res.setHeader("Access-Control-Allow-Methods", "GET");
 
-  res.status(200).json({ categories });
+  const category_selected = req.query.category;
+
+  let categoryArray = [];
+
+  categories.map((category) => {
+    if (category_selected == category.slug) {
+      categoryArray.push(category);
+    }
+  });
+  if (category_selected == "all") {
+    categoryArray = categories;
+  }
+  if (category_selected == "estante") {
+    categories.map((category) => {
+      if (
+        category.category == "estantes-convencionais" ||
+        category.category == "estantes-armazenagem"
+      ) {
+        categoryArray.push(category);
+      }
+    });
+  }
+
+  res.status(200).json({ categoryArray });
 }
 
 const categories = [
@@ -21,6 +44,18 @@ const categories = [
         name: "A402",
         slug: "a402",
       },
+      {
+        name: "Armário Celular",
+        slug: "armario-para-celular",
+      },
+      {
+        name: "Professor",
+        slug: "professor",
+      },
+      {
+        name: "Carrinho Notebook",
+        slug: "notebook",
+      },
     ],
   },
   {
@@ -33,6 +68,30 @@ const categories = [
       {
         name: "A-R4",
         slug: "a-r4",
+      },
+      {
+        name: "GAM-5",
+        slug: "gam-5",
+      },
+      {
+        name: "GAM-6",
+        slug: "gam-6",
+      },
+      {
+        name: "GAM-7",
+        slug: "gam-7",
+      },
+      {
+        name: "GAM-8",
+        slug: "gam-8",
+      },
+      {
+        name: "GAM-10",
+        slug: "gam-10",
+      },
+      {
+        name: "Arquivos Mapoteca",
+        slug: "mapoteca",
       },
     ],
   },
@@ -51,15 +110,66 @@ const categories = [
   },
 
   {
-    name: "Estantes",
+    name: "Estantes Convencionais",
     slug: "estantes",
-    image: "/assets/products/shelves/estante.jpeg",
+    category: "estantes-convencionais",
+    image: "/assets/products/shelves/pr30.jpeg",
     description:
       "Estantes com prateleiras livre para organização de objetos, arquivos, etc",
     products: [
       {
-        name: "EDE",
-        slug: "ede",
+        name: "Modelos PR",
+        slug: "pr",
+      },
+    ],
+  },
+  {
+    name: "Estantes Armazenagem",
+    slug: "estantes",
+    category: "estantes-armazenagem",
+    image: "/assets/products/shelves/encaixe.jpeg",
+    description:
+      "Estantes com prateleiras livre para organização de objetos, arquivos, etc",
+    products: [
+      {
+        name: "Modelos Armazenagem",
+        slug: "encaixe",
+      },
+    ],
+  },
+  {
+    name: "Biblioteca Encaixe",
+    slug: "estantes",
+    category: "biblioteca-encaixe",
+    image: "/assets/products/shelves/ese.jpeg",
+    description:
+      "Estantes com prateleiras livre para organização de objetos, arquivos, etc",
+    products: [
+      {
+        name: "Linha EDE",
+        slug: "linha-ede",
+      },
+      {
+        name: "Linha Estantes",
+        slug: "linha-estantes",
+      },
+      {
+        name: "Estantes Infantis",
+        slug: "linha-infantil",
+      },
+    ],
+  },
+  {
+    name: "Biblioteca Encaixe Coluna",
+    slug: "estantes",
+    category: "encaixe-coluna",
+    image: "/assets/products/shelves/ed10.jpeg",
+    description:
+      "Estantes com prateleiras livre para organização de objetos, arquivos, etc",
+    products: [
+      {
+        name: "Linha PR",
+        slug: "linha-pr",
       },
     ],
   },
@@ -70,8 +180,12 @@ const categories = [
     description: "Gondolas bem estruturadas e fortes para o seu varejo",
     products: [
       {
-        name: "Balcão",
-        slug: "balcao",
+        name: "Centro",
+        slug: "centro",
+      },
+      {
+        name: "Parede",
+        slug: "parede",
       },
     ],
   },
@@ -85,6 +199,18 @@ const categories = [
       {
         name: "GAL",
         slug: "gal",
+      },
+      {
+        name: "GRI",
+        slug: "gri",
+      },
+      {
+        name: "GRS 2-8",
+        slug: "grs2-8",
+      },
+      {
+        name: "GRS 4/2 - 20",
+        slug: "grs42-8",
       },
     ],
   },
