@@ -68,7 +68,7 @@ const videos = [
 ];
 
 export async function getStaticProps() {
-  const res = await api.get("/category");
+  const res = await api.get("/category?category=all");
 
   return {
     props: {
@@ -108,6 +108,32 @@ export default function Home({ categories }) {
               </a>
             </div>
           </div>
+        </section>
+        <div className="tw-w-full tw-px-[5%]">
+          <h1 className="tw-flex tw-justify-center tw-items-center tw-text-[24px] tw-text-darkBlue tw-my-[60px]">
+            <hr className="tw-w-[30%] tw-bg-blue tw-rounded-[10px] tw-h-[3px] tw-mr-[30px]" />
+            Conheça nossa linha de produtos
+            <hr className="tw-w-[30%] tw-bg-blue tw-rounded-[10px] tw-h-[3px] tw-ml-[30px]" />
+          </h1>
+        </div>
+        <section className="tw-px-[5%] tw-grid tw-grid-cols-4 tw-gap-y-[80px] tw-gap-x-[40px]  tw-mb-[120px]">
+          {categories.categoryArray.map((category, i) => (
+            <a
+              key={i}
+              href={`/produtos/${category.slug}?product=${category.products[0].slug}`}
+              className="tw-flex tw-flex-col tw-items-center"
+            >
+              <img
+                src={category.image}
+                className="tw-h-[160px] tw-object-contain tw-w-full"
+              />
+              <div className="tw-mt-[20px]">
+                <h1 className="tw-text-[18px] tw-bg-darkBlue tw-text-white tw-py-[5px] tw-px-[10px]">
+                  {category.name}
+                </h1>
+              </div>
+            </a>
+          ))}
         </section>
         <section className="tw-px-[5%]">
           <small className="tw-text-blue">CONTEÚDO</small>

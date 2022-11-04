@@ -601,6 +601,16 @@ video {
   margin-bottom: 20px;
 }
 
+.tw-my-\[40px\] {
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+.tw-my-\[60px\] {
+  margin-top: 60px;
+  margin-bottom: 60px;
+}
+
 .tw-mb-\[20px\] {
   margin-bottom: 20px;
 }
@@ -669,10 +679,6 @@ video {
   margin-top: 80px;
 }
 
-.tw-mt-\[100px\] {
-  margin-top: 100px;
-}
-
 .tw-mb-\[6px\] {
   margin-bottom: 6px;
 }
@@ -701,6 +707,14 @@ video {
   margin-top: 5px;
 }
 
+.tw-mb-\[120px\] {
+  margin-bottom: 120px;
+}
+
+.tw-mr-\[30px\] {
+  margin-right: 30px;
+}
+
 .tw-flex {
   display: flex;
 }
@@ -713,8 +727,8 @@ video {
   height: 100vh;
 }
 
-.tw-h-\[460px\] {
-  height: 460px;
+.tw-h-\[430px\] {
+  height: 430px;
 }
 
 .tw-h-\[80px\] {
@@ -733,16 +747,20 @@ video {
   height: 1px;
 }
 
-.tw-h-\[400px\] {
-  height: 400px;
+.tw-h-\[120px\] {
+  height: 120px;
 }
 
-.tw-h-\[450px\] {
-  height: 450px;
+.tw-h-\[160px\] {
+  height: 160px;
 }
 
-.tw-h-\[430px\] {
-  height: 430px;
+.tw-h-\[2px\] {
+  height: 2px;
+}
+
+.tw-h-\[3px\] {
+  height: 3px;
 }
 
 .tw-w-\[300px\] {
@@ -773,8 +791,8 @@ video {
   width: 50%;
 }
 
-.tw-w-\[500px\] {
-  width: 500px;
+.tw-w-\[450px\] {
+  width: 450px;
 }
 
 .tw-w-\[80px\] {
@@ -817,12 +835,8 @@ video {
   width: 15%;
 }
 
-.tw-w-\[450px\] {
-  width: 450px;
-}
-
-.tw-w-\[470px\] {
-  width: 470px;
+.tw-w-\[30\%\] {
+  width: 30%;
 }
 
 .tw-cursor-pointer {
@@ -831,6 +845,10 @@ video {
 
 .tw-grid-cols-3 {
   grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.tw-grid-cols-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .tw-flex-col {
@@ -868,6 +886,10 @@ video {
 
 .tw-rounded-\[50\%\] {
   border-radius: 50%;
+}
+
+.tw-rounded-\[10px\] {
+  border-radius: 10px;
 }
 
 .tw-border-\[1px\] {
@@ -1017,6 +1039,18 @@ video {
   font-size: 14px;
 }
 
+.tw-text-\[20px\] {
+  font-size: 20px;
+}
+
+.tw-text-\[18px\] {
+  font-size: 18px;
+}
+
+.tw-text-\[24px\] {
+  font-size: 24px;
+}
+
 .tw-font-light {
   font-weight: 300;
 }
@@ -1037,6 +1071,11 @@ video {
 .tw-text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.tw-text-darkBlue {
+  --tw-text-opacity: 1;
+  color: rgb(7 57 152 / var(--tw-text-opacity));
 }
 
 .tw-transition-\[0\.4s\] {
