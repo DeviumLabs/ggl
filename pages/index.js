@@ -89,8 +89,38 @@ export default function Home({ categories }) {
       </Head>
       <Header />
       <main className="tw-mt-[160px] tw-mb-[130px]">
-        <section>
+        {/* <section>
           <AliceCarousel items={banners} />
+        </section> */}
+        <section>
+          {/* <AliceCarousel items={banners} /> */}
+          <div
+            style={{ backgroundImage: `url(/assets/banners/uepg-banner.jpg)` }}
+            className="tw-bg-center tw-bg-no-repeat tw-w-full tw-bg-cover tw-relative"
+          >
+            <div className="tw-flex tw-items-center tw-justify-start tw-max-w-[1597px] tw-px-[5%] tw-mx-auto tw-w-full tw-py-[150px]">
+              <div className="tw-flex tw-flex-col tw-text-white tw-z-[1]">
+                <h1 className="tw-text-[30px] tw-mb-[20px]">Arquivos</h1>
+                <p className="tw-w-[300px]">
+                  Móveis de excelente qualidade e resistência e perfeito
+                  acabamento para harmonizar seu espaço.
+                </p>
+                <a
+                  href=""
+                  className="tw-border-white tw-text-white tw-py-[10px] tw-mt-[20px] tw-transition-300 hover:tw-bg-blue hover:tw-text-white tw-border-[1px] tw-w-[300px] tw-text-center"
+                >
+                  Saiba mais
+                </a>
+              </div>
+              <div className="tw-w-full tw-h-full tw-absolute tw-top-0 tw-left-0 tw-bg-[#0058C2] tw-opacity-[20%]"></div>
+              {/* <div>
+              <img
+                src="/assets/banners/armarios_home.png"
+                className="tw-w-[400px] "
+              />
+            </div> */}
+            </div>
+          </div>
         </section>
         <section className="tw-px-[5%] tw-my-[100px]" id="catalogo">
           <small className="tw-text-blue">CATÁLOGO</small>
