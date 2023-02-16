@@ -44,7 +44,7 @@ const catalogs = [
           {
             name: "GRI-1",
             scale: {
-              height: "1980 mm",
+              height: "1900 mm",
               width: "330 mm",
               depth: "420 mm",
             },
@@ -52,7 +52,7 @@ const catalogs = [
           {
             name: "GRI-2",
             scale: {
-              height: "1980 mm",
+              height: "1900 mm",
               width: "630 mm",
               depth: "420 mm",
             },
@@ -60,7 +60,7 @@ const catalogs = [
           {
             name: "GRI-3",
             scale: {
-              height: "1980 mm",
+              height: "1900 mm",
               width: "930 mm",
               depth: "420 mm",
             },
@@ -68,7 +68,7 @@ const catalogs = [
           {
             name: "GRI-4",
             scale: {
-              height: "1980 mm",
+              height: "1900 mm",
               width: "1250 mm",
               depth: "420 mm",
             },
@@ -82,8 +82,8 @@ const catalogs = [
         ],
       },
       {
-        name: "GAL",
-        slug: "gal",
+        name: "Especiais",
+        slug: "especiais",
         description:
           categories[0].description,
 
@@ -91,8 +91,24 @@ const catalogs = [
           {
             name: "GAL",
             scale: {
-              height: "1980 mm",
-              width: "330 mm",
+              height: "1900 mm",
+              width: "930 mm",
+              depth: "420 mm",
+            },
+          },
+          {
+            name: "Insalubre",
+            scale: {
+              height: "1900 mm",
+              width: "1000 mm",
+              depth: "420 mm",
+            },
+          },
+          {
+            name: "Armarinho de Limpeza",
+            scale: {
+              height: "1900 mm",
+              width: "500 mm",
               depth: "420 mm",
             },
           },
@@ -100,40 +116,40 @@ const catalogs = [
         images: ["/assets/products/locker-rooms/gal.jpeg"],
       },
       {
-        name: "GRS 2-8",
-        slug: "grs2-8",
+        name: "GRSP 2-8",
+        slug: "grsp2-8",
         description:
           categories[0].description,
 
         models: [
           {
-            name: "GRS-2",
+            name: "GRSP-2",
             scale: {
-              height: "1980 mm",
+              height: "1900 mm",
               width: "330 mm",
               depth: "420 mm",
             },
           },
           {
-            name: "GRS-4",
+            name: "GRSP-4",
             scale: {
-              height: "1980 mm",
+              height: "1900 mm",
               width: "630 mm",
               depth: "420 mm",
             },
           },
           {
-            name: "GRS-6",
+            name: "GRSP-6",
             scale: {
-              height: "1980 mm",
+              height: "1900 mm",
               width: "930 mm",
               depth: "420 mm",
             },
           },
           {
-            name: "GRS-8",
+            name: "GRSP-8",
             scale: {
-              height: "1980 mm",
+              height: "1900 mm",
               width: "1250 mm",
               depth: "420 mm",
             },
@@ -147,48 +163,48 @@ const catalogs = [
         ],
       },
       {
-        name: "GRS 4/2 - 20",
-        slug: "grs42-8",
+        name: "GRSP 4/2 - 20",
+        slug: "grsp42-8",
         description:
           categories[0].description,
 
         models: [
           {
-            name: "GRS 4/2",
+            name: "GRSP 4/2",
             scale: {
-              height: "1980 mm",
+              height: "1900 mm",
               width: "330 mm",
               depth: "420 mm",
             },
           },
           {
-            name: "GRS 8/4",
+            name: "GRSP 8/4",
             scale: {
-              height: "1980 mm",
+              height: "1900 mm",
               width: "630 mm",
               depth: "420 mm",
             },
           },
           {
-            name: "GRS 12",
+            name: "GRSP 12",
             scale: {
-              height: "1980 mm",
+              height: "1900 mm",
               width: "930 mm",
               depth: "420 mm",
             },
           },
           {
-            name: "GRS 16",
+            name: "GRSP 16",
             scale: {
-              height: "1980 mm",
+              height: "1900 mm",
               width: "1250 mm",
               depth: "420 mm",
             },
           },
           {
-            name: "GRS 20",
+            name: "GRSP 20",
             scale: {
-              height: "1980 mm",
+              height: "1900 mm",
               width: "1540 mm",
               depth: "420 mm",
             },
@@ -254,8 +270,7 @@ const catalogs = [
       {
         name: "Armário para celular",
         slug: "armario-para-celular",
-        description:
-          categories[1].description,
+        description: "Armário para guardar celular com carregar ou modelo convencional.",
         models: [
           {
             name: "Sem carregador",
@@ -276,8 +291,8 @@ const catalogs = [
         ],
         images: [
           "/assets/products/cabinets/porta_celular.jpeg",
-          "/assets/products/cabinets/celular.jpg",
           "/assets/products/cabinets/celular2.jpg",
+          "/assets/products/cabinets/celular.jpg",
         ],
       },
       {
@@ -308,6 +323,25 @@ const catalogs = [
               height: "1100 mm",
               width: "910 mm",
               depth: "470 mm",
+            },
+          },
+        ],
+        images: [
+          "/assets/products/cabinets/notebook.jpg",
+          "/assets/products/cabinets/notebook2.jpg",
+        ],
+      },
+      {
+        name: "Armário de Ferramentas",
+        slug: "armario-de-ferramentas",
+        description: "Armário para guardar ferramentas.",
+        models: [
+          {
+            name: "Armário de Ferramentas",
+            scale: {
+              height: "2000 mm",
+              width: "1200 mm",
+              depth: "450 mm",
             },
           },
         ],
@@ -530,27 +564,35 @@ const catalogs = [
 
         models: [
           {
-            name: "EDE",
+            name: "EDE 1100",
             scale: {
               height: "2000 mm",
-              width: "1600 mm",
-              depth: "550 mm",
+              width: "1000 mm",
+              depth: "580 mm",
             },
           },
           {
-            name: "ESE",
+            name: "ESE 1110",
             scale: {
-              height: "1980 mm",
-              width: "910 mm",
-              depth: "550 mm",
+              height: "2000 mm",
+              width: "1000 mm",
+              depth: "300 mm",
             },
           },
           {
-            name: "ERE",
+            name: "ERE 1090",
             scale: {
-              height: "1980 mm",
-              width: "910 mm",
-              depth: "550 mm",
+              height: "2000 mm",
+              width: "1000 mm",
+              depth: "440 mm",
+            },
+          },
+          {
+            name: "Estante Infantil",
+            scale: {
+              height: "1200 mm",
+              width: "1000 mm",
+              depth: "300 mm",
             },
           },
         ],
@@ -558,11 +600,12 @@ const catalogs = [
           "/assets/products/shelves/ere.jpeg",
           "/assets/products/shelves/ese.jpeg",
           "/assets/products/shelves/ere.jpeg",
+          "/assets/products/shelves/estante_baixa.jpeg",
         ],
       },
       {
-        name: "Linha Estantes",
-        slug: "linha-estantes",
+        name: "Linha Estantes Trapezoidal",
+        slug: "linha-estantes-trapezoidal",
         description:
           "Movéis focados em armazenar livros e revistas em bibliotecas contruídas para encaixe",
         models: [
@@ -585,9 +628,9 @@ const catalogs = [
           {
             name: "Estante Gaveta",
             scale: {
-              height: "1980 mm",
-              width: "910 mm",
-              depth: "550 mm",
+              height: "2000 mm",
+              width: "1000 mm",
+              depth: "580 mm",
             },
           },
         ],
@@ -597,23 +640,7 @@ const catalogs = [
           "/assets/products/shelves/estante_gaveta.jpeg",
         ],
       },
-      {
-        name: "Estantes Infantis",
-        slug: "linha-infantil",
-        description:
-          "Movéis focados em armazenar livros e revistas em bibliotecas contruídas para encaixe",
-        models: [
-          {
-            name: "Estante Infantil",
-            scale: {
-              height: "1200 mm",
-              width: "1000 mm",
-              depth: "300 mm",
-            },
-          },
-        ],
-        images: ["/assets/products/shelves/estante_baixa.jpeg"],
-      },
+
     ],
   },
   {

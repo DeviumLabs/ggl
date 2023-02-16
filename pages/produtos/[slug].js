@@ -28,6 +28,7 @@ export default function SingleProduct({ product, categories }) {
   
   const [principalImage, setPrincipalImage] = useState(product.images[0]);
   const [titlePrincipal, setTitlePrincipal] = useState(product.models[0].name);
+  const [table, setTable] = useState(0)
 
   // function handlePrincipalImage(image) {
   //   setPrincipalImage(image);
@@ -62,24 +63,24 @@ export default function SingleProduct({ product, categories }) {
             <div id="principal-image">
               <img
                 src={principalImage}
-                className="tw-w-[450px] tw-h-[430px] tw-object-cover"
+                className="tw-w-[450px] tw-h-[430px] tw-object-contain"
               />
               <div className="tw-flex  tw-mt-[20px]">
                 {product.images.length > 1
-                  ? product.images.map((image, i) => (
+                  && product.images.map((image, i) => (
                       <img
                         src={image}
                         key={i}
                         className="tw-w-[80px] tw-h-[80px] tw-object-cover tw-mr-[10px] hover:tw-scale-[1.1] tw-cursor-pointer"
                         onClick={() => {
                           setPrincipalImage(image);
+                          setTable(i)
                           if (!!product.models[i]) {
                             setTitlePrincipal(product.models[i].name);
                           }
                         }}
                       />
-                    ))
-                  : ""}
+                    ))}
               </div>
             </div>
             <div id="carousel-images"></div>
@@ -97,7 +98,7 @@ export default function SingleProduct({ product, categories }) {
                   <td>Profundidade</td>
                 </tr>
                 {product.models.map((model, i) => (
-                  <tr>
+                  <tr style={{fontWeight: i === table ? 600 : 300}}>
                     <td>{model.name}</td>
                     <td>{model.scale.height}</td>
                     <td>{model.scale.width}</td>

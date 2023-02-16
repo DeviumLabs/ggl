@@ -42,21 +42,22 @@ export const categories = [
       "Nossos armários são produzidos com matéria prima de qualidade, conferindo maior durabilidade e resistência.",
     products: [
       {
-        name: "GAL",
-        slug: "gal",
+        name: "GRSP 4/2 - 20",
+        slug: "grsp42-8",
+      },
+      {
+        name: "GRSP 2-8",
+        slug: "grsp2-8",
       },
       {
         name: "GRI",
         slug: "gri",
       },
       {
-        name: "GRS 2-8",
-        slug: "grs2-8",
+        name: "Especiais",
+        slug: "especiais",
       },
-      {
-        name: "GRS 4/2 - 20",
-        slug: "grs42-8",
-      },
+      
     ],
   },
   {
@@ -74,6 +75,7 @@ export const categories = [
         name: "Armário Celular",
         slug: "armario-para-celular",
       },
+
       {
         name: "Professor",
         slug: "professor",
@@ -81,6 +83,10 @@ export const categories = [
       {
         name: "Carrinho Notebook",
         slug: "notebook",
+      },
+      {
+        name: "Armário de Ferramentas",
+        slug: "armario-de-ferramentas",
       },
     ],
   },
@@ -163,12 +169,8 @@ export const categories = [
         slug: "linha-ede",
       },
       {
-        name: "Linha Estantes",
-        slug: "linha-estantes",
-      },
-      {
-        name: "Estantes Infantis",
-        slug: "linha-infantil",
+        name: "Linha Estantes Trapezoidal",
+        slug: "linha-estantes-trapezoidal",
       },
     ],
   },
