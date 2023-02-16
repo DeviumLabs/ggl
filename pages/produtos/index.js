@@ -11,7 +11,7 @@ import Navbar from "../../components/navbar";
 
 export async function getStaticProps() {
   const res = await api.get("/category?category=all");
-
+ 
   return {
     props: {
       categories: res.data,

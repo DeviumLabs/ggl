@@ -7,7 +7,7 @@ export default function handler(req, res) {
   res.setHeader("Access-Control-Allow-Methods", "GET");
 
   const category_selected = req.query.category;
-
+ 
   let categoryArray = [];
 
   categories.map((category) => {
@@ -15,6 +15,7 @@ export default function handler(req, res) {
       categoryArray.push(category);
     }
   });
+
   if (category_selected == "all") {
     categoryArray = categories;
   }
@@ -32,13 +33,38 @@ export default function handler(req, res) {
   res.status(200).json({ categoryArray });
 }
 
-const categories = [
+export const categories = [
+  {
+    name: "Armários Vestiários ",
+    slug: "armarios-vestiarios",
+    image: "/assets/products/locker-rooms/roupeiro.jpeg",
+    description:
+      "Nossos armários são produzidos com matéria prima de qualidade, conferindo maior durabilidade e resistência.",
+    products: [
+      {
+        name: "GAL",
+        slug: "gal",
+      },
+      {
+        name: "GRI",
+        slug: "gri",
+      },
+      {
+        name: "GRS 2-8",
+        slug: "grs2-8",
+      },
+      {
+        name: "GRS 4/2 - 20",
+        slug: "grs42-8",
+      },
+    ],
+  },
   {
     name: "Armários",
     slug: "armarios",
     image: "/assets/products/cabinets/a402_1.jpeg",
     description:
-      "Os armários desevolvidos pela GGL, são os mais duradouros e leves do ramo.",
+      "Os armários desevolvidos pela GGL, são os mais duradouros do ramo.",
     products: [
       {
         name: "A402",
@@ -63,7 +89,7 @@ const categories = [
     slug: "arquivos",
     image: "/assets/products/files/ar4.jpeg",
     description:
-      "Em busca de estruturas para guardas e proteger arquivos? Encontre nesta sessão os móveis necessários",
+      "Em busca de estruturas para armazenar pastas ou fichas? Encontre nesta sessão os móveis necessários",
     products: [
       {
         name: "A-R4",
@@ -95,23 +121,10 @@ const categories = [
       },
     ],
   },
-  {
-    name: "Deslizantes",
-    slug: "deslizantes",
-    image: "/assets/products/sliders/deslizante.jpeg",
-    description:
-      "Armários deslizantes para facilitar a abertura e abranger o espaço interno",
-    products: [
-      {
-        name: "Deslizante Inicial",
-        slug: "deslizante-inicial",
-      },
-    ],
-  },
 
   {
     name: "Estantes Convencionais",
-    slug: "estantes",
+    slug: "estantes-convencionais",
     category: "estantes-convencionais",
     image: "/assets/products/shelves/pr30.jpeg",
     description:
@@ -125,11 +138,11 @@ const categories = [
   },
   {
     name: "Estantes Armazenagem",
-    slug: "estantes",
+    slug: "estantes-armazenagem",
     category: "estantes-armazenagem",
     image: "/assets/products/shelves/encaixe.jpeg",
     description:
-      "Estantes com prateleiras livre para organização de objetos, arquivos, etc",
+      "Estantes com prateleiras para acondicionar material pesado",
     products: [
       {
         name: "Modelos Armazenagem",
@@ -139,11 +152,11 @@ const categories = [
   },
   {
     name: "Biblioteca Encaixe",
-    slug: "estantes",
+    slug: "biblioteca-encaixe",
     category: "biblioteca-encaixe",
     image: "/assets/products/shelves/ese.jpeg",
     description:
-      "Estantes com prateleiras livre para organização de objetos, arquivos, etc",
+      "Estantes com prateleiras livre para organização de livros, revistas e mídia.",
     products: [
       {
         name: "Linha EDE",
@@ -161,11 +174,11 @@ const categories = [
   },
   {
     name: "Biblioteca Encaixe Coluna",
-    slug: "estantes",
+    slug: "encaixe-coluna",
     category: "encaixe-coluna",
     image: "/assets/products/shelves/ed10.jpeg",
     description:
-      "Estantes com prateleiras livre para organização de objetos, arquivos, etc",
+      "Estantes com prateleiras livre para organização de livros, revistas e mídia.",
     products: [
       {
         name: "Linha PR",
@@ -190,27 +203,15 @@ const categories = [
     ],
   },
   {
-    name: "Armários Vestiários ",
-    slug: "armarios-vestiarios",
-    image: "/assets/products/locker-rooms/roupeiro.jpeg",
+    name: "Deslizantes",
+    slug: "deslizantes",
+    image: "/assets/products/sliders/deslizante.jpeg",
     description:
-      "Nossos armários contam com ferragens de qualidade, que confere maior durabilidade e resistência.",
+      "Armários deslizantes para facilitar a abertura e otimizar o espaço.",
     products: [
       {
-        name: "GAL",
-        slug: "gal",
-      },
-      {
-        name: "GRI",
-        slug: "gri",
-      },
-      {
-        name: "GRS 2-8",
-        slug: "grs2-8",
-      },
-      {
-        name: "GRS 4/2 - 20",
-        slug: "grs42-8",
+        name: "Deslizante Inicial",
+        slug: "deslizante-inicial",
       },
     ],
   },

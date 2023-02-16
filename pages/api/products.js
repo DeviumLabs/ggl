@@ -1,3 +1,5 @@
+import { categories } from "./category";
+
 export default function handler(req, res) {
   const category = req.query.category;
   const product = req.query.product;
@@ -30,16 +32,189 @@ export default function handler(req, res) {
 
 const catalogs = [
   {
+    title: "Armários Vestiários",
+    slug: "armarios-vestiarios",
+    products: [
+      {
+        name: "GRI",
+        slug: "gri",
+        description: categories[0].description,
+
+        models: [
+          {
+            name: "GRI-1",
+            scale: {
+              height: "1980 mm",
+              width: "330 mm",
+              depth: "420 mm",
+            },
+          },
+          {
+            name: "GRI-2",
+            scale: {
+              height: "1980 mm",
+              width: "630 mm",
+              depth: "420 mm",
+            },
+          },
+          {
+            name: "GRI-3",
+            scale: {
+              height: "1980 mm",
+              width: "930 mm",
+              depth: "420 mm",
+            },
+          },
+          {
+            name: "GRI-4",
+            scale: {
+              height: "1980 mm",
+              width: "1250 mm",
+              depth: "420 mm",
+            },
+          },
+        ],
+        images: [
+          "/assets/products/locker-rooms/gri1.jpeg",
+          "/assets/products/locker-rooms/gri2.jpeg",
+          "/assets/products/locker-rooms/gri3.jpeg",
+          "/assets/products/locker-rooms/gri4.jpeg",
+        ],
+      },
+      {
+        name: "GAL",
+        slug: "gal",
+        description:
+          categories[0].description,
+
+        models: [
+          {
+            name: "GAL",
+            scale: {
+              height: "1980 mm",
+              width: "330 mm",
+              depth: "420 mm",
+            },
+          },
+        ],
+        images: ["/assets/products/locker-rooms/gal.jpeg"],
+      },
+      {
+        name: "GRS 2-8",
+        slug: "grs2-8",
+        description:
+          categories[0].description,
+
+        models: [
+          {
+            name: "GRS-2",
+            scale: {
+              height: "1980 mm",
+              width: "330 mm",
+              depth: "420 mm",
+            },
+          },
+          {
+            name: "GRS-4",
+            scale: {
+              height: "1980 mm",
+              width: "630 mm",
+              depth: "420 mm",
+            },
+          },
+          {
+            name: "GRS-6",
+            scale: {
+              height: "1980 mm",
+              width: "930 mm",
+              depth: "420 mm",
+            },
+          },
+          {
+            name: "GRS-8",
+            scale: {
+              height: "1980 mm",
+              width: "1250 mm",
+              depth: "420 mm",
+            },
+          },
+        ],
+        images: [
+          "/assets/products/locker-rooms/grs2.jpeg",
+          "/assets/products/locker-rooms/grs4.jpeg",
+          "/assets/products/locker-rooms/grs6.jpeg",
+          "/assets/products/locker-rooms/grs8.jpeg",
+        ],
+      },
+      {
+        name: "GRS 4/2 - 20",
+        slug: "grs42-8",
+        description:
+          categories[0].description,
+
+        models: [
+          {
+            name: "GRS 4/2",
+            scale: {
+              height: "1980 mm",
+              width: "330 mm",
+              depth: "420 mm",
+            },
+          },
+          {
+            name: "GRS 8/4",
+            scale: {
+              height: "1980 mm",
+              width: "630 mm",
+              depth: "420 mm",
+            },
+          },
+          {
+            name: "GRS 12",
+            scale: {
+              height: "1980 mm",
+              width: "930 mm",
+              depth: "420 mm",
+            },
+          },
+          {
+            name: "GRS 16",
+            scale: {
+              height: "1980 mm",
+              width: "1250 mm",
+              depth: "420 mm",
+            },
+          },
+          {
+            name: "GRS 20",
+            scale: {
+              height: "1980 mm",
+              width: "1540 mm",
+              depth: "420 mm",
+            },
+          },
+        ],
+        images: [
+          "/assets/products/locker-rooms/grs42.jpeg",
+          "/assets/products/locker-rooms/grs84.jpeg",
+          "/assets/products/locker-rooms/grs12.jpeg",
+          "/assets/products/locker-rooms/grs16.jpeg",
+          "/assets/products/locker-rooms/grs20.jpeg",
+        ],
+      },
+    ],
+  },
+  {
     title: "Armários",
     slug: "armarios",
     image: "",
-    description: "",
+    description: categories[1].description,
     products: [
       {
         name: "A402",
         slug: "a402",
         description:
-          "Lorem Ipsum is simply dummy text of the printing and typesetting.",
+          categories[1].description,
         models: [
           {
             name: "A402",
@@ -80,7 +255,7 @@ const catalogs = [
         name: "Armário para celular",
         slug: "armario-para-celular",
         description:
-          "Lorem Ipsum is simply dummy text of the printing and typesetting.",
+          categories[1].description,
         models: [
           {
             name: "Sem carregador",
@@ -109,7 +284,7 @@ const catalogs = [
         name: "Armário Professor",
         slug: "professor",
         description:
-          "Lorem Ipsum is simply dummy text of the printing and typesetting.",
+          categories[1].description,
         models: [
           {
             name: "Professor",
@@ -151,7 +326,7 @@ const catalogs = [
         name: "A-R4",
         slug: "a-r4",
         description:
-          "Lorem Ipsum is simply dummy text of the printing and typesetting.",
+          categories[2].description,
         models: [
           {
             name: "A-R4",
@@ -168,7 +343,7 @@ const catalogs = [
         name: "GAM-5",
         slug: "gam-5",
         description:
-          "Lorem Ipsum is simply dummy text of the printing and typesetting.",
+          categories[2].description,
         models: [
           {
             name: "GAM-5",
@@ -185,7 +360,7 @@ const catalogs = [
         name: "GAM-6",
         slug: "gam-6",
         description:
-          "Lorem Ipsum is simply dummy text of the printing and typesetting.",
+          categories[2].description,
         models: [
           {
             name: "GAM-6",
@@ -202,7 +377,7 @@ const catalogs = [
         name: "GAM-7",
         slug: "gam-7",
         description:
-          "Lorem Ipsum is simply dummy text of the printing and typesetting.",
+          categories[2].description,
         models: [
           {
             name: "GAM-7",
@@ -219,7 +394,7 @@ const catalogs = [
         name: "GAM-8",
         slug: "gam-8",
         description:
-          "Lorem Ipsum is simply dummy text of the printing and typesetting.",
+          categories[2].description,
         models: [
           {
             name: "GAM-8",
@@ -236,7 +411,7 @@ const catalogs = [
         name: "GAM-10",
         slug: "gam-10",
         description:
-          "Lorem Ipsum is simply dummy text of the printing and typesetting.",
+          categories[2].description,
         models: [
           {
             name: "GAM-10",
@@ -253,7 +428,7 @@ const catalogs = [
         name: "Arquivos Mapoteca",
         slug: "mapoteca",
         description:
-          "Lorem Ipsum is simply dummy text of the printing and typesetting.",
+          categories[2].description,
         models: [
           {
             name: "Arquivos Mapoteca",
@@ -269,50 +444,15 @@ const catalogs = [
     ],
   },
   {
-    title: "Deslizantes",
-    slug: "deslizantes",
-    products: [
-      {
-        name: "Deslizante Inicial",
-        slug: "deslizante-inicial",
-        description:
-          "Lorem Ipsum is simply dummy text of the printing and typesetting.",
-
-        models: [
-          {
-            name: "Simples Face",
-            scale: {
-              height: "2250 mm",
-              width: "1050 mm",
-              depth: "430 mm",
-            },
-          },
-          {
-            name: "Dupla Face",
-            scale: {
-              height: "2250 mm",
-              width: "1050 mm",
-              depth: "860 mm",
-            },
-          },
-        ],
-        images: [
-          "/assets/products/sliders/deslizante.jpeg",
-          "/assets/products/sliders/deslizante-2.jpeg",
-        ],
-      },
-    ],
-  },
-  {
     title: "Estantes Convencionais",
-    slug: "estantes",
+    slug: "estantes-convencionais",
     category: "estantes-convencionais",
     products: [
       {
         name: "Modelos PR",
         slug: "pr",
         description:
-          "Lorem Ipsum is simply dummy text of the printing and typesetting.",
+        categories[3].description,
 
         models: [
           {
@@ -346,14 +486,14 @@ const catalogs = [
   },
   {
     title: "Estantes Armazenagem",
-    slug: "estantes",
+    slug: "estantes-armazenagem",
     category: "estantes-armazenagem",
     products: [
       {
         name: "Modelos Armazenagem",
         slug: "encaixe",
         description:
-          "Lorem Ipsum is simply dummy text of the printing and typesetting.",
+        categories[4].description,
 
         models: [
           {
@@ -379,7 +519,7 @@ const catalogs = [
   },
   {
     title: "Biblioteca Encaixe",
-    slug: "estantes",
+    slug: "biblioteca-encaixe",
     category: "biblioteca-encaixe",
     products: [
       {
@@ -478,7 +618,7 @@ const catalogs = [
   },
   {
     title: "Biblioteca Encaixe Coluna",
-    slug: "estantes",
+    slug: "encaixe-coluna",
     category: "encaixe-coluna",
     products: [
       {
@@ -525,7 +665,7 @@ const catalogs = [
         name: "Centro",
         slug: "centro",
         description:
-          "Lorem Ipsum is simply dummy text of the printing and typesetting.",
+          categories[7].description,
         models: [
           {
             name: "Centro",
@@ -543,7 +683,7 @@ const catalogs = [
         name: "Parede",
         slug: "parede",
         description:
-          "Lorem Ipsum is simply dummy text of the printing and typesetting.",
+          categories[7].description,
         models: [
           {
             name: "Parede",
@@ -560,175 +700,36 @@ const catalogs = [
     ],
   },
   {
-    title: "Armários Vestiários",
-    slug: "armarios-vestiarios",
+    title: "Deslizantes",
+    slug: "deslizantes",
     products: [
       {
-        name: "GRI",
-        slug: "gri",
+        name: "Deslizante Inicial",
+        slug: "deslizante-inicial",
         description:
-          "Lorem Ipsum is simply dummy text of the printing and typesetting.",
+          categories[8].description,
 
         models: [
           {
-            name: "GRI-1",
+            name: "Simples Face",
             scale: {
-              height: "1980 mm",
-              width: "330 mm",
-              depth: "420 mm",
+              height: "2250 mm",
+              width: "1050 mm",
+              depth: "430 mm",
             },
           },
           {
-            name: "GRI-2",
+            name: "Dupla Face",
             scale: {
-              height: "1980 mm",
-              width: "630 mm",
-              depth: "420 mm",
-            },
-          },
-          {
-            name: "GRI-3",
-            scale: {
-              height: "1980 mm",
-              width: "930 mm",
-              depth: "420 mm",
-            },
-          },
-          {
-            name: "GRI-4",
-            scale: {
-              height: "1980 mm",
-              width: "1250 mm",
-              depth: "420 mm",
+              height: "2250 mm",
+              width: "1050 mm",
+              depth: "860 mm",
             },
           },
         ],
         images: [
-          "/assets/products/locker-rooms/gri1.jpeg",
-          "/assets/products/locker-rooms/gri2.jpeg",
-          "/assets/products/locker-rooms/gri3.jpeg",
-          "/assets/products/locker-rooms/gri4.jpeg",
-        ],
-      },
-      {
-        name: "GAL",
-        slug: "gal",
-        description:
-          "Lorem Ipsum is simply dummy text of the printing and typesetting.",
-
-        models: [
-          {
-            name: "GAL",
-            scale: {
-              height: "1980 mm",
-              width: "330 mm",
-              depth: "420 mm",
-            },
-          },
-        ],
-        images: ["/assets/products/locker-rooms/gal.jpeg"],
-      },
-      {
-        name: "GRS 2-8",
-        slug: "grs2-8",
-        description:
-          "Lorem Ipsum is simply dummy text of the printing and typesetting.",
-
-        models: [
-          {
-            name: "GRS-2",
-            scale: {
-              height: "1980 mm",
-              width: "330 mm",
-              depth: "420 mm",
-            },
-          },
-          {
-            name: "GRS-4",
-            scale: {
-              height: "1980 mm",
-              width: "630 mm",
-              depth: "420 mm",
-            },
-          },
-          {
-            name: "GRS-6",
-            scale: {
-              height: "1980 mm",
-              width: "930 mm",
-              depth: "420 mm",
-            },
-          },
-          {
-            name: "GRS-8",
-            scale: {
-              height: "1980 mm",
-              width: "1250 mm",
-              depth: "420 mm",
-            },
-          },
-        ],
-        images: [
-          "/assets/products/locker-rooms/grs2.jpeg",
-          "/assets/products/locker-rooms/grs4.jpeg",
-          "/assets/products/locker-rooms/grs6.jpeg",
-          "/assets/products/locker-rooms/grs8.jpeg",
-        ],
-      },
-      {
-        name: "GRS 4/2 - 20",
-        slug: "grs42-8",
-        description:
-          "Lorem Ipsum is simply dummy text of the printing and typesetting.",
-
-        models: [
-          {
-            name: "GRS 4/2",
-            scale: {
-              height: "1980 mm",
-              width: "330 mm",
-              depth: "420 mm",
-            },
-          },
-          {
-            name: "GRS 8/4",
-            scale: {
-              height: "1980 mm",
-              width: "630 mm",
-              depth: "420 mm",
-            },
-          },
-          {
-            name: "GRS 12",
-            scale: {
-              height: "1980 mm",
-              width: "930 mm",
-              depth: "420 mm",
-            },
-          },
-          {
-            name: "GRS 16",
-            scale: {
-              height: "1980 mm",
-              width: "1250 mm",
-              depth: "420 mm",
-            },
-          },
-          {
-            name: "GRS 20",
-            scale: {
-              height: "1980 mm",
-              width: "1540 mm",
-              depth: "420 mm",
-            },
-          },
-        ],
-        images: [
-          "/assets/products/locker-rooms/grs42.jpeg",
-          "/assets/products/locker-rooms/grs84.jpeg",
-          "/assets/products/locker-rooms/grs12.jpeg",
-          "/assets/products/locker-rooms/grs16.jpeg",
-          "/assets/products/locker-rooms/grs20.jpeg",
+          "/assets/products/sliders/deslizante.jpeg",
+          "/assets/products/sliders/deslizante-2.jpeg",
         ],
       },
     ],
