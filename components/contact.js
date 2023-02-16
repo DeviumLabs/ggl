@@ -52,7 +52,8 @@ export default function Contact() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="tw-px-[5%] tw-my-[100px] tw-flex tw-flex-col tw-items-center"
+      className="tw-px-[5%] tw-mb-[100px] tw-py-[200px] tw-mt-[-100px] tw-flex tw-flex-col tw-items-center"
+      id="contato"
     >
       <div className="tw-mb-[30px]">
         <small className="tw-text-blue tw-font-light">CONTATO</small>

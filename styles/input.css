@@ -4,6 +4,9 @@
 
 @import "react-alice-carousel/lib/alice-carousel.css";
 
+* {
+    scroll-behavior: smooth;
+}
 
 footer p, footer  h3,footer  h1,footer  span{
     color: white;
