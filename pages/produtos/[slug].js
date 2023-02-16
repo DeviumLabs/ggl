@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import api from "../../services/api";
 import Head from "next/head";
 import Image from "next/image";
@@ -25,7 +25,7 @@ export async function getServerSideProps(context) {
 }
 
 export default function SingleProduct({ product, categories }) {
-  console.log(product);
+  
   const [principalImage, setPrincipalImage] = useState(product.images[0]);
   const [titlePrincipal, setTitlePrincipal] = useState(product.models[0].name);
 
