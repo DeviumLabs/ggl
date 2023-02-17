@@ -160,7 +160,7 @@ export const categories = [
     name: "Biblioteca Encaixe",
     slug: "biblioteca-encaixe",
     category: "biblioteca-encaixe",
-    image: "/assets/products/shelves/ese.jpeg",
+    image: "/assets/products/shelves/ede1100.png",
     description:
       "Estantes com prateleiras livre para organização de livros, revistas e mídia.",
     products: [
@@ -191,17 +191,14 @@ export const categories = [
   {
     name: "Gondolas",
     slug: "gondolas",
-    image: "/assets/products/gondolas/gondola.jpeg",
+    image: "/assets/products/gondolas/centro.webp",
     description: "Gondolas bem estruturadas e fortes para o seu varejo",
     products: [
       {
-        name: "Centro",
-        slug: "centro",
+        name: "Modelos",
+        slug: "modelos",
       },
-      {
-        name: "Parede",
-        slug: "parede",
-      },
+
     ],
   },
   {

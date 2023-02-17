@@ -71,7 +71,7 @@ export default function SingleProduct({ product, categories }) {
                       <img
                         src={image}
                         key={i}
-                        className="tw-w-[80px] tw-h-[80px] tw-object-cover tw-mr-[10px] hover:tw-scale-[1.1] tw-cursor-pointer"
+                        className="tw-w-[80px] tw-h-[80px] tw-object-contain tw-mr-[10px] hover:tw-scale-[1.1] tw-cursor-pointer"
                         onClick={() => {
                           setPrincipalImage(image);
                           setTable(i)

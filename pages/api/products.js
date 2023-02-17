@@ -113,7 +113,14 @@ const catalogs = [
             },
           },
         ],
-        images: ["/assets/products/locker-rooms/gal.jpeg"],
+        images: [
+          "/assets/products/locker-rooms/gal.jpeg",
+          "/assets/products/locker-rooms/insalubre.jpeg",
+          "/assets/products/locker-rooms/armarinho-limpeza.jpg",
+          "/assets/products/locker-rooms/detail1.png",
+          "/assets/products/locker-rooms/detail2.png",
+          "/assets/products/locker-rooms/detail3.png",
+        ],
       },
       {
         name: "GRSP 2-8",
@@ -371,7 +378,11 @@ const catalogs = [
             },
           },
         ],
-        images: ["/assets/products/files/ar4.jpeg"],
+        images: [
+          "/assets/products/files/ar4.jpeg",
+          "/assets/products/files/trilho-telescopico.png",
+          "/assets/products/files/nylon.png",
+        ],
       },
       {
         name: "GAM-5",
@@ -597,7 +608,7 @@ const catalogs = [
           },
         ],
         images: [
-          "/assets/products/shelves/ere.jpeg",
+          "/assets/products/shelves/ede1100.png",
           "/assets/products/shelves/ese.jpeg",
           "/assets/products/shelves/ere.jpeg",
           "/assets/products/shelves/estante_baixa.jpeg",
@@ -680,7 +691,11 @@ const catalogs = [
             },
           },
         ],
-        images: ["/assets/products/shelves/ed10.jpeg"],
+        images: [
+          "/assets/products/shelves/ed10.jpeg", 
+          "/assets/products/shelves/es6pr.jpg",
+          "/assets/products/shelves/er6pr.png"
+        ],
       },
     ],
   },
@@ -689,8 +704,8 @@ const catalogs = [
     slug: "gondolas",
     products: [
       {
-        name: "Centro",
-        slug: "centro",
+        name: "Modelos",
+        slug: "modelos",
         description:
           categories[7].description,
         models: [
@@ -702,16 +717,6 @@ const catalogs = [
               depth: "800 mm",
             },
           },
-        ],
-
-        images: ["/assets/products/gondolas/centro.jpeg"],
-      },
-      {
-        name: "Parede",
-        slug: "parede",
-        description:
-          categories[7].description,
-        models: [
           {
             name: "Parede",
             scale: {
@@ -722,8 +727,12 @@ const catalogs = [
           },
         ],
 
-        images: ["/assets/products/gondolas/parede.jpeg"],
+        images: [
+          "/assets/products/gondolas/centro.webp",
+          "/assets/products/gondolas/parede.jpeg"
+        ],
       },
+
     ],
   },
   {
