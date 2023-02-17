@@ -37,7 +37,7 @@ export const categories = [
   {
     name: "Armários Vestiários ",
     slug: "armarios-vestiarios",
-    image: "/assets/products/locker-rooms/roupeiro.jpeg",
+    image: "/assets/products/locker-rooms/roupeiro.png",
     description:
       "Nossos armários são produzidos com matéria prima de qualidade, conferindo maior durabilidade e resistência.",
     products: [
@@ -63,7 +63,7 @@ export const categories = [
   {
     name: "Armários",
     slug: "armarios",
-    image: "/assets/products/cabinets/a402_1.jpeg",
+    image: "/assets/products/cabinets/a402_1.png",
     description:
       "Os armários desevolvidos pela GGL, são os mais duradouros do ramo.",
     products: [
@@ -93,7 +93,7 @@ export const categories = [
   {
     name: "Arquivos",
     slug: "arquivos",
-    image: "/assets/products/files/ar4.jpeg",
+    image: "/assets/products/files/ar4.png",
     description:
       "Em busca de estruturas para armazenar pastas ou fichas? Encontre nesta sessão os móveis necessários",
     products: [
@@ -132,7 +132,7 @@ export const categories = [
     name: "Estantes Convencionais",
     slug: "estantes-convencionais",
     category: "estantes-convencionais",
-    image: "/assets/products/shelves/pr30.jpeg",
+    image: "/assets/products/shelves/pr30.png",
     description:
       "Estantes com prateleiras livre para organização de objetos, arquivos, etc",
     products: [
@@ -146,7 +146,7 @@ export const categories = [
     name: "Estantes Armazenagem",
     slug: "estantes-armazenagem",
     category: "estantes-armazenagem",
-    image: "/assets/products/shelves/encaixe.jpeg",
+    image: "/assets/products/shelves/encaixe.png",
     description:
       "Estantes com prateleiras para acondicionar material pesado",
     products: [
@@ -178,7 +178,7 @@ export const categories = [
     name: "Biblioteca Encaixe Coluna",
     slug: "encaixe-coluna",
     category: "encaixe-coluna",
-    image: "/assets/products/shelves/ed10.jpeg",
+    image: "/assets/products/shelves/ed10.png",
     description:
       "Estantes com prateleiras livre para organização de livros, revistas e mídia.",
     products: [
@@ -191,7 +191,7 @@ export const categories = [
   {
     name: "Gondolas",
     slug: "gondolas",
-    image: "/assets/products/gondolas/centro.webp",
+    image: "/assets/products/gondolas/centro.png",
     description: "Gondolas bem estruturadas e fortes para o seu varejo",
     products: [
       {
@@ -204,7 +204,7 @@ export const categories = [
   {
     name: "Deslizantes",
     slug: "deslizantes",
-    image: "/assets/products/sliders/deslizante.jpeg",
+    image: "/assets/products/sliders/deslizante.png",
     description:
       "Armários deslizantes para facilitar a abertura e otimizar o espaço.",
     products: [

@@ -75,10 +75,10 @@ const catalogs = [
           },
         ],
         images: [
-          "/assets/products/locker-rooms/gri1.jpeg",
-          "/assets/products/locker-rooms/gri2.jpeg",
-          "/assets/products/locker-rooms/gri3.jpeg",
-          "/assets/products/locker-rooms/gri4.jpeg",
+          "/assets/products/locker-rooms/gri1.png",
+          "/assets/products/locker-rooms/gri2.png",
+          "/assets/products/locker-rooms/gri3.png",
+          "/assets/products/locker-rooms/gri4.png",
         ],
       },
       {
@@ -114,8 +114,8 @@ const catalogs = [
           },
         ],
         images: [
-          "/assets/products/locker-rooms/gal.jpeg",
-          "/assets/products/locker-rooms/insalubre.jpeg",
+          "/assets/products/locker-rooms/gal.png",
+          "/assets/products/locker-rooms/insalubre.png",
           "/assets/products/locker-rooms/armarinho-limpeza.jpg",
           "/assets/products/locker-rooms/detail1.png",
           "/assets/products/locker-rooms/detail2.png",
@@ -163,10 +163,10 @@ const catalogs = [
           },
         ],
         images: [
-          "/assets/products/locker-rooms/grs2.jpeg",
-          "/assets/products/locker-rooms/grs4.jpeg",
-          "/assets/products/locker-rooms/grs6.jpeg",
-          "/assets/products/locker-rooms/grs8.jpeg",
+          "/assets/products/locker-rooms/grs2.png",
+          "/assets/products/locker-rooms/grs4.png",
+          "/assets/products/locker-rooms/grs6.png",
+          "/assets/products/locker-rooms/grs8.png",
         ],
       },
       {
@@ -218,11 +218,11 @@ const catalogs = [
           },
         ],
         images: [
-          "/assets/products/locker-rooms/grs42.jpeg",
-          "/assets/products/locker-rooms/grs84.jpeg",
-          "/assets/products/locker-rooms/grs12.jpeg",
-          "/assets/products/locker-rooms/grs16.jpeg",
-          "/assets/products/locker-rooms/grs20.jpeg",
+          "/assets/products/locker-rooms/grs42.png",
+          "/assets/products/locker-rooms/grs84.png",
+          "/assets/products/locker-rooms/grs12.png",
+          "/assets/products/locker-rooms/grs16.png",
+          "/assets/products/locker-rooms/grs20.png",
         ],
       },
     ],
@@ -272,7 +272,7 @@ const catalogs = [
             },
           },
         ],
-        images: ["/assets/products/cabinets/a402_1.jpeg"],
+        images: ["/assets/products/cabinets/a402_1.png"],
       },
       {
         name: "Armário para celular",
@@ -297,9 +297,9 @@ const catalogs = [
           },
         ],
         images: [
-          "/assets/products/cabinets/porta_celular.jpeg",
-          "/assets/products/cabinets/celular2.jpg",
-          "/assets/products/cabinets/celular.jpg",
+          "/assets/products/cabinets/porta_celular.png",
+          "/assets/products/cabinets/celular2.png",
+          "/assets/products/cabinets/celular.png",
         ],
       },
       {
@@ -317,7 +317,7 @@ const catalogs = [
             },
           },
         ],
-        images: ["/assets/products/cabinets/professor.jpeg"],
+        images: ["/assets/products/cabinets/professor.png"],
       },
       {
         name: "Carrinho Notebook",
@@ -334,8 +334,8 @@ const catalogs = [
           },
         ],
         images: [
-          "/assets/products/cabinets/notebook.jpg",
-          "/assets/products/cabinets/notebook2.jpg",
+          "/assets/products/cabinets/notebook.png",
+          "/assets/products/cabinets/notebook2.png",
         ],
       },
       {
@@ -353,8 +353,8 @@ const catalogs = [
           },
         ],
         images: [
-          "/assets/products/cabinets/notebook.jpg",
-          "/assets/products/cabinets/notebook2.jpg",
+          "/assets/products/cabinets/notebook.png",
+          "/assets/products/cabinets/notebook2.png",
         ],
       },
     ],
@@ -379,7 +379,7 @@ const catalogs = [
           },
         ],
         images: [
-          "/assets/products/files/ar4.jpeg",
+          "/assets/products/files/ar4.png",
           "/assets/products/files/trilho-telescopico.png",
           "/assets/products/files/nylon.png",
         ],
@@ -399,7 +399,7 @@ const catalogs = [
             },
           },
         ],
-        images: ["/assets/products/files/gam-5.jpeg"],
+        images: ["/assets/products/files/gam-5.png"],
       },
       {
         name: "GAM-6",
@@ -416,7 +416,7 @@ const catalogs = [
             },
           },
         ],
-        images: ["/assets/products/files/gam-6.jpeg"],
+        images: ["/assets/products/files/gam-6.png"],
       },
       {
         name: "GAM-7",
@@ -433,7 +433,7 @@ const catalogs = [
             },
           },
         ],
-        images: ["/assets/products/files/gam-7.jpeg"],
+        images: ["/assets/products/files/gam-7.png"],
       },
       {
         name: "GAM-8",
@@ -450,7 +450,7 @@ const catalogs = [
             },
           },
         ],
-        images: ["/assets/products/files/gam-8.jpeg"],
+        images: ["/assets/products/files/gam-8.png"],
       },
       {
         name: "GAM-10",
@@ -467,7 +467,7 @@ const catalogs = [
             },
           },
         ],
-        images: ["/assets/products/files/gam-10.jpeg"],
+        images: ["/assets/products/files/gam-10.png"],
       },
       {
         name: "Arquivos Mapoteca",
@@ -484,7 +484,7 @@ const catalogs = [
             },
           },
         ],
-        images: ["/assets/products/files/mapoteca.jpeg"],
+        images: ["/assets/products/files/mapoteca.png"],
       },
     ],
   },
@@ -525,7 +525,7 @@ const catalogs = [
             },
           },
         ],
-        images: ["/assets/products/shelves/pr30.jpeg"],
+        images: ["/assets/products/shelves/pr30.png"],
       },
     ],
   },
@@ -558,7 +558,7 @@ const catalogs = [
             },
           },
         ],
-        images: ["/assets/products/shelves/encaixe.jpeg"],
+        images: ["/assets/products/shelves/encaixe.png"],
       },
     ],
   },
@@ -609,9 +609,9 @@ const catalogs = [
         ],
         images: [
           "/assets/products/shelves/ede1100.png",
-          "/assets/products/shelves/ese.jpeg",
-          "/assets/products/shelves/ere.jpeg",
-          "/assets/products/shelves/estante_baixa.jpeg",
+          "/assets/products/shelves/ese.png",
+          "/assets/products/shelves/ere.png",
+          "/assets/products/shelves/estante_baixa.png",
         ],
       },
       {
@@ -646,9 +646,9 @@ const catalogs = [
           },
         ],
         images: [
-          "/assets/products/shelves/estante_livro.jpeg",
-          "/assets/products/shelves/estante_prateleira.jpeg",
-          "/assets/products/shelves/estante_gaveta.jpeg",
+          "/assets/products/shelves/estante_livro.png",
+          "/assets/products/shelves/estante_prateleira.png",
+          "/assets/products/shelves/estante_gaveta.png",
         ],
       },
 
@@ -692,8 +692,8 @@ const catalogs = [
           },
         ],
         images: [
-          "/assets/products/shelves/ed10.jpeg", 
-          "/assets/products/shelves/es6pr.jpg",
+          "/assets/products/shelves/ed10.png", 
+          "/assets/products/shelves/es6pr.png",
           "/assets/products/shelves/er6pr.png"
         ],
       },
@@ -728,8 +728,8 @@ const catalogs = [
         ],
 
         images: [
-          "/assets/products/gondolas/centro.webp",
-          "/assets/products/gondolas/parede.jpeg"
+          "/assets/products/gondolas/centro.png",
+          "/assets/products/gondolas/parede.png"
         ],
       },
 
@@ -764,7 +764,7 @@ const catalogs = [
           },
         ],
         images: [
-          "/assets/products/sliders/deslizante.jpeg",
+          "/assets/products/sliders/deslizante.png",
           "/assets/products/sliders/deslizante-2.jpeg",
         ],
       },
