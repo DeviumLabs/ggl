@@ -353,8 +353,7 @@ const catalogs = [
           },
         ],
         images: [
-          "/assets/products/cabinets/notebook.png",
-          "/assets/products/cabinets/notebook2.png",
+          "/assets/products/locker-rooms/ferramentas.png",
         ],
       },
     ],
@@ -525,7 +524,7 @@ const catalogs = [
             },
           },
         ],
-        images: ["/assets/products/shelves/pr30.png"],
+        images: ["/assets/products/shelves/estante.png"],
       },
     ],
   },

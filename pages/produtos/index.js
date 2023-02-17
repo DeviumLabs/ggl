@@ -31,23 +31,24 @@ export default function Produtos({ categories }) {
       </Head>
       <Header />
       <main className="tw-mt-[120px]">
-        <section className="tw-px-[5%] tw-flex tw-items-center">
-          <div className="tw-w-[50%]">
+        <section className="tw-px-[20px] tw-flex-col md:tw-flex-row tw-flex tw-items-center">
+          <div className="tw-w-full md:tw-w-[50%]">
             <h1 className="tw-text-[35px] tw-mb-[10px]">PRODUTOS</h1>
             <p>Produtos da mais excelente qualidade para sua empresa.</p>
           </div>
-          <div className="tw-w-[50%] tw-flex tw-justify-center">
+          <div className="tw-w-full md:tw-w-[50%] tw-flex tw-justify-center">
             <img
-              src="/assets/banners/category-banner.png"
-              className="tw-w-[60%]"
+              src="/assets/banners/banner.png"
+              className=""
             />
           </div>
         </section>
-        <section className="tw-px-[5%] tw-grid tw-grid-cols-3 tw-gap-y-[80px] tw-gap-x-[40px] tw-mt-[80px]">
+        <section className="tw-px-[20px] tw-flex tw-justify-center tw-flex-wrap tw-gap-y-[80px] tw-gap-x-[40px] tw-mt-[80px] tw-mb-[100px]">
           {categories.categoryArray.map((category, i) => (
             <a
               key={i}
               href={`/produtos/${category.slug}?product=${category.products[0].slug}`}
+              className="tw-max-w-[350px] tw-w-full"
             >
               <img
                 src={category.image}

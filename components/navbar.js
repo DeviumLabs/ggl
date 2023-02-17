@@ -1,7 +1,7 @@
 export default function Navbar({ categories }) {
   console.log(categories);
   return (
-    <nav className="tw-absolute tw-left-0 tw-z-[300] tw-w-[15%] tw-bg-blue tw-px-[10px] tw-py-[30px]">
+    <nav className="tw-absolute tw-left-0 tw-z-[300] tw-w-[15%] tw-min-w-[200px] tw-bg-blue tw-px-[10px] tw-py-[30px]">
       <h1 className="tw-text-white ">
         LINHA DE PRODUTOS
         <hr className="tw-h-[1px] tw-w-[80%]  tw-mt-[5px]" />

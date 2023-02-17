@@ -18,13 +18,6 @@ module.exports = {
         darkBlue: "#073998",
         black: "#474747",
       },
-      screens: {
-        notebook: { max: "1440px" },
-        // => @media (max-width: 1279px) { ... }
-
-        mobile: { max: "1024px" },
-        // => @media (max-width: 1023px) { ... }
-      },
     },
   },
   plugins: [],

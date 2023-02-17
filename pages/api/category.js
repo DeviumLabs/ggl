@@ -132,7 +132,7 @@ export const categories = [
     name: "Estantes Convencionais",
     slug: "estantes-convencionais",
     category: "estantes-convencionais",
-    image: "/assets/products/shelves/pr30.png",
+    image: "/assets/products/shelves/estante.png",
     description:
       "Estantes com prateleiras livre para organização de objetos, arquivos, etc",
     products: [

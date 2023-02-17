@@ -57,15 +57,15 @@ export default function SingleProduct({ product, categories }) {
         <Navbar categories={categories} />
         <section
           id="product-wrapper"
-          className="tw-flex tw-mb-[150px]  tw-justify-between tw-w-[85%] tw-ml-[15%] tw-px-[5%]"
+          className="tw-flex tw-mb-[150px] tw-justify-between tw-flex-col lg:tw-flex-row tw-w-full md:tw-w-[85%] md:tw-ml-[15%] tw-px-[20px] tw-pt-[300px] md:tw-py-0 tw-gap-[20px]"
         >
-          <div className="tw-w-[50%] ">
+          <div className="tw-w-full lg:tw-w-[50%] ">
             <div id="principal-image">
               <img
                 src={principalImage}
                 className="tw-w-[450px] tw-h-[430px] tw-object-contain"
               />
-              <div className="tw-flex  tw-mt-[20px]">
+              <div className="tw-flex tw-mt-[20px] tw-w-full tw-overflow-x-auto tw-overflow-y-hidden md:tw-w-auto">
                 {product.images.length > 1
                   && product.images.map((image, i) => (
                       <img
@@ -85,20 +85,20 @@ export default function SingleProduct({ product, categories }) {
             </div>
             <div id="carousel-images"></div>
           </div>
-          <div className="tw-w-[50%]">
+          <div className="tw-w-full lg:tw-w-[50%] tw-mt-[50px] lg:tw-mt-0">
             <h1 className="tw-text-[38px]">{titlePrincipal}</h1>
             <p>{product.description}</p>
             <h1 className="tw-text-[32px] tw-mt-[50px]">Medidas</h1>
-            <table className="tw-font-light tw-w-full">
-              <tbody>
-                <tr className="tw-w-full">
+            <table className="tw-font-light tw-w-[calc(100vw-15%)] sm:tw-w-full tw-inline-block">
+              <tbody className="tw-inline-block tw-w-[calc(100vw-15%)] md:tw-w-full tw-overflow-x-auto md:tw-w-auto">
+                <tr className="tw-w-[800px] tw-min-w-[600px] tw-flex md:tw-w-full">
                   <td>Modelo</td>
                   <td>Altura</td>
                   <td>Largura</td>
                   <td>Profundidade</td>
                 </tr>
                 {product.models.map((model, i) => (
-                  <tr style={{fontWeight: i === table ? 600 : 300}}>
+                  <tr className="tw-w-[800px] tw-min-w-[600px] tw-flex md:tw-w-full" style={{fontWeight: i === table ? 600 : 300}}>
                     <td>{model.name}</td>
                     <td>{model.scale.height}</td>
                     <td>{model.scale.width}</td>

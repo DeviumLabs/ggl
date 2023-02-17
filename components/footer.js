@@ -3,7 +3,7 @@ import { Fragment } from "react";
 export default function Footer() {
   return (
     <Fragment>
-      <footer className="tw-grid tw-grid-cols-3 tw-gap-[40px] tw-bg-darkBlue tw-py-[50px] tw-px-[5%] tw-w-full tw-justify-center">
+      <footer className="tw-flex tw-flex-wrap tw-justify-start tw-items-start tw-gap-[40px] tw-bg-darkBlue tw-py-[50px] tw-px-[20px] tw-w-full">
         <div>
           <img src="/assets/icons/white-logo.svg" className="tw-w-[250px]" />
         </div>
@@ -97,11 +97,11 @@ export default function Footer() {
           </div>
         </div>
       </footer>
-      <div className="tw-bg-darkBlue tw-text-center tw-border-white tw-border-t-[1px] tw-py-[5px]">
-        <p className="tw-text-white">
-          &copy; 2022 GGL Móveis. Todos os direitos reservado | Developed by
+      <div className="tw-bg-darkBlue tw-text-center tw-border-white tw-border-t-[1px] tw-py-[5px] tw-px-[20px]">
+        <a href="https://deviumlabs.com.br" target="_blank" className="tw-text-white hover:tw-underline">
+          &copy; 2022 GGL Móveis. Todos os direitos reservado | Desenvolvido por
           Devium Labs
-        </p>
+        </a>
       </div>
     </Fragment>
   );

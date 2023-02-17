@@ -52,14 +52,14 @@ export default function Contact() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="tw-px-[5%] tw-mb-[100px] tw-py-[200px] tw-mt-[-100px] tw-flex tw-flex-col tw-items-center"
+      className="tw-px-[20px] tw-mb-[100px] tw-pt-[200px] tw-mt-[-200px] tw-flex tw-flex-col tw-items-center"
       id="contato"
     >
       <div className="tw-mb-[30px]">
         <small className="tw-text-blue tw-font-light">CONTATO</small>
         <h1 className="tw-text-[30px] tw-leading-[30px]">Entre em contato</h1>
       </div>
-      <div className="tw-flex tw-flex-col tw-w-[70%] tw-mb-[20px]">
+      <div className="tw-flex tw-flex-col tw-w-full tw-max-w-[600px] tw-mb-[20px]">
         <label htmlFor="">Nome:</label>
         <input
           type="text"
@@ -69,7 +69,7 @@ export default function Contact() {
         />
         {errors.name && <span className="tw-text-red">*Campo obrigatório</span>}
       </div>
-      <div className="tw-flex tw-flex-col tw-w-[70%] tw-mb-[20px]">
+      <div className="tw-flex tw-flex-col tw-w-full tw-max-w-[600px] tw-mb-[20px]">
         <label htmlFor="">Telefone:</label>
         <input
           type="tel"
@@ -88,7 +88,7 @@ export default function Contact() {
           <span className="tw-text-red">*Campo obrigatório</span>
         )}
       </div>
-      <div className="tw-flex tw-flex-col tw-w-[70%] tw-mb-[20px]">
+      <div className="tw-flex tw-flex-col tw-w-full tw-max-w-[600px] tw-mb-[20px]">
         <label htmlFor="">E-mail:</label>
         <input
           type="email"
@@ -100,7 +100,7 @@ export default function Contact() {
           <span className="tw-text-red">*Campo obrigatório</span>
         )}
       </div>
-      <div className="tw-flex tw-flex-col tw-w-[70%] tw-mb-[20px]">
+      <div className="tw-flex tw-flex-col tw-w-full tw-max-w-[600px] tw-mb-[20px]">
         <label htmlFor="">Mensagem</label>
         <textarea
           name="message"

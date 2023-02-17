@@ -101,7 +101,7 @@ export default function Home({ categories }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />
-      {window && <main className="tw-mt-[160px] tw-mb-[130px] tw-max-w-[1920px] tw-mx-auto">
+      {window && <main className="tw-mt-[110px] tw-mb-[130px] tw-max-w-[1920px] tw-mx-auto">
         {/* <section>
           <AliceCarousel items={banners} />
         </section> */}
@@ -114,13 +114,13 @@ export default function Home({ categories }) {
             <div className="tw-flex tw-items-center tw-justify-start tw-max-w-[1597px] tw-px-[5%] tw-mx-auto tw-w-full tw-py-[150px]">
               <div className="tw-flex tw-flex-col tw-text-white tw-z-[1]">
                 <h1 className="tw-text-[30px] tw-mb-[20px]">Arquivos</h1>
-                <p className="tw-w-[300px]">
+                <p className="tw-max-w-[300px] tw-w-full">
                   Móveis de excelente qualidade e resistência e perfeito
                   acabamento para harmonizar seu espaço.
                 </p>
                 <a
                   href=""
-                  className="tw-border-white tw-text-white tw-py-[10px] tw-mt-[20px] tw-transition-300 hover:tw-bg-blue hover:tw-text-white tw-border-[1px] tw-w-[300px] tw-text-center"
+                  className="tw-border-white tw-text-white tw-py-[10px] tw-mt-[20px] tw-transition-300 hover:tw-bg-blue hover:tw-text-white tw-border-[1px] tw-max-w-[300px] tw-w-full tw-text-center"
                 >
                   Saiba mais
                 </a>
@@ -143,7 +143,7 @@ export default function Home({ categories }) {
             <hr className="tw-w-[30%] tw-bg-blue tw-rounded-[10px] tw-h-[3px] tw-ml-[30px]" />
           </h1>
         </div>
-        <section className="tw-px-[5%] tw-grid tw-grid-cols-4 tw-gap-y-[80px] tw-gap-x-[40px]  tw-mb-[120px]">
+        <section className="tw-px-[20px] tw-flex tw-justify-center tw-items-center tw-flex-wrap tw-gap-y-[80px] tw-gap-x-[40px]  tw-mb-[120px]">
           {categories.categoryArray.map((category, i) => (
             <a
               key={i}
@@ -165,12 +165,12 @@ export default function Home({ categories }) {
         <section className="tw-px-[5%] tw-pt-[150px] pb-[100px] tw-mt-[-100px]" id="catalogo">
           <small className="tw-text-blue">CATÁLOGO</small>
           <h1 className="tw-text-[30px]">Nosso catálogo</h1>
-          <div className="tw-flex tw-items-center tw-justify-around tw-mt-[40px]">
+          <div className="tw-flex tw-items-center tw-justify-around tw-mt-[40px] tw-flex-col md:tw-flex-row tw-gap-[20px]">
             <a href="/assets/catalogo.pdf" target="_blank">
-              <img src="/assets/banners/catalogo.png" className="tw-w-[300px]" />
+              <img src="/assets/banners/catalogo.png" className="tw-max-w-[300px] tw-w-full" />
             </a>
             <div>
-              <p className="tw-w-[360px] tw-mb-[30px]">
+              <p className="tw-max-w-[360px] tw-w-full tw-mb-[30px]">
                 Baixe nosso catálogo para ter acesso a informações técnicas
                 sobre nossos produtos.
               </p>
@@ -182,11 +182,11 @@ export default function Home({ categories }) {
           </div>
         </section>
 
-        <section className="tw-px-[5%] tw-py-[200px] tw-mt-[-100px]" id="sobre">
+        <section className="tw-px-[20px] tw-py-[200px] tw-mt-[-100px]" id="sobre">
           <small className="tw-text-blue">EMPRESA</small>
           <h1 className="tw-text-[30px]">Sobre nós</h1>
-          <div className="tw-flex tw-items-center tw-justify-around tw-gap-[20px] tw-mt-[40px] tw-max-w-[1280px] tw-mx-auto">
-            <div className="tw-w-[50%]">
+          <div className="tw-flex tw-items-center tw-justify-around tw-gap-[20px] tw-mt-[40px] tw-max-w-[1280px] tw-mx-auto tw-flex-col md:tw-flex-row">
+            <div className="tw-w-full md:tw-w-[50%]">
               <p className="tw-mb-[30px]">
                 Em 15/02/1999 iniciamos a produção de Móveis fornecendo com rapidez e qualidade toda linha de Aço aos clientes.
                 Hoje continuamos com este compromisso atuando numa área própria de 10.300m².
@@ -194,21 +194,12 @@ export default function Home({ categories }) {
                 Toda atenção e respeito a nossos clientes resulta em constante expansão com parcerias em vários estados do Brasil.
               </p>
             </div>
-            <div className="tw-w-[50%]" >
+            <div className="tw-w-full md:tw-w-[50%]" >
               <img src="/assets/banners/empresa.jpg" className="tw-w-full" />
             </div>
           </div>
         </section>
           
-        <section className="tw-px-[5%] tw-py-[150px] tw-mt-[-150px]" id="videos">
-          <small className="tw-text-blue">CONTEÚDO</small>
-          <h1 className="tw-text-[30px]">Vídeos</h1>
-          <div className="tw-w-full tw-flex tw-justify-center tw-mt-[30px]">
-            <div className="tw-w-[80%] ">
-              <AliceCarousel items={videos} />
-            </div>
-          </div>
-        </section>
         <Contact />
       </main>}
       <Footer />
