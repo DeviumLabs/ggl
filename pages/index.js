@@ -136,14 +136,14 @@ export default function Home({ categories }) {
           </div>
         </section>
         
-        <div className="tw-w-full tw-px-[5%]">
+        <div className="tw-w-full tw-px-[20px]">
           <h1 className="tw-flex tw-justify-center tw-items-center tw-text-[24px] tw-text-darkBlue tw-my-[60px]">
             <hr className="tw-w-[30%] tw-bg-blue tw-rounded-[10px] tw-h-[3px] tw-mr-[30px]" />
             Conheça nossa linha de produtos
             <hr className="tw-w-[30%] tw-bg-blue tw-rounded-[10px] tw-h-[3px] tw-ml-[30px]" />
           </h1>
         </div>
-        <section className="tw-px-[20px] tw-flex tw-justify-center tw-items-center tw-flex-wrap tw-gap-y-[80px] tw-gap-x-[40px]  tw-mb-[120px]">
+        <section className="tw-px-[20px] tw-flex tw-justify-center tw-items-center tw-flex-wrap tw-gap-y-[80px] tw-gap-x-[40px] tw-mb-[120px] tw-max-w-[1024px] tw-w-full tw-mx-auto">
           {categories.categoryArray.map((category, i) => (
             <a
               key={i}
@@ -162,7 +162,7 @@ export default function Home({ categories }) {
             </a>
           ))}
         </section>
-        <section className="tw-px-[5%] tw-pt-[150px] pb-[100px] tw-mt-[-100px]" id="catalogo">
+        <section className="tw-px-[20px] tw-max-w-[1024px] tw-w-full tw-mx-auto tw-pt-[150px] pb-[100px] tw-mt-[-100px]" id="catalogo">
           <small className="tw-text-blue">CATÁLOGO</small>
           <h1 className="tw-text-[30px]">Nosso catálogo</h1>
           <div className="tw-flex tw-items-center tw-justify-around tw-mt-[40px] tw-flex-col md:tw-flex-row tw-gap-[20px]">
@@ -182,7 +182,7 @@ export default function Home({ categories }) {
           </div>
         </section>
 
-        <section className="tw-px-[20px] tw-py-[200px] tw-mt-[-100px]" id="sobre">
+        <section className="tw-px-[20px] tw-py-[200px] tw-max-w-[1024px] tw-w-full tw-mx-auto tw-mt-[-100px]" id="sobre">
           <small className="tw-text-blue">EMPRESA</small>
           <h1 className="tw-text-[30px]">Sobre nós</h1>
           <div className="tw-flex tw-items-center tw-justify-around tw-gap-[20px] tw-mt-[40px] tw-max-w-[1280px] tw-mx-auto tw-flex-col md:tw-flex-row">
