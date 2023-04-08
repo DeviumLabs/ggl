@@ -27,7 +27,7 @@ const banners = [
       <p className="tw-w-[300px]">
         Móveis de excelente qualidade e resistência e perfeito acabamento para
         harmonizar seu espaço.
-      </p>
+      </p> 
       <a
         href=""
         className="tw-border-blue tw-text-blue tw-py-[10px] tw-mt-[20px] tw-transition-300 hover:tw-bg-blue hover:tw-text-white tw-border-[1px] tw-w-[300px] tw-text-center"
