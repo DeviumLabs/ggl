@@ -11,7 +11,7 @@ import Navbar from "../../components/navbar";
 
 export async function getStaticProps() {
   const res = await api.get("/category?category=all");
- 
+
   return {
     props: {
       categories: res.data,
@@ -36,10 +36,7 @@ export default function Produtos({ categories }) {
             <p>Produtos da mais excelente qualidade para sua empresa.</p>
           </div>
           <div className="tw-w-full md:tw-w-[50%] tw-flex tw-justify-center">
-            <img
-              src="/assets/banners/banner.png"
-              className=""
-            />
+            <img src="/assets/banners/banner1.png" className="" />
           </div>
         </section>
         <section className="tw-px-[20px] tw-flex tw-justify-center tw-flex-wrap tw-gap-y-[80px] tw-gap-x-[40px] tw-mt-[80px] tw-mb-[100px]">
