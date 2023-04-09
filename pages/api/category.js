@@ -7,7 +7,7 @@ export default function handler(req, res) {
   res.setHeader("Access-Control-Allow-Methods", "GET");
 
   const category_selected = req.query.category;
- 
+
   let categoryArray = [];
 
   categories.map((category) => {
@@ -57,7 +57,6 @@ export const categories = [
         name: "Especiais",
         slug: "especiais",
       },
-      
     ],
   },
   {
@@ -65,7 +64,7 @@ export const categories = [
     slug: "armarios",
     image: "/assets/products/cabinets/a402_1.png",
     description:
-      "Os armários desevolvidos pela GGL, são os mais duradouros do ramo.",
+      "Os armários desenvolvidos pela GGL, são os mais duradouros do ramo.",
     products: [
       {
         name: "A402",
@@ -147,8 +146,7 @@ export const categories = [
     slug: "estantes-armazenagem",
     category: "estantes-armazenagem",
     image: "/assets/products/shelves/encaixe.png",
-    description:
-      "Estantes com prateleiras para acondicionar material pesado",
+    description: "Estantes com prateleiras para acondicionar material pesado",
     products: [
       {
         name: "Modelos Armazenagem",
@@ -198,7 +196,6 @@ export const categories = [
         name: "Modelos",
         slug: "modelos",
       },
-
     ],
   },
   {
