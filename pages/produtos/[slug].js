@@ -98,7 +98,7 @@ export default function SingleProduct({ product, categories }) {
                   <td>Profundidade</td>
                 </tr>
                 {product.models.map((model, i) => (
-                  <tr className="tw-w-[800px] tw-min-w-[600px] tw-flex md:tw-w-full" style={{fontWeight: i === table ? 600 : 300}}>
+                  <tr key={i} className="tw-w-[800px] tw-min-w-[600px] tw-flex md:tw-w-full" style={{fontWeight: product.images.length === 1 ? 600 : (i === table || product?.allBold ? 600 : 300)}}>
                     <td>{model.name}</td>
                     <td>{model.scale.height}</td>
                     <td>{model.scale.width}</td>

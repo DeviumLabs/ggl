@@ -277,7 +277,7 @@ const catalogs = [
       {
         name: "Armário para celular",
         slug: "armario-para-celular",
-        description: "Armário para guardar celular com carregar ou modelo convencional.",
+        description: "Armário para guardar celular, convencional ou com carregador.",
         models: [
           {
             name: "Sem carregador",
@@ -574,7 +574,7 @@ const catalogs = [
 
         models: [
           {
-            name: "EDE 1100",
+            name: "EDE 1010",
             scale: {
               height: "2000 mm",
               width: "1000 mm",
@@ -582,7 +582,7 @@ const catalogs = [
             },
           },
           {
-            name: "ESE 1110",
+            name: "ESE 1020",
             scale: {
               height: "2000 mm",
               width: "1000 mm",
@@ -590,7 +590,7 @@ const catalogs = [
             },
           },
           {
-            name: "ERE 1090",
+            name: "ERE 1030",
             scale: {
               height: "2000 mm",
               width: "1000 mm",
@@ -620,23 +620,31 @@ const catalogs = [
           "Movéis focados em armazenar livros e revistas em bibliotecas contruídas para encaixe",
         models: [
           {
-            name: "Estante Livro",
+            name: "Estante Revista 1090",
             scale: {
               height: "2000 mm",
-              width: "1600 mm",
-              depth: "550 mm",
+              width: "1000 mm",
+              depth: "580 mm",
             },
           },
           {
-            name: "Estante Prateleira",
+            name: "Estante Simples 1100",
             scale: {
               height: "1980 mm",
-              width: "910 mm",
-              depth: "550 mm",
+              width: "1000 mm",
+              depth: "300 mm",
             },
           },
           {
-            name: "Estante Gaveta",
+            name: "Estante Gaveta 1110",
+            scale: {
+              height: "2000 mm",
+              width: "1000 mm",
+              depth: "580 mm",
+            },
+          },
+          {
+            name: "Estante Dupla 1100",
             scale: {
               height: "2000 mm",
               width: "1000 mm",
@@ -741,6 +749,7 @@ const catalogs = [
       {
         name: "Deslizante Inicial",
         slug: "deslizante-inicial",
+        allBold: true,
         description:
           categories[8].description,
 

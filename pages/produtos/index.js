@@ -21,7 +21,6 @@ export async function getStaticProps() {
 }
 
 export default function Produtos({ categories }) {
-  console.log(categories);
   return (
     <div>
       <Head>
