@@ -656,6 +656,7 @@ const catalogs = [
           "/assets/products/shelves/estante_livro.png",
           "/assets/products/shelves/estante_prateleira.png",
           "/assets/products/shelves/estante_gaveta.png",
+          "/assets/products/shelves/gaveta_1100.png",
         ],
       },
 
