@@ -315,25 +315,25 @@ const catalogs = [
         ],
         images: ["/assets/products/cabinets/professor.png"],
       },
-      {
-        name: "Carrinho Notebook",
-        slug: "notebook",
-        description: "Carrinho para notebook com capacidade para 32 notebooks",
-        models: [
-          {
-            name: "Carrinho Notebook",
-            scale: {
-              height: "1100 mm",
-              width: "910 mm",
-              depth: "470 mm",
-            },
-          },
-        ],
-        images: [
-          "/assets/products/cabinets/notebook2.png",
-          "/assets/products/cabinets/notebook.png",
-        ],
-      },
+      // {
+      //   name: "Carrinho Notebook",
+      //   slug: "notebook",
+      //   description: "Carrinho para notebook com capacidade para 32 notebooks",
+      //   models: [
+      //     {
+      //       name: "Carrinho Notebook",
+      //       scale: {
+      //         height: "1100 mm",
+      //         width: "910 mm",
+      //         depth: "470 mm",
+      //       },
+      //     },
+      //   ],
+      //   images: [
+      //     "/assets/products/cabinets/notebook2.png",
+      //     "/assets/products/cabinets/notebook.png",
+      //   ],
+      // },
       {
         name: "Armário de Ferramentas",
         slug: "armario-de-ferramentas",
