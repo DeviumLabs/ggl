@@ -647,6 +647,32 @@ const catalogs = [
     ],
   },
   {
+    title: "Carrinho Notebook",
+    slug: "carrinho-notebook",
+    category: "carrinho-notebook",
+    products: [
+      {
+        name: "Carrinho Notebook",
+        slug: "carrinho-notebook",
+        description: "Carrinho para notebook com capacidade para 32 notebooks",
+        models: [
+          {
+            name: "Carrinho Notebook",
+            scale: {
+              height: "1100 mm",
+              width: "910 mm",
+              depth: "470 mm",
+            },
+          },
+        ],
+        images: [
+          "/assets/products/cabinets/notebook2.png",
+          "/assets/products/cabinets/notebook.png",
+        ],
+      },
+    ],
+  },
+  {
     title: "Biblioteca Encaixe Coluna",
     slug: "encaixe-coluna",
     category: "encaixe-coluna",

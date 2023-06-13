@@ -173,6 +173,19 @@ export const categories = [
     ],
   },
   {
+    name: "Carrinho Notebook",
+    slug: "carrinho-notebook",
+    category: "carrinho-notebook",
+    image: "/assets/products/cabinets/notebook2.png",
+    description: "Carrinho para notebook com capacidade para 32 notebooks",
+    products: [
+      {
+        name: "Carrinho Notebook",
+        slug: "carrinho-notebook",
+      },
+    ],
+  },
+  {
     name: "Biblioteca Encaixe Coluna",
     slug: "encaixe-coluna",
     category: "encaixe-coluna",

@@ -795,10 +795,6 @@ video {
   width: 30%;
 }
 
-.tw-w-\[500px\] {
-  width: 500px;
-}
-
 .tw-w-\[450px\] {
   width: 450px;
 }
@@ -1100,6 +1096,10 @@ video {
   padding-top: 150px;
 }
 
+.tw-pt-\[30px\] {
+  padding-top: 30px;
+}
+
 .tw-pt-\[300px\] {
   padding-top: 300px;
 }
@@ -1110,10 +1110,6 @@ video {
 
 .tw-pl-\[10px\] {
   padding-left: 10px;
-}
-
-.tw-pt-\[30px\] {
-  padding-top: 30px;
 }
 
 .tw-text-center {
@@ -1316,12 +1312,12 @@ img{
 }
 
 @media (min-width: 640px) {
-  .sm\:tw-w-full {
-    width: 100%;
-  }
-
   .sm\:tw-w-\[400px\] {
     width: 400px;
+  }
+
+  .sm\:tw-w-full {
+    width: 100%;
   }
 }
 
