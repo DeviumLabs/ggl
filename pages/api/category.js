@@ -79,10 +79,10 @@ export const categories = [
         name: "Professor",
         slug: "professor",
       },
-      {
-        name: "Carrinho Notebook",
-        slug: "notebook",
-      },
+      // {
+      //   name: "Carrinho Notebook",
+      //   slug: "notebook",
+      // },
       {
         name: "Armário de Ferramentas",
         slug: "armario-de-ferramentas",
