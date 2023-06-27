@@ -3,6 +3,7 @@ import React, { useRef, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Input from "react-input-mask";
+import axios from "axios";
 
 export default function Contact() {
   const {
@@ -10,6 +11,7 @@ export default function Contact() {
     watch,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm();
 
@@ -20,7 +22,7 @@ export default function Contact() {
 
   const onSubmit = async ({ name, email, phone, message }) => {
     const body = `
-                                <h3>Novo contato via site OrganoZero</h3>
+                                <h3>Novo contato via site GGL Móveis</h3>
                                 <p>Nome: ${name}</p>  
                                 <p>Email: ${email}</p>  
                                 <p>Telefone: ${phone}</p>  
@@ -28,20 +30,31 @@ export default function Contact() {
                                 <p>Mensagem: ${message}</p>                   
                       `;
 
-    const mail = {
-      to: "vm.ribeiro.company@gmail.com",
-      from: email,
-
-      subject: "Nova mensagem via site - GGL Móveis de Aço",
-      message: body,
-    };
     try {
       setLoading("Enviando...");
-      console.log(mail);
+      // console.log(mail);
+
+      const res = await axios.post(
+        "./api/mail",
+        {
+          body,
+        },
+        {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            // "Access-Control-Allow-Origin": "https://www.deviumlabs.com.br",
+          },
+        }
+      );
+      console.log(res.data);
 
       toast.success("Mensagem enviada!");
 
-      setLoading("Enviar novamente");
+      setLoading("ENVIAR");
+      // setValue("name", "");
+      // setValue("email", "");
+      // setValue("phone", "");
+      // setValue("message", "");
     } catch (e) {
       console.log(e);
       setLoading("Clique aqui");
