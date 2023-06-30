@@ -1,7 +1,7 @@
 import sg from "@sendgrid/mail";
 
 sg.setApiKey(process.env.SENDGRID_APIKEY);
-
+// Teste
 export default function sendEmail(req, res) {
   const data = req.body;
   const message = {
