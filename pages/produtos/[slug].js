@@ -44,6 +44,7 @@ export default function SingleProduct({ product, categories }) {
       </div>
     );
   }
+
   return (
     <div className="">
       <Head>

@@ -5,7 +5,7 @@ sg.setApiKey(process.env.SENDGRID_APIKEY);
 export default function sendEmail(req, res) {
   const data = req.body;
   const message = {
-    to: "pedro.neto72pn@gmail.com",
+    to: "ggl@gglmoveis.com.br",
     from: "deviumlabs@gmail.com",
     subject: "Contato | GGl Móveis",
     html: data.body.replace(/[\r\n]/gm, ""),
