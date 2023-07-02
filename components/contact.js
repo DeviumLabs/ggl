@@ -86,8 +86,8 @@ export default function Contact() {
                 ? "(99) 9999-9999?"
                 : "(99) 99999-9999"
             }
-            formatChars={{ 9: "[0-9]", "?": "[0-9 ]" }}
-            maskChar={null}
+            // formatchars={{ 9: "[0-9]", "?": "[0-9 ]" }}
+            // maskchar={null}
             {...register("phone", { required: true })}
             className="tw-border-blue tw-border-[1px] tw-py-[12px] tw-px-[12px]"
           />

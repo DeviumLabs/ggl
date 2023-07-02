@@ -200,7 +200,7 @@ export default function Home({ categories }) {
             </div>
           </section>
 
-          <Contact />
+          {/* <Contact /> */}
         </main>
       )}
       <Footer />
