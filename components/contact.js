@@ -4,7 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 
-export default function Contact() {
+export default function Contact({ budgetMessage }) {
   const {
     register,
     watch,
@@ -33,7 +33,7 @@ export default function Contact() {
       setLoading("Enviando...");
 
       const res = await axios.post(
-        "./api/mail",
+        "/api/mail",
         { body },
         {
           headers: {
@@ -111,6 +111,7 @@ export default function Contact() {
           <label htmlFor="">Mensagem</label>
           <textarea
             name="message"
+            defaultValue={budgetMessage ? budgetMessage : ""}
             {...register("message", { required: true })}
             className="tw-border-blue tw-border-[1px] tw-py-[12px] tw-px-[12px]"
           />

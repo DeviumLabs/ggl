@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import api from "../../services/api";
 import Head from "next/head";
-import Image from "next/image";
 
 //Components
 import Header from "../../components/header";
@@ -27,11 +26,8 @@ export async function getServerSideProps(context) {
 export default function SingleProduct({ product, categories }) {
   const [principalImage, setPrincipalImage] = useState(product.images[0]);
   const [titlePrincipal, setTitlePrincipal] = useState(product.models[0].name);
+  const [contactMessage, setContactMessage] = useState("");
   const [table, setTable] = useState(0);
-
-  // function handlePrincipalImage(image) {
-  //   setPrincipalImage(image);
-  // }
 
   if (product.error) {
     return (
@@ -44,6 +40,13 @@ export default function SingleProduct({ product, categories }) {
       </div>
     );
   }
+
+  const createBudget = () => {
+    setContactMessage(
+      `Gostaria de ter mais informações sobre o produto ${categories.categoryArray[0].singleName} ${product.name}`
+    );
+    window.location.assign("#contato");
+  };
 
   return (
     <div className="">
@@ -90,7 +93,7 @@ export default function SingleProduct({ product, categories }) {
             <p>{product.description}</p>
             <h1 className="tw-text-[32px] tw-mt-[50px]">Medidas</h1>
             <table className="tw-font-light tw-w-[calc(100vw-15%)] sm:tw-w-full tw-inline-block">
-              <tbody className="tw-inline-block tw-w-[calc(100vw-15%)] md:tw-w-full tw-overflow-x-auto md:tw-w-auto">
+              <tbody className="tw-inline-block tw-w-[calc(100vw-15%)] md:tw-w-full tw-overflow-x-auto ">
                 <tr className="tw-w-[800px] tw-min-w-[600px] tw-flex md:tw-w-full">
                   <td>Modelo</td>
                   <td>Altura</td>
@@ -149,12 +152,13 @@ export default function SingleProduct({ product, categories }) {
             <button
               type="submit"
               className="tw-bg-blue tw-mt-[30px] tw-text-white tw-w-[240px] tw-h-[50px] hover:tw-bg-white hover:tw-border-blue hover:tw-border-[1px] hover:tw-text-blue tw-transition-300"
+              onClick={createBudget}
             >
               Fazer Orçamento
             </button>
           </div>
         </section>
-        <Contact />
+        <Contact budgetMessage={contactMessage} />
       </main>
       <Footer />
     </div>

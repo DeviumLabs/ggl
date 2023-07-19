@@ -89,7 +89,11 @@ export default function Footer() {
                 </a>
               </div>
               <div className="tw-bg-white tw-w-[50px] tw-h-[50px] tw-rounded-[50%] tw-p-[5px] tw-mr-[15px]">
-                <a href="" target="_blank" className="tw-bg-white ">
+                <a
+                  href="https://www.youtube.com/@GGLmoveis"
+                  target="_blank"
+                  className="tw-bg-white "
+                >
                   <img src="/assets/icons/youtube.svg" />
                 </a>
               </div>
