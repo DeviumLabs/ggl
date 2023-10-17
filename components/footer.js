@@ -41,7 +41,7 @@ export default function Footer() {
               Catálogo
             </a>
             <a
-              href="/#videos"
+              href="/videos"
               target="_blank"
               className="tw-mx-[30px] hover:tw-underline tw-transition-[0.4s] tw-text-white tw-mb-[6px]"
             >
@@ -94,7 +94,11 @@ export default function Footer() {
                 </a>
               </div>
               <div className="tw-bg-white tw-w-[50px] tw-h-[50px] tw-rounded-[50%] tw-p-[5px] tw-mr-[15px]">
-                <a href="" target="_blank" className="tw-bg-white ">
+                <a
+                  href="https://www.youtube.com/@GGLmoveis"
+                  target="_blank"
+                  className="tw-bg-white "
+                >
                   <img src="/assets/icons/youtube.svg" />
                 </a>
               </div>
@@ -103,9 +107,13 @@ export default function Footer() {
         </div>
       </footer>
       <div className="tw-bg-darkBlue tw-text-center tw-border-white tw-border-t-[1px] tw-py-[5px] tw-px-[20px]">
-        <a href="https://deviumlabs.com.br" target="_blank" className="tw-text-white hover:tw-underline">
+        <a
+          href="https://www.devlara.com.br/"
+          target="_blank"
+          className="tw-text-white hover:tw-underline"
+        >
           &copy; 2022 GGL Móveis. Todos os direitos reservado | Desenvolvido por
-          Devium Labs
+          <strong> Devlara</strong>
         </a>
       </div>
     </Fragment>

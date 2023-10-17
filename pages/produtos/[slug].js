@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import api from "../../services/api";
 import Head from "next/head";
-import Image from "next/image";
 
 //Components
 import Header from "../../components/header";
@@ -25,14 +24,10 @@ export async function getServerSideProps(context) {
 }
 
 export default function SingleProduct({ product, categories }) {
-  
   const [principalImage, setPrincipalImage] = useState(product.images[0]);
   const [titlePrincipal, setTitlePrincipal] = useState(product.models[0].name);
-  const [table, setTable] = useState(0)
-
-  // function handlePrincipalImage(image) {
-  //   setPrincipalImage(image);
-  // }
+  const [contactMessage, setContactMessage] = useState("");
+  const [table, setTable] = useState(0);
 
   if (product.error) {
     return (
@@ -45,6 +40,14 @@ export default function SingleProduct({ product, categories }) {
       </div>
     );
   }
+
+  const createBudget = () => {
+    setContactMessage(
+      `Gostaria de ter mais informações sobre o produto ${categories.categoryArray[0].singleName} ${product.name}`
+    );
+    window.location.assign("#contato");
+  };
+
   return (
     <div className="">
       <Head>
@@ -66,21 +69,21 @@ export default function SingleProduct({ product, categories }) {
                 className="tw-w-[450px] tw-h-[430px] tw-object-contain"
               />
               <div className="tw-flex tw-mt-[20px] tw-w-full tw-overflow-x-auto tw-overflow-y-hidden md:tw-w-auto">
-                {product.images.length > 1
-                  && product.images.map((image, i) => (
-                      <img
-                        src={image}
-                        key={i}
-                        className="tw-w-[80px] tw-h-[80px] tw-object-contain tw-mr-[10px] hover:tw-scale-[1.1] tw-cursor-pointer"
-                        onClick={() => {
-                          setPrincipalImage(image);
-                          setTable(i)
-                          if (!!product.models[i]) {
-                            setTitlePrincipal(product.models[i].name);
-                          }
-                        }}
-                      />
-                    ))}
+                {product.images.length > 1 &&
+                  product.images.map((image, i) => (
+                    <img
+                      src={image}
+                      key={i}
+                      className="tw-w-[80px] tw-h-[80px] tw-object-contain tw-mr-[10px] hover:tw-scale-[1.1] tw-cursor-pointer"
+                      onClick={() => {
+                        setPrincipalImage(image);
+                        setTable(i);
+                        if (!!product.models[i]) {
+                          setTitlePrincipal(product.models[i].name);
+                        }
+                      }}
+                    />
+                  ))}
               </div>
             </div>
             <div id="carousel-images"></div>
@@ -90,7 +93,7 @@ export default function SingleProduct({ product, categories }) {
             <p>{product.description}</p>
             <h1 className="tw-text-[32px] tw-mt-[50px]">Medidas</h1>
             <table className="tw-font-light tw-w-[calc(100vw-15%)] sm:tw-w-full tw-inline-block">
-              <tbody className="tw-inline-block tw-w-[calc(100vw-15%)] md:tw-w-full tw-overflow-x-auto md:tw-w-auto">
+              <tbody className="tw-inline-block tw-w-[calc(100vw-15%)] md:tw-w-full tw-overflow-x-auto ">
                 <tr className="tw-w-[800px] tw-min-w-[600px] tw-flex md:tw-w-full">
                   <td>Modelo</td>
                   <td>Altura</td>
@@ -98,7 +101,18 @@ export default function SingleProduct({ product, categories }) {
                   <td>Profundidade</td>
                 </tr>
                 {product.models.map((model, i) => (
-                  <tr key={i} className="tw-w-[800px] tw-min-w-[600px] tw-flex md:tw-w-full" style={{fontWeight: product.images.length === 1 ? 600 : (i === table || product?.allBold ? 600 : 300)}}>
+                  <tr
+                    key={i}
+                    className="tw-w-[800px] tw-min-w-[600px] tw-flex md:tw-w-full"
+                    style={{
+                      fontWeight:
+                        product.images.length === 1
+                          ? 600
+                          : i === table || product?.allBold
+                          ? 600
+                          : 300,
+                    }}
+                  >
                     <td>{model.name}</td>
                     <td>{model.scale.height}</td>
                     <td>{model.scale.width}</td>
@@ -138,12 +152,13 @@ export default function SingleProduct({ product, categories }) {
             <button
               type="submit"
               className="tw-bg-blue tw-mt-[30px] tw-text-white tw-w-[240px] tw-h-[50px] hover:tw-bg-white hover:tw-border-blue hover:tw-border-[1px] hover:tw-text-blue tw-transition-300"
+              onClick={createBudget}
             >
               Fazer Orçamento
             </button>
           </div>
         </section>
-        <Contact />
+        <Contact budgetMessage={contactMessage} />
       </main>
       <Footer />
     </div>

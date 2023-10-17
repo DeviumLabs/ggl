@@ -27,6 +27,9 @@ yarn-error.log*
 
 # local env files
 .env*.local
+.env
+
+./bfg-1.14.0
 
 # vercel
 .vercel

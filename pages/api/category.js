@@ -35,7 +35,8 @@ export default function handler(req, res) {
 
 export const categories = [
   {
-    name: "Armários Vestiários ",
+    name: "Armários Vestiários",
+    singleName: "Armário Vestiário",
     slug: "armarios-vestiarios",
     image: "/assets/products/locker-rooms/roupeiro.png",
     description:
@@ -61,6 +62,7 @@ export const categories = [
   },
   {
     name: "Armários",
+    singleName: "Armário",
     slug: "armarios",
     image: "/assets/products/cabinets/a402_1.png",
     description:
@@ -79,10 +81,10 @@ export const categories = [
         name: "Professor",
         slug: "professor",
       },
-      {
-        name: "Carrinho Notebook",
-        slug: "notebook",
-      },
+      // {
+      //   name: "Carrinho Notebook",
+      //   slug: "notebook",
+      // },
       {
         name: "Armário de Ferramentas",
         slug: "armario-de-ferramentas",
@@ -91,6 +93,7 @@ export const categories = [
   },
   {
     name: "Arquivos",
+    singleName: "Arquivo",
     slug: "arquivos",
     image: "/assets/products/files/ar4.png",
     description:
@@ -126,9 +129,9 @@ export const categories = [
       },
     ],
   },
-
   {
     name: "Estantes Convencionais",
+    singleName: "Estante Convencional",
     slug: "estantes-convencionais",
     category: "estantes-convencionais",
     image: "/assets/products/shelves/estante.png",
@@ -143,6 +146,7 @@ export const categories = [
   },
   {
     name: "Estantes Armazenagem",
+    singleName: "Estante de Armazenagem",
     slug: "estantes-armazenagem",
     category: "estantes-armazenagem",
     image: "/assets/products/shelves/encaixe.png",
@@ -156,6 +160,7 @@ export const categories = [
   },
   {
     name: "Biblioteca Encaixe",
+    singleName: "Biblioteca de Encaixe",
     slug: "biblioteca-encaixe",
     category: "biblioteca-encaixe",
     image: "/assets/products/shelves/ede1100.png",
@@ -173,7 +178,22 @@ export const categories = [
     ],
   },
   {
+    name: "Carrinho Notebook",
+    singleName: "Carrinho Notebook",
+    slug: "carrinho-notebook",
+    category: "carrinho-notebook",
+    image: "/assets/products/cabinets/notebook2.png",
+    description: "Carrinho para notebook com capacidade para 32 notebooks",
+    products: [
+      {
+        name: "Carrinho Notebook",
+        slug: "carrinho-notebook",
+      },
+    ],
+  },
+  {
     name: "Biblioteca Encaixe Coluna",
+    singleName: "Biblioteca Encaixe Coluna",
     slug: "encaixe-coluna",
     category: "encaixe-coluna",
     image: "/assets/products/shelves/ed10.png",
@@ -188,6 +208,7 @@ export const categories = [
   },
   {
     name: "Gondolas",
+    singleName: "Gondola",
     slug: "gondolas",
     image: "/assets/products/gondolas/centro.png",
     description: "Gondolas bem estruturadas e fortes para o seu varejo",
@@ -200,6 +221,7 @@ export const categories = [
   },
   {
     name: "Deslizantes",
+    singleName: "Deslizante",
     slug: "deslizantes",
     image: "/assets/products/sliders/deslizante.png",
     description:

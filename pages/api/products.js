@@ -84,8 +84,7 @@ const catalogs = [
       {
         name: "Especiais",
         slug: "especiais",
-        description:
-          categories[0].description,
+        description: categories[0].description,
 
         models: [
           {
@@ -125,8 +124,7 @@ const catalogs = [
       {
         name: "GRSP 2-8",
         slug: "grsp2-8",
-        description:
-          categories[0].description,
+        description: categories[0].description,
 
         models: [
           {
@@ -172,8 +170,7 @@ const catalogs = [
       {
         name: "GRSP 4/2 - 20",
         slug: "grsp42-8",
-        description:
-          categories[0].description,
+        description: categories[0].description,
 
         models: [
           {
@@ -236,8 +233,7 @@ const catalogs = [
       {
         name: "A402",
         slug: "a402",
-        description:
-          categories[1].description,
+        description: categories[1].description,
         models: [
           {
             name: "A402",
@@ -277,7 +273,8 @@ const catalogs = [
       {
         name: "Armário para celular",
         slug: "armario-para-celular",
-        description: "Armário para guardar celular, convencional ou com carregador.",
+        description:
+          "Armário para guardar celular, convencional ou com carregador.",
         models: [
           {
             name: "Sem carregador",
@@ -305,8 +302,7 @@ const catalogs = [
       {
         name: "Armário Professor",
         slug: "professor",
-        description:
-          categories[1].description,
+        description: categories[1].description,
         models: [
           {
             name: "Professor",
@@ -319,25 +315,25 @@ const catalogs = [
         ],
         images: ["/assets/products/cabinets/professor.png"],
       },
-      {
-        name: "Carrinho Notebook",
-        slug: "notebook",
-        description: "Carrinho para notebook com capacidade para 32 notebooks",
-        models: [
-          {
-            name: "Carrinho Notebook",
-            scale: {
-              height: "1100 mm",
-              width: "910 mm",
-              depth: "470 mm",
-            },
-          },
-        ],
-        images: [
-          "/assets/products/cabinets/notebook.png",
-          "/assets/products/cabinets/notebook2.png",
-        ],
-      },
+      // {
+      //   name: "Carrinho Notebook",
+      //   slug: "notebook",
+      //   description: "Carrinho para notebook com capacidade para 32 notebooks",
+      //   models: [
+      //     {
+      //       name: "Carrinho Notebook",
+      //       scale: {
+      //         height: "1100 mm",
+      //         width: "910 mm",
+      //         depth: "470 mm",
+      //       },
+      //     },
+      //   ],
+      //   images: [
+      //     "/assets/products/cabinets/notebook2.png",
+      //     "/assets/products/cabinets/notebook.png",
+      //   ],
+      // },
       {
         name: "Armário de Ferramentas",
         slug: "armario-de-ferramentas",
@@ -352,9 +348,7 @@ const catalogs = [
             },
           },
         ],
-        images: [
-          "/assets/products/locker-rooms/ferramentas.png",
-        ],
+        images: ["/assets/products/locker-rooms/ferramentas.png"],
       },
     ],
   },
@@ -365,8 +359,7 @@ const catalogs = [
       {
         name: "A-R4",
         slug: "a-r4",
-        description:
-          categories[2].description,
+        description: categories[2].description,
         models: [
           {
             name: "A-R4",
@@ -386,8 +379,7 @@ const catalogs = [
       {
         name: "GAM-5",
         slug: "gam-5",
-        description:
-          categories[2].description,
+        description: categories[2].description,
         models: [
           {
             name: "GAM-5",
@@ -403,8 +395,7 @@ const catalogs = [
       {
         name: "GAM-6",
         slug: "gam-6",
-        description:
-          categories[2].description,
+        description: categories[2].description,
         models: [
           {
             name: "GAM-6",
@@ -420,8 +411,7 @@ const catalogs = [
       {
         name: "GAM-7",
         slug: "gam-7",
-        description:
-          categories[2].description,
+        description: categories[2].description,
         models: [
           {
             name: "GAM-7",
@@ -437,8 +427,7 @@ const catalogs = [
       {
         name: "GAM-8",
         slug: "gam-8",
-        description:
-          categories[2].description,
+        description: categories[2].description,
         models: [
           {
             name: "GAM-8",
@@ -454,8 +443,7 @@ const catalogs = [
       {
         name: "GAM-10",
         slug: "gam-10",
-        description:
-          categories[2].description,
+        description: categories[2].description,
         models: [
           {
             name: "GAM-10",
@@ -471,8 +459,7 @@ const catalogs = [
       {
         name: "Arquivos Mapoteca",
         slug: "mapoteca",
-        description:
-          categories[2].description,
+        description: categories[2].description,
         models: [
           {
             name: "Arquivos Mapoteca",
@@ -495,8 +482,7 @@ const catalogs = [
       {
         name: "Modelos PR",
         slug: "pr",
-        description:
-        categories[3].description,
+        description: categories[3].description,
 
         models: [
           {
@@ -536,8 +522,7 @@ const catalogs = [
       {
         name: "Modelos Armazenagem",
         slug: "encaixe",
-        description:
-        categories[4].description,
+        description: categories[4].description,
 
         models: [
           {
@@ -659,7 +644,32 @@ const catalogs = [
           "/assets/products/shelves/gaveta_1100.png",
         ],
       },
-
+    ],
+  },
+  {
+    title: "Carrinho Notebook",
+    slug: "carrinho-notebook",
+    category: "carrinho-notebook",
+    products: [
+      {
+        name: "Carrinho Notebook",
+        slug: "carrinho-notebook",
+        description: "Carrinho para notebook com capacidade para 32 notebooks",
+        models: [
+          {
+            name: "Carrinho Notebook",
+            scale: {
+              height: "1100 mm",
+              width: "910 mm",
+              depth: "470 mm",
+            },
+          },
+        ],
+        images: [
+          "/assets/products/cabinets/notebook2.png",
+          "/assets/products/cabinets/notebook.png",
+        ],
+      },
     ],
   },
   {
@@ -700,9 +710,9 @@ const catalogs = [
           },
         ],
         images: [
-          "/assets/products/shelves/ed10.png", 
+          "/assets/products/shelves/ed10.png",
           "/assets/products/shelves/es6pr.png",
-          "/assets/products/shelves/er6pr.png"
+          "/assets/products/shelves/er6pr.png",
         ],
       },
     ],
@@ -714,8 +724,7 @@ const catalogs = [
       {
         name: "Modelos",
         slug: "modelos",
-        description:
-          categories[7].description,
+        description: categories[7].description,
         models: [
           {
             name: "Centro",
@@ -737,10 +746,9 @@ const catalogs = [
 
         images: [
           "/assets/products/gondolas/centro.png",
-          "/assets/products/gondolas/parede.png"
+          "/assets/products/gondolas/parede.png",
         ],
       },
-
     ],
   },
   {
@@ -751,8 +759,7 @@ const catalogs = [
         name: "Deslizante Inicial",
         slug: "deslizante-inicial",
         allBold: true,
-        description:
-          categories[8].description,
+        description: categories[8].description,
 
         models: [
           {

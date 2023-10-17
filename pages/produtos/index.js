@@ -31,13 +31,17 @@ export default function Produtos({ categories }) {
       <Header />
       <main className="tw-mt-[120px]">
         <section className="tw-px-[20px] tw-flex-col md:tw-flex-row tw-flex tw-items-center">
-          <div className="tw-w-full md:tw-w-[50%]">
-            <h1 className="tw-text-[35px] tw-mb-[10px]">PRODUTOS</h1>
-            <p>Produtos da mais excelente qualidade para sua empresa.</p>
+          <div className="tw-w-full">
+            <h1 className="tw-text-[35px] tw-mb-[10px] tw-text-center">
+              PRODUTOS
+            </h1>
+            <p className="tw-text-center">
+              Produtos da mais excelente qualidade para sua empresa.
+            </p>
           </div>
-          <div className="tw-w-full md:tw-w-[50%] tw-flex tw-justify-center">
+          {/* <div className="tw-w-full md:tw-w-[50%] tw-flex tw-justify-center">
             <img src="/assets/banners/banner1.png" className="" />
-          </div>
+          </div> */}
         </section>
         <section className="tw-px-[20px] tw-flex tw-justify-center tw-flex-wrap tw-gap-y-[80px] tw-gap-x-[40px] tw-mt-[80px] tw-mb-[100px]">
           {categories.categoryArray.map((category, i) => (
