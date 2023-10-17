@@ -651,12 +651,24 @@ video {
   margin-left: 10px;
 }
 
-.tw-mt-\[140px\] {
-  margin-top: 140px;
+.tw-mt-\[120px\] {
+  margin-top: 120px;
+}
+
+.tw-mb-\[10px\] {
+  margin-bottom: 10px;
+}
+
+.tw-mt-\[80px\] {
+  margin-top: 80px;
 }
 
 .tw-mb-\[100px\] {
   margin-bottom: 100px;
+}
+
+.tw-mt-\[140px\] {
+  margin-top: 140px;
 }
 
 .tw-mb-\[150px\] {
@@ -673,18 +685,6 @@ video {
 
 .tw-mt-\[30px\] {
   margin-top: 30px;
-}
-
-.tw-mt-\[120px\] {
-  margin-top: 120px;
-}
-
-.tw-mb-\[10px\] {
-  margin-bottom: 10px;
-}
-
-.tw-mt-\[80px\] {
-  margin-top: 80px;
 }
 
 .tw-mt-\[-200px\] {
@@ -739,6 +739,10 @@ video {
   height: 160px;
 }
 
+.tw-h-\[300px\] {
+  height: 300px;
+}
+
 .tw-h-\[100vh\] {
   height: 100vh;
 }
@@ -753,10 +757,6 @@ video {
 
 .tw-h-\[50px\] {
   height: 50px;
-}
-
-.tw-h-\[300px\] {
-  height: 300px;
 }
 
 .tw-h-\[110px\] {
@@ -875,10 +875,6 @@ video {
   max-width: 600px;
 }
 
-.tw-max-w-\[1024\] {
-  max-width: 1024;
-}
-
 .tw-cursor-pointer {
   cursor: pointer;
 }
@@ -962,6 +958,14 @@ video {
 
 .tw-border-b-\[1px\] {
   border-bottom-width: 1px;
+}
+
+.tw-border-l {
+  border-left-width: 1px;
+}
+
+.tw-border-t {
+  border-top-width: 1px;
 }
 
 .tw-border-blue {
@@ -1096,6 +1100,14 @@ video {
   padding-left: 10px;
 }
 
+.tw-pl-\[20px\] {
+  padding-left: 20px;
+}
+
+.tw-pt-\[20px\] {
+  padding-top: 20px;
+}
+
 .tw-text-center {
   text-align: center;
 }
@@ -1116,20 +1128,20 @@ video {
   font-size: 18px;
 }
 
-.tw-text-\[38px\] {
-  font-size: 38px;
-}
-
-.tw-text-\[32px\] {
-  font-size: 32px;
-}
-
 .tw-text-\[35px\] {
   font-size: 35px;
 }
 
 .tw-text-\[22px\] {
   font-size: 22px;
+}
+
+.tw-text-\[38px\] {
+  font-size: 38px;
+}
+
+.tw-text-\[32px\] {
+  font-size: 32px;
 }
 
 .tw-text-\[14px\] {
@@ -1353,6 +1365,19 @@ img{
     justify-content: flex-end;
   }
 
+  .md\:tw-border-l {
+    border-left-width: 1px;
+  }
+
+  .md\:tw-border-t-0 {
+    border-top-width: 0px;
+  }
+
+  .md\:tw-border-black {
+    --tw-border-opacity: 1;
+    border-color: rgb(71 71 71 / var(--tw-border-opacity));
+  }
+
   .md\:tw-bg-transparent {
     background-color: transparent;
   }
@@ -1360,6 +1385,14 @@ img{
   .md\:tw-py-0 {
     padding-top: 0px;
     padding-bottom: 0px;
+  }
+
+  .md\:tw-pl-\[20px\] {
+    padding-left: 20px;
+  }
+
+  .md\:tw-pt-\[0\] {
+    padding-top: 0;
   }
 
   .md\:tw-text-black {

@@ -14,9 +14,9 @@ export default function Header() {
           <img src="/assets/icons/logo.svg" className="tw-w-[100px]" />
         </a>
         <div className='tw-fixed md:tw-static tw-top-[110px] tw-left-0 tw-w-full tw-h-full tw-flex tw-items-center tw-justify-center md:tw-justify-end tw-flex-col md:tw-flex-row tw-gap-[30px] md:tw-bg-transparent tw-bg-blue tw-text-white md:tw-text-black tw-duration-200 tw-ease-out md:!tw-translate-x-0'
-        style={{
-          transform: !isOpen ? "translateX(100%)" : "translateX(0)"
-        }}>
+          style={{
+            transform: !isOpen ? "translateX(100%)" : "translateX(0)"
+          }}>
           <a
             href="/"
             className="hover:tw-text-blue tw-transition-[0.4s]"
@@ -53,6 +53,10 @@ export default function Header() {
           >
             Contato
           </a>
+          <div className='tw-border-t md:tw-border-t-0 md:tw-border-l tw-border-white md:tw-border-black tw-pt-[20px] md:tw-pt-[0] md:tw-pl-[20px]'>
+            <p className="tw-font-[300]">(42) 3025 2200</p>
+            <p className="tw-font-[300]">(42) 3025 5045</p>
+          </div>
         </div>
         <div className='md:tw-hidden tw-block'>
           <Hamburger toggled={isOpen} toggle={setOpen} />

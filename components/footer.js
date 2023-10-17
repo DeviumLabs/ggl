@@ -76,6 +76,11 @@ export default function Footer() {
               84070-430
             </p>
           </div>
+          <div className="tw-my-[20px]">
+            <h3 className="tw-font-[300] tw-mb-[3px]">Contato:</h3>
+            <p className="tw-ml-[15px] tw-font-[300]">(42) 3025 2200</p>
+            <p className="tw-ml-[15px] tw-font-[300]">(42) 3025 5045</p>
+          </div>
           <div>
             <h3 className="tw-font-[300] tw-mb-[5px]">Redes sociais:</h3>
             <div className="tw-flex">
