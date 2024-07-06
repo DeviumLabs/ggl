@@ -51,6 +51,12 @@ export default function Contact({ budgetMessage }) {
     }
   };
 
+  const clickButton = () => {
+    window.gtag('config', 'AW-16570872797');
+
+    window.gtag('event', 'conversion', { 'send_to': 'AW-16570872797/lXFKCOfqxsAZEN3nzd09' });
+  }
+
   return (
     <>
       <Helmet>
@@ -139,7 +145,7 @@ export default function Contact({ budgetMessage }) {
           )}
         </div>
         <button
-          onclick="gtag_report_conversion"
+          onClick={() => clickButton()}
           type="submit"
           className="tw-bg-blue tw-text-white tw-w-[240px] tw-h-[50px] hover:tw-bg-white hover:tw-border-blue hover:tw-border-[1px] hover:tw-text-blue tw-transition-300"
         >
