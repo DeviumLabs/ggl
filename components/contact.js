@@ -3,6 +3,7 @@ import React, { useRef, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import { Helmet } from "react-helmet";
 
 export default function Contact({ budgetMessage }) {
   const {
@@ -16,18 +17,6 @@ export default function Contact({ budgetMessage }) {
 
   const phoneWatcher = watch("phone");
   const [loading, setLoading] = useState("ENVIAR");
-
-  /* <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-16570872797"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'AW-16570872797');
-</script>*/
-
-  //6LcUikYhAAAAAKnwsxZBGlB3ZrSpBkpJWHTH4eVf
 
   const onSubmit = async ({ name, email, phone, message }) => {
     const body = `
@@ -64,6 +53,26 @@ export default function Contact({ budgetMessage }) {
 
   return (
     <>
+      <Helmet>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `function gtag_report_conversion(url) {
+              var callback = function () {
+                if (typeof(url) != 'undefined') {
+                  window.location = url;
+                }
+              };
+              gtag('event', 'conversion', {
+                  'send_to': 'AW-16570872797/lXFKCOfqxsAZEN3nzd09',
+                  'value': 1.0,
+                  'currency': 'BRL',
+                  'event_callback': callback
+              });
+              return false;
+            }`
+          }}
+        />
+      </Helmet>
       <ToastContainer />
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -130,6 +139,7 @@ export default function Contact({ budgetMessage }) {
           )}
         </div>
         <button
+          onclick="gtag_report_conversion"
           type="submit"
           className="tw-bg-blue tw-text-white tw-w-[240px] tw-h-[50px] hover:tw-bg-white hover:tw-border-blue hover:tw-border-[1px] hover:tw-text-blue tw-transition-300"
         >

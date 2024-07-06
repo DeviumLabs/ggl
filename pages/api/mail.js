@@ -5,7 +5,8 @@ sg.setApiKey(process.env.SENDGRID_APIKEY);
 export default function sendEmail(req, res) {
   const data = req.body;
   const message = {
-    to: "ggl@gglmoveis.com.br",
+    to: "pedro.neto72pn@gmail.com",
+    // to: "ggl@gglmoveis.com.br",
     from: "deviumlabs@gmail.com",
     subject: "Contato | GGl Móveis",
     html: data.body.replace(/[\r\n]/gm, ""),
@@ -13,13 +14,13 @@ export default function sendEmail(req, res) {
 
   sg.send(message)
     .then((response) => {
-      res.json({
+      return res.json({
         status: 200,
         message: response,
       });
     })
     .catch((err) => {
-      res.json({
+      return res.json({
         status: 404,
         message: err,
       });
