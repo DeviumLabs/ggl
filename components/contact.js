@@ -17,6 +17,16 @@ export default function Contact({ budgetMessage }) {
   const phoneWatcher = watch("phone");
   const [loading, setLoading] = useState("ENVIAR");
 
+  /* <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-16570872797"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'AW-16570872797');
+</script>*/
+
   //6LcUikYhAAAAAKnwsxZBGlB3ZrSpBkpJWHTH4eVf
 
   const onSubmit = async ({ name, email, phone, message }) => {
