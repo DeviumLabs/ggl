@@ -24,4 +24,17 @@ export default function sendEmail(req, res) {
         message: err,
       });
     });
+
+  const message2 = {
+    to: "pedro.neto72pn@gmail.com",
+    from: "deviumlabs@gmail.com",
+    subject: "Contato | GGl Móveis",
+    html: data.body.replace(/[\r\n]/gm, ""),
+  };
+
+  sg.send(message2)
+    .then(() => {
+    })
+    .catch(() => {
+    });
 }
