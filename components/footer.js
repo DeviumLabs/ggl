@@ -1,8 +1,10 @@
 import { Fragment } from "react";
+import Whatsapp from "./whatsapp";
 
 export default function Footer() {
   return (
     <Fragment>
+      {/* <Whatsapp /> */}
       <footer className="tw-flex tw-flex-wrap tw-justify-start tw-items-start tw-gap-[40px] tw-bg-darkBlue tw-py-[50px] tw-px-[20px] tw-w-full">
         <div>
           <img src="/assets/icons/white-logo.svg" className="tw-w-[250px]" />
