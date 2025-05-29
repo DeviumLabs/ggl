@@ -103,19 +103,10 @@ const catalogs = [
               depth: "420 mm",
             },
           },
-          {
-            name: "Armarinho de Limpeza",
-            scale: {
-              height: "1900 mm",
-              width: "500 mm",
-              depth: "420 mm",
-            },
-          },
         ],
         images: [
-          "/assets/products/locker-rooms/gal.png",
+          "/assets/products/locker-rooms/roupeiro.png",
           "/assets/products/locker-rooms/insalubre.png",
-          "/assets/products/locker-rooms/armarinho-limpeza.jpg",
           "/assets/products/locker-rooms/detail1.png",
           "/assets/products/locker-rooms/detail2.png",
           "/assets/products/locker-rooms/detail3.png",
@@ -271,35 +262,6 @@ const catalogs = [
         images: ["/assets/products/cabinets/a402_1.png"],
       },
       {
-        name: "Armário para celular",
-        slug: "armario-para-celular",
-        description:
-          "Armário para guardar celular, convencional ou com carregador.",
-        models: [
-          {
-            name: "Sem carregador",
-            scale: {
-              height: "1000 mm",
-              width: "800 mm",
-              depth: "200 mm",
-            },
-          },
-          {
-            name: "Com carregador",
-            scale: {
-              height: "1360 mm",
-              width: "350 mm",
-              depth: "300 mm",
-            },
-          },
-        ],
-        images: [
-          "/assets/products/cabinets/porta_celular.png",
-          "/assets/products/cabinets/celular2.png",
-          "/assets/products/cabinets/celular.png",
-        ],
-      },
-      {
         name: "Armário Professor",
         slug: "professor",
         description: categories[1].description,
@@ -349,6 +311,24 @@ const catalogs = [
           },
         ],
         images: ["/assets/products/locker-rooms/ferramentas.png"],
+      },
+      {
+        name: "Armarinho de Limpeza",
+        slug: "armario-de-limpeza",
+        description: "Armário compacto para armazenar materiais de limpeza.",
+        models: [
+          {
+            name: "Armarinho de Limpeza",
+            scale: {
+              height: "1900 mm",
+              width: "500 mm",
+              depth: "420 mm",
+            },
+          },
+        ],
+        images: [
+          "/assets/products/locker-rooms/armarinho-limpeza.jpg",
+        ],
       },
     ],
   },
@@ -647,27 +627,45 @@ const catalogs = [
     ],
   },
   {
-    title: "Carrinho Notebook",
-    slug: "carrinho-notebook",
-    category: "carrinho-notebook",
+    title: "Armários Especiais",
+    slug: "armarios-especiais",
+    category: "armarios-especiais",
     products: [
       {
-        name: "Carrinho Notebook",
-        slug: "carrinho-notebook",
-        description: "Carrinho para notebook com capacidade para 32 notebooks",
+        name: "Armário Guarda-Volumes",
+        slug: "armario-guarda-volumes",
+        description: "Armário guarda-volumes em aço com 6 compartimentos individuais, ideal para armazenamento seguro de pertences em ambientes corporativos, escolares ou industriais.",
         models: [
           {
-            name: "Carrinho Notebook",
+            name: "Armário Guarda-Volumes",
             scale: {
-              height: "1100 mm",
-              width: "910 mm",
-              depth: "470 mm",
+              height: "1450 mm",
+              width: "600 mm",
+              depth: "450 mm",
             },
           },
         ],
         images: [
-          "/assets/products/cabinets/notebook2.png",
-          "/assets/products/cabinets/notebook.png",
+          "/assets/products/cabinets/guarda-volumes.png",
+        ],
+      },
+      {
+        name: "Armário para celular",
+        slug: "armario-para-celular",
+        description:
+          "Armário para guardar celular.",
+        models: [
+          {
+            name: "Armário Celular",
+            scale: {
+              height: "1000 mm",
+              width: "800 mm",
+              depth: "200 mm",
+            },
+          },
+        ],
+        images: [
+          "/assets/products/cabinets/porta_celular.png",
         ],
       },
     ],

@@ -73,11 +73,6 @@ export const categories = [
         slug: "a402",
       },
       {
-        name: "Armário Celular",
-        slug: "armario-para-celular",
-      },
-
-      {
         name: "Professor",
         slug: "professor",
       },
@@ -88,6 +83,10 @@ export const categories = [
       {
         name: "Armário de Ferramentas",
         slug: "armario-de-ferramentas",
+      },
+      {
+        name: "Armário de Limpeza",
+        slug: "armario-de-limpeza",
       },
     ],
   },
@@ -178,16 +177,20 @@ export const categories = [
     ],
   },
   {
-    name: "Carrinho Notebook",
-    singleName: "Carrinho Notebook",
-    slug: "carrinho-notebook",
-    category: "carrinho-notebook",
-    image: "/assets/products/cabinets/notebook2.png",
-    description: "Carrinho para notebook com capacidade para 32 notebooks",
+    name: "Armários Especiais",
+    singleName: "Armário Especial",
+    slug: "armarios-especiais",
+    category: "armarios-especiais",
+    image: "/assets/products/cabinets/especiais.png",
+    description: "Armários metálicos resistentes, ideais para armazenar com segurança objetos pessoais ou equipamentos em ambientes corporativos, escolares ou industriais.",
     products: [
       {
-        name: "Carrinho Notebook",
-        slug: "carrinho-notebook",
+        name: "Armário Guarda-Volumes",
+        slug: "armario-guarda-volumes",
+      },
+      {
+        name: "Armário Celular",
+        slug: "armario-para-celular",
       },
     ],
   },
