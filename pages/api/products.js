@@ -245,7 +245,7 @@ const catalogs = [
           {
             name: "A407",
             scale: {
-              height: "1975 mm",
+              height: "1750 mm",
               width: "750 mm",
               depth: "330 mm",
             },
