@@ -20,12 +20,12 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>
-          <script async src="https://www.googletagmanager.com/gtag/js?id=AW-16570872797"></script>
+          <script async src="https://www.googletagmanager.com/gtag/js?id=AW-16882485681"></script>
           <script dangerouslySetInnerHTML={{
             __html: `window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
-              gtag('config', 'AW-16570872797');`
+              gtag('config', 'AW-16882485681');`
           }} />
 
           <link rel="preconnect" href="https://fonts.googleapis.com" />
