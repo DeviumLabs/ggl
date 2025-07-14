@@ -210,6 +210,21 @@ export const categories = [
     ],
   },
   {
+    name: "Porta Pallet",
+    singleName: "Porta Pallet",
+    slug: "porta-pallet",
+    category: "porta-pallet",
+    image: "/assets/products/shelves/mini-porta-pallet.png",
+    description:
+      "Estrutura robusta para armazenagem eficiente, ideal para organizar cargas paletizadas em diversos ambientes.",
+    products: [
+      {
+        name: "Mini Porta Pallet",
+        slug: "mini-porta-pallet",
+      },
+    ],
+  },
+  {
     name: "Gondolas",
     singleName: "Gondola",
     slug: "gondolas",

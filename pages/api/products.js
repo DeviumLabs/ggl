@@ -716,6 +716,33 @@ const catalogs = [
     ],
   },
   {
+    title: "Porta Pallet",
+    slug: "porta-pallet",
+    category: "porta-pallet",
+    products: [
+      {
+        name: "Mini Porta Pallet",
+        slug: "mini-porta-pallet",
+        description:
+          "Estrutura robusta para armazenagem eficiente, ideal para organização de cargas paletizadas em espaços compactos.",
+
+        models: [
+          {
+            name: "Mini Porta Pallet",
+            scale: {
+              height: "2000 mm",
+              width: "1800 mm",
+              depth: "800 mm",
+            },
+          },
+        ],
+        images: [
+          "/assets/products/shelves/mini-porta-pallet.png",
+        ],
+      },
+    ],
+  },
+  {
     title: "Gondolas",
     slug: "gondolas",
     products: [
