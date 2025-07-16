@@ -49,13 +49,17 @@ export default function SingleProduct({ product, categories }) {
   return (
     <div>
       <Head>
-        <title>GGL Móveis de Aço | {product.name}</title>
+        <title>GGL Móveis de Aço | {categories.categoryArray[0].name}</title>
         <meta
           name="description"
-          content={`Confira detalhes do produto ${product.name} da linha ${categories.categoryArray[0].name}. Móveis de aço de alta resistência e qualidade.`}
+          content={`Conheça a linha de ${categories.categoryArray[0].name} da GGL Móveis de Aço. Produtos resistentes, duráveis e ideais para ambientes profissionais.`}
         />
-        <link rel="icon" href="/logo.svg" />
+        <link
+          rel="canonical"
+          href={`https://www.gglmoveis.com.br/produtos/${categories.categoryArray[0].slug}`}
+        />
       </Head>
+
 
       <Header />
       <main className="tw-mt-[140px] tw-mb-[100px] tw-relative">
@@ -109,8 +113,8 @@ export default function SingleProduct({ product, categories }) {
                         product.images.length === 1
                           ? 600
                           : i === table || product?.allBold
-                          ? 600
-                          : 300,
+                            ? 600
+                            : 300,
                     }}
                   >
                     <td>{model.name}</td>
