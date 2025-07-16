@@ -52,7 +52,10 @@ export default function SingleProduct({ product, categories }) {
         <title>GGL Móveis de Aço | {categories.categoryArray[0].name}</title>
         <meta
           name="description"
-          content={`Conheça a linha de ${categories.categoryArray[0].name} da GGL Móveis de Aço. Produtos resistentes, duráveis e ideais para ambientes profissionais.`}
+          content={
+            categories?.categoryArray?.[0]?.description ||
+            `Conheça os móveis de aço da GGL: qualidade, durabilidade e acabamento superior.`
+          }
         />
         <link
           rel="canonical"
