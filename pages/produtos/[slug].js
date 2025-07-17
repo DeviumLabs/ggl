@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import api from "../../services/api";
 import Head from "next/head";
 
@@ -9,32 +10,44 @@ import Contact from "../../components/contact";
 import Navbar from "../../components/navbar";
 import ZoomLens from "../../components/zoom-lens";
 
-export async function getServerSideProps(context) {
-  const category = context.query.slug;
-  const slug = context.query.product;
+export default function SingleProduct({ initialProduct, initialCategories }) {
+  const router = useRouter();
+  const { slug, product: productSlug } = router.query;
 
-  const res = await api.get(`/products?category=${category}&product=${slug}`);
-  const categories = await api.get(`/category?category=${category}`);
-
-  return {
-    props: {
-      product: res.data,
-      categories: categories.data,
-    },
-  };
-}
-
-export default function SingleProduct({ product, categories }) {
-  const [principalImage, setPrincipalImage] = useState(product.images[0]);
-  const [titlePrincipal, setTitlePrincipal] = useState(product.models[0].name);
+  const [product, setProduct] = useState(initialProduct);
+  const [categories, setCategories] = useState(initialCategories);
+  const [principalImage, setPrincipalImage] = useState(initialProduct.images[0]);
+  const [titlePrincipal, setTitlePrincipal] = useState(initialProduct.models[0].name);
   const [contactMessage, setContactMessage] = useState("");
   const [table, setTable] = useState(0);
+  const [loading, setLoading] = useState(false);
 
-  if (product.error) {
+  useEffect(() => {
+    if (!productSlug || !slug) return;
+
+    const fetchProduct = async () => {
+      setLoading(true);
+      try {
+        const resProduct = await api.get(`/products?category=${slug}&product=${productSlug}`);
+        const resCategories = await api.get(`/category?category=${slug}`);
+        setProduct(resProduct.data);
+        setCategories(resCategories.data);
+        setPrincipalImage(resProduct.data.images[0]);
+        setTitlePrincipal(resProduct.data.models[0].name);
+        setTable(0);
+      } catch (error) {
+        console.error("Erro ao carregar produto:", error);
+      }
+      setLoading(false);
+    };
+
+    fetchProduct();
+  }, [slug, productSlug]);
+
+  if (!product || product.error || loading) {
     return (
       <div className="tw-h-[100vh] tw-flex tw-items-center tw-flex-col tw-justify-center tw-w-full">
-        <h1>O Produto selecionado não existe ou possui informações incorretas!</h1>
-        <p>CÓDIGO DO ERRO: 404 Not Found</p>
+        <h1>Carregando ou Produto não encontrado...</h1>
       </div>
     );
   }
@@ -103,27 +116,24 @@ export default function SingleProduct({ product, categories }) {
           className="tw-flex tw-mb-[150px] tw-justify-between tw-flex-col lg:tw-flex-row tw-w-full md:tw-w-[85%] md:tw-ml-[15%] tw-px-[20px] tw-pt-[300px] md:tw-py-0 tw-gap-[20px]"
         >
           <div className="tw-w-full lg:tw-w-[50%]">
-            <div id="principal-image">
-              <ZoomLens src={principalImage} />
-
-              <div className="tw-flex tw-mt-[20px] tw-w-full tw-overflow-x-auto tw-overflow-y-hidden md:tw-w-auto">
-                {product.images.length > 1 &&
-                  product.images.map((image, i) => (
-                    <img
-                      src={image}
-                      key={i}
-                      alt={`${product.name} - ${i + 1}`}
-                      className="tw-w-[80px] tw-h-[80px] tw-object-contain tw-mr-[10px] hover:tw-scale-[1.1] tw-cursor-pointer"
-                      onClick={() => {
-                        setPrincipalImage(image);
-                        setTable(i);
-                        if (!!product.models[i]) {
-                          setTitlePrincipal(product.models[i].name);
-                        }
-                      }}
-                    />
-                  ))}
-              </div>
+            <ZoomLens src={principalImage} />
+            <div className="tw-flex tw-mt-[20px] tw-w-full tw-overflow-x-auto md:tw-w-auto">
+              {product.images.length > 1 &&
+                product.images.map((image, i) => (
+                  <img
+                    src={image}
+                    key={i}
+                    alt={`${product.name} - ${i + 1}`}
+                    className="tw-w-[80px] tw-h-[80px] tw-object-contain tw-mr-[10px] hover:tw-scale-[1.1] tw-cursor-pointer"
+                    onClick={() => {
+                      setPrincipalImage(image);
+                      setTable(i);
+                      if (product.models[i]) {
+                        setTitlePrincipal(product.models[i].name);
+                      }
+                    }}
+                  />
+                ))}
             </div>
           </div>
 
@@ -177,4 +187,19 @@ export default function SingleProduct({ product, categories }) {
       <Footer />
     </div>
   );
+}
+
+export async function getServerSideProps(context) {
+  const category = context.query.slug;
+  const slug = context.query.product;
+
+  const res = await api.get(`/products?category=${category}&product=${slug}`);
+  const categories = await api.get(`/category?category=${category}`);
+
+  return {
+    props: {
+      initialProduct: res.data,
+      initialCategories: categories.data,
+    },
+  };
 }
