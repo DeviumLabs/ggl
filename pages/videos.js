@@ -7,21 +7,36 @@ import Contact from "../components/contact";
 export default function Videos() {
   const [isClient, setIsClient] = useState(false);
 
-  useEffect(() => {
-    setIsClient(true);
-
-    const query = location.hash;
-    if (query !== "") {
-      location.replace(`/${query}`);
-    }
-  }, []);
-
   const videos = [
     { name: "Montagem de Gondola Central", id: "nPwJHr-P7ek" },
     { name: "Montagem de Estante de Armazenamento", id: "Wr1YHpplRbE" },
     { name: "Montagem da Estante Biblioteca", id: "r7wG3CCayP0" },
     { name: "Estante Biblioteca com Sistema de Encaixe", id: "_l0TqQY2HPk" },
   ];
+
+  useEffect(() => {
+    setIsClient(true);
+
+    const hash = window.location.hash;
+    if (hash) {
+      const element = document.getElementById(hash.replace("#", ""));
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, []);
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Vídeos de Montagem GGL",
+    "itemListElement": videos.map((v, index) => ({
+      "@type": "VideoObject",
+      "position": index + 1,
+      "name": v.name,
+      "embedUrl": `https://www.youtube.com/embed/${v.id}`,
+    })),
+  };
 
   return (
     <div>
@@ -32,7 +47,12 @@ export default function Videos() {
           content="Assista aos vídeos de montagem dos móveis GGL, como estantes, bibliotecas e gôndolas."
         />
         <link rel="icon" href="/favicon.ico" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
       </Head>
+
       <Header />
 
       {isClient && (
@@ -50,12 +70,15 @@ export default function Videos() {
                     className="tw-aspect-video tw-top-0 tw-left-0 tw-w-full tw-h-full"
                     src={`https://www.youtube.com/embed/${v.id}`}
                     title={v.name}
+                    aria-label={`Vídeo de ${v.name}`}
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     allowFullScreen
                   ></iframe>
                 </div>
-                <p className="tw-mt-[10px] tw-text-center">{v.name}</p>
+                <h2 className="tw-mt-[10px] tw-text-center tw-text-[18px]">
+                  {v.name}
+                </h2>
               </div>
             ))}
           </section>
