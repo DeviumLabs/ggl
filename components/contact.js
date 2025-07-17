@@ -45,8 +45,6 @@ export default function Contact({ budgetMessage }) {
   return (
     <>
       <Helmet>
-        <title>Contato | GGL Móveis de Aço</title>
-        <meta name="description" content="Entre em contato com a GGL Móveis de Aço e solicite seu orçamento personalizado." />
         <script
           dangerouslySetInnerHTML={{
             __html: `function gtag_report_conversion(url) {
