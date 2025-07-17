@@ -63,6 +63,7 @@ export default function SingleProduct({ product, categories }) {
       "@type": "Offer",
       "url": `https://www.gglmoveis.com.br/produtos/${categories.categoryArray[0].slug}?product=${product.slug}`,
       "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition",
       "priceCurrency": "BRL",
       "price": "0.00"
     }
