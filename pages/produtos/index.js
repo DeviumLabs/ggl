@@ -1,5 +1,4 @@
 import api from "../../services/api";
-
 import Head from "next/head";
 import Link from "next/link";
 
@@ -20,15 +19,28 @@ export async function getStaticProps() {
 }
 
 export default function Produtos({ categories }) {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: categories.categoryArray.map((cat, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      url: `https://www.gglmoveis.com.br/produtos/${cat.slug}?product=${cat.products[0].slug}`,
+    })),
+  };
+
   return (
     <div>
       <Head>
-        <title>GGL Móveis de Aço | Categorias</title>
+        <title>GGL Móveis de Aço | Todos os Produtos por Categoria</title>
         <meta
           name="description"
-          content="Explore todas as categorias dos móveis de aço GGL. Produtos resistentes, modernos e ideais para ambientes corporativos, industriais e educacionais."
+          content="Confira a linha completa de móveis de aço GGL por categoria: armários, estantes, arquivos, gondolas, porta-pallets e muito mais. Qualidade e resistência para empresas."
         />
         <link rel="icon" href="/logo.svg" />
+        <script type="application/ld+json">
+          {JSON.stringify(jsonLd)}
+        </script>
       </Head>
 
       <Header />
@@ -55,7 +67,8 @@ export default function Produtos({ categories }) {
               <a className="tw-max-w-[350px] tw-w-full tw-transition-transform tw-duration-300 hover:tw-scale-105">
                 <img
                   src={category.image}
-                  alt={category.name}
+                  alt={`Imagem da categoria ${category.name} da GGL Móveis de Aço`}
+                  loading="lazy"
                   className="tw-h-[300px] tw-object-contain tw-w-full tw-transition-transform tw-duration-300"
                 />
                 <div className="tw-mt-[20px]">

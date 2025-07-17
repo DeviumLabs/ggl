@@ -33,7 +33,6 @@ export default function Home({ categories }) {
 
   useEffect(() => {
     setIsClient(true);
-
     const hash = window.location.hash;
     if (hash) {
       setTimeout(() => {
@@ -45,15 +44,25 @@ export default function Home({ categories }) {
     }
   }, []);
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "GGL Móveis de Aço",
+    url: "https://www.gglmoveis.com.br",
+    logo: "https://www.gglmoveis.com.br/logo.svg",
+    sameAs: [],
+  };
 
   return (
     <div>
       <Head>
-        <title>GGL Móveis de Aço | Home</title>
+        <title>GGL Móveis de Aço | Móveis de qualidade para seu ambiente profissional</title>
         <meta
           name="description"
-          content="Móveis de aço de alta qualidade, resistentes e com design moderno para seu ambiente profissional."
+          content="Móveis de aço de alta qualidade, resistentes e com design moderno para ambientes profissionais, corporativos e industriais. Conheça a GGL."
         />
+        <link rel="canonical" href="https://www.gglmoveis.com.br/" />
+        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       </Head>
 
       <Header />
@@ -63,17 +72,14 @@ export default function Home({ categories }) {
           {/* Banner principal */}
           <section>
             <div
-              style={{
-                backgroundImage: `url(/assets/banners/uepg-banner1.png)`,
-              }}
+              style={{ backgroundImage: `url(/assets/banners/uepg-banner1.png)` }}
               className="tw-bg-center tw-bg-no-repeat tw-w-full tw-bg-cover tw-relative"
             >
               <div className="tw-flex tw-items-center tw-justify-start tw-max-w-[1597px] tw-px-[5%] tw-mx-auto tw-w-full tw-py-[150px]">
                 <div className="tw-flex tw-flex-col tw-text-white tw-z-[1]">
                   <h1 className="tw-text-[30px] md:tw-text-[40px] tw-mb-[20px]">GGL</h1>
                   <p className="tw-max-w-[300px] tw-w-full">
-                    Móveis de excelente qualidade e resistência e perfeito
-                    acabamento para harmonizar seu espaço.
+                    Móveis de excelente qualidade, resistência e acabamento superior para seu espaço.
                   </p>
                 </div>
                 <div className="tw-w-full tw-h-full tw-absolute tw-top-0 tw-left-0 tw-bg-[#0058C2] tw-opacity-[20%]"></div>
@@ -83,11 +89,11 @@ export default function Home({ categories }) {
 
           {/* Título das categorias */}
           <div className="tw-w-full tw-px-[20px]">
-            <h1 className="tw-flex tw-justify-center tw-items-center tw-text-[24px] tw-text-darkBlue tw-my-[60px]">
+            <h2 className="tw-flex tw-justify-center tw-items-center tw-text-[24px] tw-text-darkBlue tw-my-[60px]">
               <hr className="tw-w-[30%] tw-bg-blue tw-rounded-[10px] tw-h-[3px] tw-mr-[30px]" />
               Conheça nossa linha de produtos
               <hr className="tw-w-[30%] tw-bg-blue tw-rounded-[10px] tw-h-[3px] tw-ml-[30px]" />
-            </h1>
+            </h2>
           </div>
 
           {/* Lista de categorias */}
@@ -101,13 +107,14 @@ export default function Home({ categories }) {
                 <a className="tw-flex tw-flex-col tw-items-center tw-transition-transform tw-duration-300 hover:tw-scale-105">
                   <img
                     src={category.image}
-                    alt={category.name}
+                    alt={`Categoria ${category.name} da GGL Móveis de Aço`}
+                    loading="lazy"
                     className="tw-h-[160px] tw-object-contain tw-w-full"
                   />
                   <div className="tw-mt-[20px]">
-                    <h1 className="tw-text-[18px] tw-bg-darkBlue tw-text-white tw-py-[5px] tw-px-[10px]">
+                    <h3 className="tw-text-[18px] tw-bg-darkBlue tw-text-white tw-py-[5px] tw-px-[10px]">
                       {category.name}
-                    </h1>
+                    </h3>
                   </div>
                 </a>
               </Link>
@@ -120,23 +127,24 @@ export default function Home({ categories }) {
             id="catalogo"
           >
             <small className="tw-text-blue">CATÁLOGO</small>
-            <h1 className="tw-text-[30px]">Nosso catálogo</h1>
+            <h2 className="tw-text-[30px]">Nosso catálogo</h2>
             <div className="tw-flex tw-items-center tw-justify-around tw-mt-[40px] tw-flex-col md:tw-flex-row tw-gap-[20px]">
-              <a href="/assets/catalogo.pdf" target="_blank">
+              <a href="/assets/catalogo.pdf" target="_blank" rel="noopener noreferrer">
                 <img
                   src="/assets/banners/catalogo.png"
-                  alt="Catálogo"
+                  alt="Download do catálogo da GGL"
                   className="tw-max-w-[300px] tw-w-full"
+                  loading="lazy"
                 />
               </a>
               <div>
                 <p className="tw-max-w-[360px] tw-w-full tw-mb-[30px]">
-                  Baixe nosso catálogo para ter acesso a informações técnicas
-                  sobre nossos produtos.
+                  Baixe nosso catálogo para acessar especificações técnicas dos produtos da GGL.
                 </p>
                 <a
                   href="/assets/catalogo.pdf"
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="tw-flex tw-items-center hover:tw-underline"
                 >
                   <AiOutlineCloudDownload />
@@ -152,26 +160,21 @@ export default function Home({ categories }) {
             id="sobre"
           >
             <small className="tw-text-blue">EMPRESA</small>
-            <h1 className="tw-text-[30px]">Sobre nós</h1>
+            <h2 className="tw-text-[30px]">Sobre nós</h2>
             <div className="tw-flex tw-items-center tw-justify-around tw-gap-[20px] tw-mt-[40px] tw-max-w-[1280px] tw-mx-auto tw-flex-col md:tw-flex-row">
               <div className="tw-w-full md:tw-w-[50%]">
                 <p className="tw-mb-[30px]">
-                  Em 15/02/1999 iniciamos a produção de Móveis fornecendo com
-                  rapidez e qualidade toda linha de Aço aos clientes. Hoje
-                  continuamos com este compromisso atuando numa área própria de
-                  10.300m². Contamos com alta tecnologia na fabricação das
-                  próprias matrizes e equipamentos utilizados para moldar e
-                  desenvolver nossos móveis, que garante a precisão e o perfeito
-                  acabamento refletindo em um diferencial na venda dos produtos
-                  GGL. Toda atenção e respeito a nossos clientes resulta em
-                  constante expansão com parcerias em vários estados do Brasil.
+                  Desde 1999 fornecendo móveis de aço com qualidade e rapidez. Com sede própria de 10.300m²,
+                  produzimos nossas próprias matrizes e equipamentos para garantir precisão e acabamento superior.
+                  Atendemos diversos estados com parcerias e respeito aos clientes.
                 </p>
               </div>
               <div className="tw-w-full md:tw-w-[50%]">
                 <img
                   src="/assets/banners/empresa.jpg"
-                  alt="Foto da empresa"
+                  alt="Instalações da empresa GGL"
                   className="tw-w-full"
+                  loading="lazy"
                 />
               </div>
             </div>

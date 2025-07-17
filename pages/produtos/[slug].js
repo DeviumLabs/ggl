@@ -46,27 +46,57 @@ export default function SingleProduct({ product, categories }) {
     window.location.assign("#contato");
   };
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": `${categories.categoryArray[0].singleName} ${product.name}`,
+    "image": product.images,
+    "description":
+      product.description ||
+      categories?.categoryArray?.[0]?.description ||
+      "Produto em aço de alta durabilidade e resistência.",
+    "brand": {
+      "@type": "Brand",
+      "name": "GGL Móveis de Aço"
+    },
+    "offers": {
+      "@type": "Offer",
+      "url": `https://www.gglmoveis.com.br/produtos/${categories.categoryArray[0].slug}?product=${product.slug}`,
+      "availability": "https://schema.org/InStock",
+      "priceCurrency": "BRL",
+      "price": "0.00"
+    }
+  };
+
   return (
     <div>
       <Head>
-        <title>GGL Móveis de Aço | {categories.categoryArray[0].name}</title>
+        <title>
+          GGL Móveis de Aço | {categories.categoryArray[0].name} - {product.name}
+        </title>
         <meta
           name="description"
           content={
+            product.description ||
             categories?.categoryArray?.[0]?.description ||
             `Conheça os móveis de aço da GGL: qualidade, durabilidade e acabamento superior.`
           }
         />
+        <meta name="robots" content="index, follow" />
         <link
           rel="canonical"
-          href={`https://www.gglmoveis.com.br/produtos/${categories.categoryArray[0].slug}`}
+          href={`https://www.gglmoveis.com.br/produtos/${categories.categoryArray[0].slug}?product=${product.slug}`}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </Head>
-
 
       <Header />
       <main className="tw-mt-[140px] tw-mb-[100px] tw-relative">
         <Navbar categories={categories} />
+
         <section
           id="product-wrapper"
           className="tw-flex tw-mb-[150px] tw-justify-between tw-flex-col lg:tw-flex-row tw-w-full md:tw-w-[85%] md:tw-ml-[15%] tw-px-[20px] tw-pt-[300px] md:tw-py-0 tw-gap-[20px]"
@@ -81,6 +111,7 @@ export default function SingleProduct({ product, categories }) {
                     <img
                       src={image}
                       key={i}
+                      alt={`${product.name} - ${i + 1}`}
                       className="tw-w-[80px] tw-h-[80px] tw-object-contain tw-mr-[10px] hover:tw-scale-[1.1] tw-cursor-pointer"
                       onClick={() => {
                         setPrincipalImage(image);
@@ -98,10 +129,11 @@ export default function SingleProduct({ product, categories }) {
           <div className="tw-w-full lg:tw-w-[50%] tw-mt-[50px] lg:tw-mt-0">
             <h1 className="tw-text-[38px]">{titlePrincipal}</h1>
             <p>{product.description}</p>
-            <h1 className="tw-text-[32px] tw-mt-[50px]">Medidas</h1>
+
+            <h2 className="tw-text-[32px] tw-mt-[50px]">Medidas</h2>
             <table className="tw-font-light tw-w-[calc(100vw-15%)] sm:tw-w-full tw-inline-block">
               <tbody className="tw-inline-block tw-w-[calc(100vw-15%)] md:tw-w-full tw-overflow-x-auto">
-                <tr className="tw-w-[800px] tw-min-w-[600px] tw-flex md:tw-w-full">
+                <tr className="tw-w-[800px] tw-min-w-[600px] tw-flex md:tw-w-full tw-font-bold">
                   <td>Modelo</td>
                   <td>Altura</td>
                   <td>Largura</td>
@@ -128,6 +160,7 @@ export default function SingleProduct({ product, categories }) {
                 ))}
               </tbody>
             </table>
+
             <button
               type="submit"
               className="tw-bg-blue tw-mt-[30px] tw-text-white tw-w-[240px] tw-h-[50px] hover:tw-bg-white hover:tw-border-blue hover:tw-border-[1px] hover:tw-text-blue tw-transition-300"
@@ -137,6 +170,7 @@ export default function SingleProduct({ product, categories }) {
             </button>
           </div>
         </section>
+
         <Contact budgetMessage={contactMessage} />
       </main>
       <Footer />
