@@ -1,3 +1,4 @@
 User-agent: *
 Allow: /
 Sitemap: https://www.gglmoveis.com.br/sitemap.xml
+Host: https://www.gglmoveis.com.br
