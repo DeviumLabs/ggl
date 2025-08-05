@@ -82,19 +82,28 @@ export default function Home({ categories }) {
       {isClient && (
         <main className="tw-mt-[110px] tw-mb-[130px] tw-max-w-[1920px] tw-mx-auto">
           {/* Banner principal */}
-          <section>
-            <div
-              style={{ backgroundImage: `url(/assets/banners/uepg-banner1.png)` }}
-              className="tw-bg-center tw-bg-no-repeat tw-w-full tw-bg-cover tw-relative"
-            >
-              <div className="tw-flex tw-items-center tw-justify-start tw-max-w-[1597px] tw-px-[5%] tw-mx-auto tw-w-full tw-py-[150px]">
-                <div className="tw-flex tw-flex-col tw-text-white tw-z-[1]">
-                  <h1 className="tw-text-[30px] md:tw-text-[40px] tw-mb-[20px]">GGL</h1>
-                  <p className="tw-max-w-[300px] tw-w-full">
-                    Móveis de excelente qualidade, resistência e acabamento superior para seu espaço.
-                  </p>
-                </div>
-                <div className="tw-w-full tw-h-full tw-absolute tw-top-0 tw-left-0 tw-bg-[#0058C2] tw-opacity-[20%]"></div>
+
+          <section className="tw-relative tw-w-full">
+            {/* Imagem otimizada */}
+            <Image
+              src="/assets/banners/uepg-banner1.png"
+              alt="Banner principal da GGL"
+              layout="fill"
+              objectFit="cover"
+              quality={90}
+              priority
+            />
+
+            {/* Overlay azul */}
+            <div className="tw-absolute tw-top-0 tw-left-0 tw-w-full tw-h-full tw-bg-[#0058C2] tw-opacity-[20%] z-[1]" />
+
+            {/* Conteúdo com padding vertical igual ao original */}
+            <div className="tw-relative tw-z-[2] tw-flex tw-items-center tw-justify-start tw-max-w-[1597px] tw-px-[5%] tw-mx-auto tw-w-full tw-py-[150px]">
+              <div className="tw-flex tw-flex-col tw-text-white">
+                <h1 className="tw-text-[30px] md:tw-text-[40px] tw-mb-[20px]">GGL</h1>
+                <p className="tw-max-w-[300px] tw-w-full">
+                  Móveis de excelente qualidade, resistência e acabamento superior para seu espaço.
+                </p>
               </div>
             </div>
           </section>
@@ -117,12 +126,16 @@ export default function Home({ categories }) {
                 passHref
               >
                 <a className="tw-flex tw-flex-col tw-items-center tw-transition-transform tw-duration-300 hover:tw-scale-105">
-                  <img
-                    src={category.image}
-                    alt={`Categoria ${category.name} da GGL Móveis de Aço`}
-                    loading="lazy"
-                    className="tw-h-[160px] tw-object-contain tw-w-full"
-                  />
+                  <div className="tw-w-[100px] md:tw-w-[160px]">
+                    <Image
+                      src={category.image}
+                      alt={`Categoria ${category.name} da GGL Móveis de Aço`}
+                      width={160}
+                      height={160}
+                      layout="intrinsic"
+                      className="tw-object-contain"
+                    />
+                  </div>
                   <div className="tw-mt-[20px]">
                     <h3 className="tw-text-[18px] tw-bg-darkBlue tw-text-white tw-py-[5px] tw-px-[10px]">
                       {category.name}
@@ -142,12 +155,14 @@ export default function Home({ categories }) {
             <h2 className="tw-text-[30px]">Nosso catálogo</h2>
             <div className="tw-flex tw-items-center tw-justify-around tw-mt-[40px] tw-flex-col md:tw-flex-row tw-gap-[20px]">
               <a href="/assets/catalogo.pdf" target="_blank" rel="noopener noreferrer">
-                <img
+                <Image
                   src="/assets/banners/catalogo.png"
                   alt="Download do catálogo da GGL"
-                  className="tw-max-w-[300px] tw-w-full"
-                  loading="lazy"
+                  width={300}
+                  height={424}
+                  layout="intrinsic"
                 />
+
               </a>
               <div>
                 <p className="tw-max-w-[360px] tw-w-full tw-mb-[30px]">
