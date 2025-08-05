@@ -25,6 +25,7 @@ export default function Produtos({ categories }) {
     itemListElement: categories.categoryArray.map((cat, index) => ({
       "@type": "ListItem",
       position: index + 1,
+      name: cat.name,
       url: `https://www.gglmoveis.com.br/produtos/${cat.slug}?product=${cat.products[0].slug}`,
     })),
   };
@@ -37,11 +38,15 @@ export default function Produtos({ categories }) {
           name="description"
           content="Confira a linha completa de móveis de aço GGL por categoria: armários, estantes, arquivos, gondolas, porta-pallets e muito mais. Qualidade e resistência para empresas."
         />
+        <meta name="robots" content="index, follow" />
         <link rel="icon" href="/logo.svg" />
-        <script type="application/ld+json">
-          {JSON.stringify(jsonLd)}
-        </script>
+        <link rel="canonical" href="https://www.gglmoveis.com.br/produtos" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
       </Head>
+
 
       <Header />
 

@@ -31,12 +31,21 @@ export default function Videos() {
     "@type": "ItemList",
     "name": "Vídeos de Montagem GGL",
     "itemListElement": videos.map((v, index) => ({
-      "@type": "VideoObject",
+      "@type": "ListItem",
       "position": index + 1,
-      "name": v.name,
-      "embedUrl": `https://www.youtube.com/embed/${v.id}`,
-    })),
+      "item": {
+        "@type": "VideoObject",
+        "name": v.name,
+        "embedUrl": `https://www.youtube.com/embed/${v.id}`,
+        "uploadDate": "2024-01-01",
+        "publisher": {
+          "@type": "Organization",
+          "name": "GGL Móveis de Aço"
+        }
+      }
+    }))
   };
+
 
   return (
     <div>
@@ -46,12 +55,15 @@ export default function Videos() {
           name="description"
           content="Assista aos vídeos de montagem dos móveis GGL, como estantes, bibliotecas e gôndolas."
         />
+        <meta name="robots" content="index, follow" />
         <link rel="icon" href="/favicon.ico" />
+        <link rel="canonical" href="https://www.gglmoveis.com.br/videos" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </Head>
+
 
       <Header />
 

@@ -47,11 +47,22 @@ export default function Home({ categories }) {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "GGL Móveis de Aço",
-    url: "https://www.gglmoveis.com.br",
-    logo: "https://www.gglmoveis.com.br/logo.svg",
-    sameAs: [],
+    "name": "GGL Móveis de Aço",
+    "url": "https://www.gglmoveis.com.br",
+    "logo": "https://www.gglmoveis.com.br/logo.svg",
+    "description": "Fabricante de móveis de aço para ambientes corporativos, industriais e institucionais. Qualidade, durabilidade e acabamento superior.",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+55-42-3025-2200",
+      "contactType": "customer service",
+      "areaServed": "BR",
+      "availableLanguage": "Portuguese"
+    },
+    "sameAs": [
+      "https://www.instagram.com/gglmoveisdeaco/",
+    ]
   };
+
 
   return (
     <div>
@@ -61,6 +72,7 @@ export default function Home({ categories }) {
           name="description"
           content="Móveis de aço de alta qualidade, resistentes e com design moderno para ambientes profissionais, corporativos e industriais. Conheça a GGL."
         />
+        <meta name="robots" content="index, follow" />
         <link rel="canonical" href="https://www.gglmoveis.com.br/" />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       </Head>

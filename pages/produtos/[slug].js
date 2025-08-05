@@ -55,6 +55,7 @@ export default function SingleProduct({ product, categories }) {
       product.description ||
       categories?.categoryArray?.[0]?.description ||
       "Produto em aço de alta durabilidade e resistência.",
+    "sku": product.slug,
     "brand": {
       "@type": "Brand",
       "name": "GGL Móveis de Aço"
@@ -63,11 +64,10 @@ export default function SingleProduct({ product, categories }) {
       "@type": "Offer",
       "url": `https://www.gglmoveis.com.br/produtos/${categories.categoryArray[0].slug}?product=${product.slug}`,
       "availability": "https://schema.org/InStock",
-      "itemCondition": "https://schema.org/NewCondition",
-      "priceCurrency": "BRL",
-      "price": "0.00"
+      "itemCondition": "https://schema.org/NewCondition"
     }
   };
+
 
   return (
     <div>
