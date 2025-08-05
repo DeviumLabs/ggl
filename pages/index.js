@@ -67,11 +67,8 @@ export default function Home({ categories }) {
   return (
     <div>
       <Head>
-        <title>GGL Móveis de Aço | Móveis de qualidade para seu ambiente profissional</title>
-        <meta
-          name="description"
-          content="Móveis de aço de alta qualidade, resistentes e com design moderno para ambientes profissionais, corporativos e industriais. Conheça a GGL."
-        />
+        <title>Móveis de Aço para Empresas | GGL Móveis de Aço</title>
+        <meta name="description" content="Soluções em móveis de aço para empresas, escolas, indústrias e órgãos públicos. Conheça a GGL e solicite um orçamento." />
         <meta name="robots" content="index, follow" />
         <link rel="canonical" href="https://www.gglmoveis.com.br/" />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
