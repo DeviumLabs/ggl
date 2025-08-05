@@ -81,10 +81,7 @@ export default function Home({ categories }) {
 
       {isClient && (
         <main className="tw-mt-[110px] tw-mb-[130px] tw-max-w-[1920px] tw-mx-auto">
-          {/* Banner principal */}
-
           <section className="tw-relative tw-w-full">
-            {/* Imagem otimizada */}
             <Image
               src="/assets/banners/uepg-banner1.png"
               alt="Banner principal da GGL"
@@ -93,20 +90,23 @@ export default function Home({ categories }) {
               quality={90}
               priority
             />
-
-            {/* Overlay azul */}
             <div className="tw-absolute tw-top-0 tw-left-0 tw-w-full tw-h-full tw-bg-[#0058C2] tw-opacity-[20%] z-[1]" />
-
-            {/* Conteúdo com padding vertical igual ao original */}
             <div className="tw-relative tw-z-[2] tw-flex tw-items-center tw-justify-start tw-max-w-[1597px] tw-px-[5%] tw-mx-auto tw-w-full tw-py-[150px]">
               <div className="tw-flex tw-flex-col tw-text-white">
                 <h1 className="tw-text-[30px] md:tw-text-[40px] tw-mb-[20px]">GGL</h1>
-                <p className="tw-max-w-[300px] tw-w-full">
+                <p className="tw-max-w-[300px] tw-w-full tw-mb-[30px]">
                   Móveis de excelente qualidade, resistência e acabamento superior para seu espaço.
                 </p>
+                <a
+                  href="#contato"
+                  className="tw-text-white tw-w-fit tw-relative before:tw-content-[''] before:tw-absolute before:tw-left-0 before:tw-bottom-0 before:tw-bg-white before:tw-h-[2px] before:tw-w-1/2 hover:before:tw-w-full before:tw-duration-500 tw-text-[16px] tw-font-medium"
+                >
+                  Solicitar orçamento
+                </a>
               </div>
             </div>
           </section>
+
 
           {/* Título das categorias */}
           <div className="tw-w-full tw-px-[20px]">
