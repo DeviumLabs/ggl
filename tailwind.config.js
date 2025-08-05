@@ -9,6 +9,12 @@ module.exports = {
     "./components/*.js",
   ],
 
+  safelist: [
+    {
+      pattern: /before:tw-content-.+/,
+    },
+  ],
+
   theme: {
     extend: {
       colors: {
