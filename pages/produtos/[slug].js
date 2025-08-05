@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import api from "../../services/api";
 import Head from "next/head";
+import Image from "next/image";
 
 // Components
 import Header from "../../components/header";
@@ -109,11 +110,13 @@ export default function SingleProduct({ product, categories }) {
               <div className="tw-flex tw-mt-[20px] tw-w-full tw-overflow-x-auto tw-overflow-y-hidden md:tw-w-auto">
                 {product.images.length > 1 &&
                   product.images.map((image, i) => (
-                    <img
+                    <Image
                       src={image}
                       key={i}
                       alt={`${product.name} - ${i + 1}`}
-                      className="tw-w-[80px] tw-h-[80px] tw-object-contain tw-mr-[10px] hover:tw-scale-[1.1] tw-cursor-pointer"
+                      width={80}
+                      height={80}
+                      className="tw-object-contain tw-mr-[10px] hover:tw-scale-[1.1] tw-cursor-pointer"
                       onClick={() => {
                         setPrincipalImage(image);
                         setTable(i);

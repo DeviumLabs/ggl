@@ -1,6 +1,7 @@
 import api from "../../services/api";
 import Head from "next/head";
 import Link from "next/link";
+import Image from "next/image";
 
 //Components
 import Header from "../../components/header";
@@ -70,11 +71,13 @@ export default function Produtos({ categories }) {
               passHref
             >
               <a className="tw-max-w-[350px] tw-w-full tw-transition-transform tw-duration-300 hover:tw-scale-105">
-                <img
+                <Image
                   src={category.image}
                   alt={`Imagem da categoria ${category.name} da GGL Móveis de Aço`}
-                  loading="lazy"
-                  className="tw-h-[300px] tw-object-contain tw-w-full tw-transition-transform tw-duration-300"
+                  width={350}
+                  height={300}
+                  layout="responsive"
+                  className="tw-object-contain tw-transition-transform tw-duration-300"
                 />
                 <div className="tw-mt-[20px]">
                   <h1 className="tw-text-[22px]">{category.name}</h1>
