@@ -197,11 +197,12 @@ export default function Home({ categories }) {
                 </p>
               </div>
               <div className="tw-w-full md:tw-w-[50%]">
-                <img
+                <Image
                   src="/assets/banners/empresa.jpg"
                   alt="Instalações da empresa GGL"
-                  className="tw-w-full"
-                  loading="lazy"
+                  width={800}
+                  height={600}
+                  className="tw-w-full tw-h-auto"
                 />
               </div>
             </div>

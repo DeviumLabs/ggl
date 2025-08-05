@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Squash as Hamburger } from "hamburger-react";
 import { useState } from "react";
+import Image from "next/image";
 
 export default function Header() {
   const [isOpen, setOpen] = useState(false);
@@ -9,11 +10,16 @@ export default function Header() {
     <header className="tw-flex tw-items-center tw-z-[400] tw-bg-white tw-w-[100%] tw-px-[20px] tw-fixed tw-top-0 tw-left-0 tw-justify-center tw-border-black tw-border-b-[1px] tw-h-[110px]">
       <div className="tw-flex tw-items-center tw-justify-between tw-max-w-[1280px] tw-w-full">
         <Link href="/" passHref>
-          <a className="tw-flex" aria-label="Ir para a Home">
-            <img
+          <a
+            className="tw-relative tw-w-[140px] md:tw-w-[220px] tw-h-[50px] md:tw-h-[70px]"
+            aria-label="Ir para a Home"
+          >
+            <Image
               src="/assets/icons/logo.svg"
               alt="Logo da GGL Móveis de Aço"
-              className="tw-w-[100px]"
+              layout="fill"
+              objectFit="contain"
+              priority
             />
           </a>
         </Link>

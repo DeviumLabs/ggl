@@ -1,4 +1,5 @@
 import { Fragment } from "react";
+import Image from "next/image";
 import Whatsapp from "./whatsapp";
 
 export default function Footer() {
@@ -6,103 +7,80 @@ export default function Footer() {
     <Fragment>
       {/* <Whatsapp /> */}
       <footer className="tw-bg-darkBlue tw-pt-[30px] tw-pb-[10px] tw-px-[20px] tw-w-full">
-        <div className="tw-flex tw-flex-wrap tw-justify-start tw-items-start tw-gap-[40px]">
-          <div>
-            <img
-              src="/assets/icons/white-logo.svg"
-              alt="Logo GGL"
-              className="tw-w-[250px]"
-            />
+        <div className="tw-w-full tw-grid tw-grid-cols-1 md:tw-grid-cols-3 tw-gap-[40px] tw-max-w-[1400px] tw-mx-auto">
+          {/* Coluna 1 - Logo */}
+          <div className="tw-flex tw-justify-start">
+            <Image src="/assets/icons/white-logo.svg" alt="Logo GGL" width={250} height={80} />
           </div>
 
-          <nav
-            aria-label="Rodapé - Navegação"
-            className="tw-px-[20px]"
-          >
-            <h2 className="tw-text-[30px] tw-text-white tw-mb-[10px]">
-              Navegação
-            </h2>
-            <ul className="tw-flex tw-flex-col">
-              {[
-                { label: "Home", href: "/" },
-                { label: "Sobre", href: "/#sobre" },
-                { label: "Produtos", href: "/produtos" },
-                { label: "Catálogo", href: "/#catalogo" },
-                { label: "Vídeos", href: "/videos" },
-                { label: "Contato", href: "#contato" },
-              ].map((link) => (
-                <li key={link.href} className="tw-mb-[6px]">
-                  <a
-                    href={link.href}
-                    className="tw-text-white hover:tw-underline tw-transition-[0.4s]"
-                  >
-                    {link.label}
+          {/* Coluna 2 - Navegação */}
+          <div>
+            <h2 className="tw-text-[24px] tw-text-white tw-mb-[10px]">Navegação</h2>
+            <ul className="tw-flex tw-flex-col tw-gap-[4px]">
+              {["Home", "Sobre", "Produtos", "Catálogo", "Vídeos", "Contato"].map((label, i) => (
+                <li key={i}>
+                  <a href={["/", "/#sobre", "/produtos", "/#catalogo", "/videos", "#contato"][i]} className="tw-text-white hover:tw-underline">
+                    {label}
                   </a>
                 </li>
               ))}
             </ul>
-          </nav>
+          </div>
 
+          {/* Coluna 3 - Atendimento, endereço e redes */}
           <div>
-            <section className="tw-mb-[20px]">
-              <h3 className="tw-font-[300] tw-text-white">Horário de atendimento:</h3>
-              <p className="tw-ml-[15px] tw-font-[300] tw-text-white">
-                Segunda a quinta: 7h30 às 17h30
-              </p>
-              <p className="tw-ml-[15px] tw-font-[300] tw-text-white">
-                Sexta: 7h30 às 16h30
-              </p>
-              <p className="tw-ml-[15px] tw-font-[300] tw-text-white">
-                Finais de semana: fechado
-              </p>
-            </section>
-
-            <address className="tw-not-italic tw-text-white tw-font-[300] tw-ml-[15px]">
-              <strong>Endereço:</strong><br />
-              R. Dr. Eugênio José Bocchi, 645<br />
-              Boa Vista, Ponta Grossa - PR<br />
-              84070-430
-            </address>
-
-            <div className="tw-my-[20px]">
-              <h3 className="tw-font-[300] tw-mb-[3px] tw-text-white">Contato:</h3>
-              <p className="tw-ml-[15px] tw-font-[300]">
-                <a href="tel:+554230252200" className="hover:tw-underline">
-                  (42) 3025 2200
-                </a>
-              </p>
-              <p className="tw-ml-[15px] tw-font-[300]">
-                <a href="tel:+554230255045" className="hover:tw-underline">
-                  (42) 3025 5045
-                </a>
-              </p>
+            <div className="tw-mb-[10px]">
+              <h3 className="tw-text-white tw-font-medium">Horário de atendimento:</h3>
+              <p className="tw-text-white tw-text-sm">Segunda a quinta: 7h30 às 17h30</p>
+              <p className="tw-text-white tw-text-sm">Sexta: 7h30 às 16h30</p>
+              <p className="tw-text-white tw-text-sm">Finais de semana: fechado</p>
             </div>
 
-            <div>
-              <h3 className="tw-font-[300] tw-mb-[5px] tw-text-white">Redes sociais:</h3>
-              <div className="tw-flex">
-                <a
-                  href="https://www.instagram.com/gglmoveisdeaco/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Instagram GGL"
-                  className="tw-bg-white tw-w-[50px] tw-h-[50px] tw-rounded-[50%] tw-p-[5px] tw-mr-[15px] tw-flex tw-items-center tw-justify-center tw-transition-transform tw-duration-300 hover:tw-scale-110"
-                >
-                  <img src="/assets/icons/instagram.svg" alt="Instagram GGL" />
-                </a>
-                <a
-                  href="https://www.youtube.com/@GGLmoveis"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="YouTube GGL"
-                  className="tw-bg-white tw-w-[50px] tw-h-[50px] tw-rounded-[50%] tw-p-[5px] tw-mr-[15px] tw-flex tw-items-center tw-justify-center tw-transition-transform tw-duration-300 hover:tw-scale-110"
-                >
-                  <img src="/assets/icons/youtube.svg" alt="YouTube GGL" />
-                </a>
-              </div>
+            <div className="tw-mb-[10px]">
+              <h3 className="tw-text-white tw-font-medium">Endereço:</h3>
+              <p className="tw-text-white tw-text-sm">R. Dr. Eugênio José Bocchi, 645<br />Boa Vista, Ponta Grossa - PR<br />84070-430</p>
+            </div>
+
+            <div className="tw-mb-[10px]">
+              <h3 className="tw-text-white tw-font-medium">Contato:</h3>
+              <p className="tw-text-white tw-text-sm"><a href="tel:+554230252200" className="hover:tw-underline">(42) 3025 2200</a></p>
+              <p className="tw-text-white tw-text-sm"><a href="tel:+554230255045" className="hover:tw-underline">(42) 3025 5045</a></p>
+            </div>
+
+            <div className="tw-flex tw-gap-[10px] tw-mt-[10px]">
+              <a
+                href="https://www.instagram.com/gglmoveisdeaco/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram GGL"
+                className="tw-bg-white tw-w-[40px] tw-h-[40px] tw-rounded-full tw-flex tw-items-center tw-justify-center tw-transition-transform tw-duration-300 hover:tw-scale-110"
+              >
+                <Image src="/assets/icons/instagram.svg" alt="Instagram GGL" width={24} height={24} />
+              </a>
+
+              <a
+                href="https://www.youtube.com/@GGLmoveis"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="YouTube GGL"
+                className="tw-bg-white tw-w-[40px] tw-h-[40px] tw-rounded-full tw-flex tw-items-center tw-justify-center tw-transition-transform tw-duration-300 hover:tw-scale-110"
+              >
+                <Image src="/assets/icons/youtube.svg" alt="YouTube GGL" width={24} height={24} />
+              </a>
+
+              <a
+                href="https://www.facebook.com/gglmoveis/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook GGL"
+                className="tw-bg-white tw-w-[40px] tw-h-[40px] tw-rounded-full tw-flex tw-items-center tw-justify-center tw-transition-transform tw-duration-300 hover:tw-scale-110"
+              >
+                <Image src="/assets/icons/facebook.svg" alt="Facebook GGL" width={24} height={20} />
+              </a>
             </div>
           </div>
         </div>
+
 
         <div className="tw-text-center tw-border-white tw-border-t-[1px] tw-mt-[40px] tw-pt-[5px]">
           <a

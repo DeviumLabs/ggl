@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import Image from "next/image";
 
 export default function ZoomLens({ src, width = 450, height = 430, zoom = 2 }) {
   const containerRef = useRef(null);
@@ -22,13 +23,11 @@ export default function ZoomLens({ src, width = 450, height = 430, zoom = 2 }) {
     let lensX = x - lensWidth;
     let lensY = y - lensHeight;
 
-    // limitar dentro da imagem
     lensX = Math.max(0, Math.min(lensX, width - lens.offsetWidth));
     lensY = Math.max(0, Math.min(lensY, height - lens.offsetHeight));
 
     lens.style.left = `${lensX}px`;
     lens.style.top = `${lensY}px`;
-
     lens.style.backgroundPosition = `-${lensX * zoom}px -${lensY * zoom}px`;
   };
 
@@ -44,18 +43,18 @@ export default function ZoomLens({ src, width = 450, height = 430, zoom = 2 }) {
         height: `${height}px`,
       }}
     >
-      <img
+      <Image
         src={src}
         alt="Produto com zoom"
-        style={{
-          width: "100%",
-          height: "100%",
-          objectFit: "contain",
-        }}
+        width={width}
+        height={height}
+        className="tw-object-contain"
+        style={{ width: "100%", height: "100%" }}
       />
       {showLens && (
         <div
           ref={lensRef}
+          aria-hidden="true"
           className="tw-absolute tw-border tw-border-gray-400 tw-pointer-events-none"
           style={{
             width: "150px",
