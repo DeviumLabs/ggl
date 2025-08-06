@@ -36,8 +36,10 @@ export default function Videos() {
       "item": {
         "@type": "VideoObject",
         "name": v.name,
+        "description": `Vídeo institucional da GGL Móveis de Aço: ${v.name}.`,
+        "thumbnailUrl": `https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`,
+        "uploadDate": "2010-01-01",
         "embedUrl": `https://www.youtube.com/embed/${v.id}`,
-        "uploadDate": "2024-01-01",
         "publisher": {
           "@type": "Organization",
           "name": "GGL Móveis de Aço"
