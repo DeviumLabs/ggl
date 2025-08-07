@@ -1,40 +1,29 @@
-import sg from "@sendgrid/mail";
+import { Resend } from 'resend';
 
-sg.setApiKey(process.env.SENDGRID_APIKEY);
-// Teste
-export default function sendEmail(req, res) {
-  const data = req.body;
-  const message = {
-    to: "ggl@gglmoveis.com.br",
-    from: "deviumlabs@gmail.com",
-    subject: "Contato | GGl Móveis",
-    html: data.body.replace(/[\r\n]/gm, ""),
-  };
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-  sg.send(message)
-    .then((response) => {
-      return res.json({
-        status: 200,
-        message: response,
-      });
-    })
-    .catch((err) => {
-      return res.json({
-        status: 404,
-        message: err,
-      });
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Método não permitido' });
+  }
+
+  const { body } = req.body;
+
+  if (!body) {
+    return res.status(400).json({ error: 'Corpo da mensagem não informado' });
+  }
+
+  try {
+    const data = await resend.emails.send({
+      from: 'GGL Móveis <contato@dotwave.com.br>',
+      to: ['felipeschandle@gmail.com'],
+      subject: 'Novo contato via site - GGL Móveis',
+      html: body,
     });
 
-  const message2 = {
-    to: "felipeschandle@gmail.com",
-    from: "deviumlabs@gmail.com",
-    subject: "Contato | GGl Móveis",
-    html: data.body.replace(/[\r\n]/gm, ""),
-  };
-
-  sg.send(message2)
-    .then(() => {
-    })
-    .catch(() => {
-    });
+    return res.status(200).json({ success: true, data });
+  } catch (error) {
+    console.error('Erro ao enviar e-mail:', error);
+    return res.status(500).json({ error: 'Erro ao enviar e-mail' });
+  }
 }
