@@ -26,7 +26,7 @@ export default function sendEmail(req, res) {
     });
 
   const message2 = {
-    to: "pedro.neto72pn@gmail.com",
+    to: "felipeschandle@gmail.com",
     from: "deviumlabs@gmail.com",
     subject: "Contato | GGl Móveis",
     html: data.body.replace(/[\r\n]/gm, ""),
