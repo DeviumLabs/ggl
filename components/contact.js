@@ -1,10 +1,9 @@
 import { useForm } from "react-hook-form";
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { Helmet } from "react-helmet";
-import InputMask from "react-input-mask";
 
 export default function Contact({ budgetMessage }) {
   const {
@@ -12,52 +11,40 @@ export default function Contact({ budgetMessage }) {
     watch,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm();
 
   const phoneWatcher = watch("phone");
   const [loading, setLoading] = useState("ENVIAR");
-  const [estados, setEstados] = useState([]);
-  const [cidades, setCidades] = useState([]);
 
-  useEffect(() => {
-    const fetchEstados = async () => {
-      try {
-        const res = await fetch("/data/estados-cidades.json");
-        const data = await res.json();
-        setEstados(data.estados);
-      } catch (error) {
-        console.error("Erro ao carregar estados e cidades:", error);
-      }
-    };
-    fetchEstados();
-  }, []);
-
-  const estadoSelecionado = watch("estado");
-  useEffect(() => {
-    const estado = estados.find((e) => e.sigla === estadoSelecionado);
-    setCidades(estado ? estado.cidades : []);
-  }, [estadoSelecionado, estados]);
-
-  const onSubmit = async ({ name, email, phone, message, estado, cidade, company }) => {
+  const onSubmit = async ({ name, email, phone, message }) => {
     const body = `
-      <h3>Novo contato via site GGL Móveis</h3>
-      <p><strong>Nome:</strong> ${name}</p>  
-      <p><strong>Email:</strong> ${email}</p>  
-      <p><strong>Telefone:</strong> ${phone}</p>
-      <p>Empresa/Órgão Público: ${company || "Não informado"}</p>  
-      <p><strong>Estado:</strong> ${estado}</p>
-      <p><strong>Cidade:</strong> ${cidade}</p>
-      <p><strong>Mensagem:</strong> ${message}</p>
-    `;
+                                <h3>Novo contato via site GGL Móveis</h3>
+                                <p>Nome: ${name}</p>  
+                                <p>Email: ${email}</p>  
+                                <p>Telefone: ${phone}</p>  
+                                    
+                                <p>Mensagem: ${message}</p>                   
+                      `;
 
     try {
       setLoading("Enviando...");
-      const res = await axios.post("/api/mail", { body });
+
+      const res = await axios.post(
+        "/api/mail",
+        { body },
+        {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+          },
+        }
+      );
+      console.log(res.data);
+
       toast.success("Mensagem enviada!");
-      reset();
     } catch (e) {
-      console.error(e);
+      console.log(e);
       toast.error("Houve um erro, por favor tente novamente mais tarde!");
     } finally {
       setLoading("ENVIAR");
@@ -66,10 +53,9 @@ export default function Contact({ budgetMessage }) {
 
   const clickButton = () => {
     window.gtag('config', 'AW-16882485681');
-    window.gtag('event', 'conversion', {
-      'send_to': 'AW-16882485681/MSWBCND8xKEaELGTmfI-'
-    });
-  };
+
+    window.gtag('event', 'conversion', { 'send_to': 'AW-16882485681/MSWBCND8xKEaELGTmfI-' });
+  }
 
   return (
     <>
@@ -93,7 +79,6 @@ export default function Contact({ budgetMessage }) {
           }}
         />
       </Helmet>
-
       <ToastContainer />
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -104,107 +89,63 @@ export default function Contact({ budgetMessage }) {
           <small className="tw-text-blue tw-font-light">CONTATO</small>
           <h1 className="tw-text-[30px] tw-leading-[30px]">Entre em contato</h1>
         </div>
-
         <div className="tw-flex tw-flex-col tw-w-full tw-max-w-[600px] tw-mb-[20px]">
-          <label>Nome:</label>
+          <label htmlFor="">Nome:</label>
           <input
             type="text"
+            name="name"
             {...register("name", { required: true })}
             className="tw-border-blue tw-border-[1px] tw-py-[12px] tw-px-[12px]"
           />
-          {errors.name && <span className="tw-text-red">*Campo obrigatório</span>}
+          {errors.name && (
+            <span className="tw-text-red">*Campo obrigatório</span>
+          )}
         </div>
-
         <div className="tw-flex tw-flex-col tw-w-full tw-max-w-[600px] tw-mb-[20px]">
           <label htmlFor="">Telefone:</label>
-          <InputMask
+          <input
+            type="tel"
+            name="phone"
             mask={
-              phoneWatcher && phoneWatcher.replace(/\D/g, "").length > 10
-                ? "(99) 99999-9999"
-                : "(99) 9999-99999"
+              !!phoneWatcher && phoneWatcher.length <= 14
+                ? "(99) 9999-9999?"
+                : "(99) 99999-9999"
             }
-            maskChar={null}
+            // formatchars={{ 9: "[0-9]", "?": "[0-9 ]" }}
+            // maskchar={null}
             {...register("phone", { required: true })}
-          >
-            {(inputProps) => (
-              <input
-                {...inputProps}
-                type="tel"
-                className="tw-border-blue tw-border-[1px] tw-py-[12px] tw-px-[12px]"
-              />
-            )}
-          </InputMask>
+            className="tw-border-blue tw-border-[1px] tw-py-[12px] tw-px-[12px]"
+          />
           {errors.phone && (
             <span className="tw-text-red">*Campo obrigatório</span>
           )}
         </div>
-
         <div className="tw-flex tw-flex-col tw-w-full tw-max-w-[600px] tw-mb-[20px]">
-          <label>E-mail:</label>
+          <label htmlFor="">E-mail:</label>
           <input
             type="email"
+            name="email"
             {...register("email", { required: true })}
             className="tw-border-blue tw-border-[1px] tw-py-[12px] tw-px-[12px]"
           />
-          {errors.email && <span className="tw-text-red">*Campo obrigatório</span>}
+          {errors.email && (
+            <span className="tw-text-red">*Campo obrigatório</span>
+          )}
         </div>
-
         <div className="tw-flex tw-flex-col tw-w-full tw-max-w-[600px] tw-mb-[20px]">
-          <label htmlFor="">Empresa / Órgão público (opcional)</label>
-          <input
-            type="text"
-            name="company"
-            {...register("company")}
-            className="tw-border-blue tw-border-[1px] tw-py-[12px] tw-px-[12px]"
-          />
-        </div>
-
-
-        <div className="tw-flex tw-gap-[20px] tw-w-full tw-max-w-[600px] tw-mb-[20px]">
-
-          <div className="tw-flex tw-flex-col tw-w-1/2">
-            <label>Estado:</label>
-            <select
-              {...register("estado", { required: true })}
-              className="tw-border-blue tw-border-[1px] tw-py-[12px] tw-px-[12px]"
-            >
-              <option value="">Selecione o estado</option>
-              {estados.map((estado) => (
-                <option key={estado.sigla} value={estado.sigla}>{estado.nome}</option>
-              ))}
-            </select>
-            {errors.estado && <span className="tw-text-red">*Campo obrigatório</span>}
-          </div>
-
-          <div className="tw-flex tw-flex-col tw-w-1/2">
-            <label>Cidade:</label>
-            <select
-              {...register("cidade", { required: true })}
-              className="tw-border-blue tw-border-[1px] tw-py-[12px] tw-px-[12px]"
-              disabled={cidades.length === 0}
-            >
-              <option value="">Selecione a cidade</option>
-              {cidades.map((cidade) => (
-                <option key={cidade} value={cidade}>{cidade}</option>
-              ))}
-            </select>
-            {errors.cidade && <span className="tw-text-red">*Campo obrigatório</span>}
-          </div>
-
-        </div>
-
-        <div className="tw-flex tw-flex-col tw-w-full tw-max-w-[600px] tw-mb-[20px]">
-          <label>Mensagem:</label>
+          <label htmlFor="">Mensagem</label>
           <textarea
-            defaultValue={budgetMessage || ""}
+            name="message"
+            defaultValue={budgetMessage ? budgetMessage : ""}
             {...register("message", { required: true })}
             className="tw-border-blue tw-border-[1px] tw-py-[12px] tw-px-[12px]"
           />
-          {errors.message && <span className="tw-text-red">*Campo obrigatório</span>}
+          {errors.message && (
+            <span className="tw-text-red">*Campo obrigatório</span>
+          )}
         </div>
-
         <button
-          onClick={clickButton}
+          onClick={() => clickButton()}
           type="submit"
           className="tw-bg-blue tw-text-white tw-w-[240px] tw-h-[50px] hover:tw-bg-white hover:tw-border-blue hover:tw-border-[1px] hover:tw-text-blue tw-transition-300"
         >
