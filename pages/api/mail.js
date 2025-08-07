@@ -16,7 +16,7 @@ export default async function handler(req, res) {
   try {
     const data = await resend.emails.send({
       from: 'GGL Móveis <contato@dotwave.com.br>',
-      to: ['felipeschandle@gmail.com'],
+      to: ['ggl@gglmoveis.com.br', 'felipeschandle@gmail.com', 'pedro.neto72pn@gmail.com'],
       subject: 'Novo contato via site - GGL Móveis',
       html: body,
     });
