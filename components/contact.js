@@ -110,6 +110,7 @@ export default function Contact({ budgetMessage }) {
           <input
             type="text"
             {...register("name", { required: true })}
+            autoComplete="name"
             className="tw-border-blue tw-border-[1px] tw-py-[12px] tw-px-[12px]"
           />
           {errors.name && <span className="tw-text-red">*Campo obrigatório</span>}
@@ -131,6 +132,8 @@ export default function Contact({ budgetMessage }) {
                 {...inputProps}
                 type="tel"
                 className="tw-border-blue tw-border-[1px] tw-py-[12px] tw-px-[12px]"
+                autoComplete="tel"
+                inputMode="tel"
               />
             )}
           </InputMask>
@@ -144,6 +147,7 @@ export default function Contact({ budgetMessage }) {
           <input
             type="email"
             {...register("email", { required: true })}
+            autoComplete="email"
             className="tw-border-blue tw-border-[1px] tw-py-[12px] tw-px-[12px]"
           />
           {errors.email && <span className="tw-text-red">*Campo obrigatório</span>}
