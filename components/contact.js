@@ -40,22 +40,23 @@ export default function Contact({ budgetMessage }) {
     setCidades(estado ? estado.cidades : []);
   }, [estadoSelecionado, estados]);
 
-  // Captura gclid/gbraid/wbraid
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const gclid = params.get("gclid");
     const gbraid = params.get("gbraid");
     const wbraid = params.get("wbraid");
-    const getBest = (key, urlVal) => {
+
+    const setBest = (key, urlVal) => {
       if (urlVal) {
         localStorage.setItem(key, urlVal);
         return urlVal;
       }
       return localStorage.getItem(key) || "";
     };
-    setValue("gclid", getBest("gclid", gclid));
-    setValue("gbraid", getBest("gbraid", gbraid));
-    setValue("wbraid", getBest("wbraid", wbraid));
+
+    setValue("gclid", setBest("gclid", gclid));
+    setValue("gbraid", setBest("gbraid", gbraid));
+    setValue("wbraid", setBest("wbraid", wbraid));
   }, [setValue]);
 
   const onSubmit = async ({
@@ -66,25 +67,31 @@ export default function Contact({ budgetMessage }) {
     estado,
     cidade,
     company,
-    website, // honeypot
+    website, 
+    gclid,
+    gbraid,
+    wbraid,
   }) => {
-    // Se o honeypot vier preenchido, aborta silenciosamente
     if (website) {
       reset();
       return;
     }
-
-    if (isSending) return; // guarda extra contra duplo clique
+    if (isSending) return; 
 
     const body = `
       <h3>Novo contato via site GGL Móveis</h3>
-      <p><strong>Nome:</strong> ${name}</p>  
-      <p><strong>Email:</strong> ${email}</p>  
+      <p><strong>Nome:</strong> ${name}</p>
+      <p><strong>Email:</strong> ${email}</p>
       <p><strong>Telefone:</strong> ${phone}</p>
-      <p><strong>Empresa/Órgão Público:</strong> ${company || "Não informado"}</p>  
+      <p><strong>Empresa/Órgão Público:</strong> ${company || "Não informado"}</p>
       <p><strong>Estado:</strong> ${estado}</p>
       <p><strong>Cidade:</strong> ${cidade}</p>
       <p><strong>Mensagem:</strong> ${message}</p>
+      <hr/>
+      <p><em>(códigos do anúncio)</em></p>
+      <p>gclid: ${gclid || "-"}</p>
+      <p>gbraid: ${gbraid || "-"}</p>
+      <p>wbraid: ${wbraid || "-"}</p>
     `;
 
     try {
@@ -94,6 +101,7 @@ export default function Contact({ budgetMessage }) {
       toast.success("Mensagem enviada!");
       reset();
 
+      // dispara conversão (opcional; seu tag já pode estar registrando via Enhanced)
       if (window.gtag) {
         window.gtag("event", "conversion", {
           send_to: "AW-16882485681/MSWBCND8xKEaELGTmfI-",
@@ -122,10 +130,7 @@ export default function Contact({ budgetMessage }) {
         </div>
 
         {/* Honeypot (anti-spam) */}
-        <div
-          aria-hidden="true"
-          style={{ position: "absolute", left: "-10000px", opacity: 0 }}
-        >
+        <div aria-hidden="true" style={{ position: "absolute", left: "-10000px", opacity: 0 }}>
           <label htmlFor="website">Website</label>
           <input id="website" type="text" autoComplete="off" {...register("website")} />
         </div>
@@ -194,7 +199,7 @@ export default function Contact({ budgetMessage }) {
           />
         </div>
 
-        {/* Estado/Cidade lado a lado */}
+        {/* Estado/Cidade */}
         <div className="tw-flex tw-gap-[20px] tw-w-full tw-max-w-[600px] tw-mb-[20px]">
           <div className="tw-flex tw-flex-col tw-w-1/2">
             <label htmlFor="estado">Estado:</label>
@@ -247,6 +252,7 @@ export default function Contact({ budgetMessage }) {
           {errors.message && <span className="tw-text-red">*Campo obrigatório</span>}
         </div>
 
+        {/* Hidden: gclid/gbraid/wbraid */}
         <input type="hidden" {...register("gclid")} />
         <input type="hidden" {...register("gbraid")} />
         <input type="hidden" {...register("wbraid")} />
