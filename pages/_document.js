@@ -20,10 +20,7 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>
-          <script
-            async
-            src="https://www.googletagmanager.com/gtag/js?id=AW-16882485681"
-          ></script>
+          <script async src="https://www.googletagmanager.com/gtag/js?id=G-ESC22234MN"></script>
           <script
             dangerouslySetInnerHTML={{
               __html: `
