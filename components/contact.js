@@ -22,6 +22,21 @@ export default function Contact({ budgetMessage }) {
   const [estados, setEstados] = useState([]);
   const [cidades, setCidades] = useState([]);
 
+  const norm = (s) => (s || "").toString().trim().toLowerCase();
+  const onlyDigits = (s) => (s || "").toString().replace(/\D/g, "");
+  const splitName = (full = "") => {
+    const parts = full.trim().split(/\s+/);
+    if (!parts[0]) return { first_name: "", last_name: "" };
+    return { first_name: parts[0], last_name: parts.slice(1).join(" ") };
+  };
+  const sha256 = async (str) => {
+    const enc = new TextEncoder().encode(str);
+    const buf = await crypto.subtle.digest("SHA-256", enc);
+    return Array.from(new Uint8Array(buf))
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
+  };
+
   useEffect(() => {
     const fetchEstados = async () => {
       try {
@@ -102,11 +117,93 @@ export default function Contact({ budgetMessage }) {
       toast.success("Mensagem enviada!");
       reset();
 
+      // ========= Disparos de mensuração =========
       if (window.gtag) {
+        // Conversão do Google Ads (como você já fazia)
         window.gtag("event", "conversion", {
           send_to: "AW-16882485681/MSWBCND8xKEaELGTmfI-",
+          // parâmetros extras úteis p/ depuração
+          value: 1.0,
+          currency: "BRL",
+          company: company || "",
+          city: cidade || "",
+          state: estado || "",
         });
+
+        // ----- GA4 + Ads: User-Provided Data (hash) -----
+        const { first_name, last_name } = splitName(name);
+        const emailNorm = norm(email);
+        const phoneDigits = onlyDigits(phone);
+        const firstNorm = norm(first_name);
+        const lastNorm = norm(last_name);
+        const cityNorm = norm(cidade);
+        const stateNorm = norm(estado);
+
+        // Verifica suporte a crypto API
+        if (window.crypto && window.crypto.subtle) {
+          const [
+            email_h,
+            phone_h,
+            first_h,
+            last_h,
+            city_h,
+            state_h,
+          ] = await Promise.all([
+            sha256(emailNorm),
+            sha256(phoneDigits),
+            sha256(firstNorm),
+            sha256(lastNorm),
+            sha256(cityNorm),
+            sha256(stateNorm),
+          ]);
+
+          // GA4: generate_lead com user_data
+          window.gtag("event", "generate_lead", {
+            value: 1.0,
+            currency: "BRL",
+            company: company || "",
+            city: cidade || "",
+            state: estado || "",
+            user_data: {
+              // Campos esperados (hashes SHA-256)
+              email: email_h,
+              phone_number: phone_h,
+              first_name: first_h,
+              last_name: last_h,
+              city: city_h,   // GA pode ignorar em GA4; útil p/ Ads EC
+              region: state_h // region = estado/UF
+              // Se tiver país/CEP/rua, dá para enviar também
+            },
+          });
+
+          // Google Ads Enhanced Conversions junto da conversão
+          window.gtag("event", "conversion", {
+            send_to: "AW-16882485681/MSWBCND8xKEaELGTmfI-",
+            value: 1.0,
+            currency: "BRL",
+            user_data: {
+              email: email_h,
+              phone_number: phone_h,
+              first_name: first_h,
+              last_name: last_h,
+              city: city_h,
+              region: state_h,
+            },
+            // parâmetros adicionais não-padronizados
+            company: company || "",
+          });
+        } else {
+          // Fallback: dispara sem user_data (sem hash)
+          window.gtag("event", "generate_lead", {
+            value: 1.0,
+            currency: "BRL",
+            company: company || "",
+            city: cidade || "",
+            state: estado || "",
+          });
+        }
       }
+      // ===============================================
     } catch (e) {
       console.error(e);
       toast.error("Houve um erro, por favor tente novamente mais tarde!");
@@ -125,29 +222,6 @@ export default function Contact({ budgetMessage }) {
           content="Fale com a GGL Móveis de Aço. Tire dúvidas e solicite orçamento."
         />
         <meta name="referrer" content="strict-origin-when-cross-origin" />
-        <script
-          type="text/javascript"
-          dangerouslySetInnerHTML={{
-            __html: `
-              function gtag_report_conversion(url) {
-                var callback = function () {
-                  if (typeof(url) != 'undefined') {
-                    window.location = url;
-                  }
-                };
-                if (window.gtag) {
-                  gtag('event', 'conversion', {
-                    'send_to': 'AW-16882485681/MSWBCND8xKEaELGTmfI-',
-                    'value': 1.0,
-                    'currency': 'BRL',
-                    'event_callback': callback
-                  });
-                }
-                return false;
-              }
-            `,
-          }}
-        />
       </Helmet>
 
       <ToastContainer />
@@ -161,11 +235,8 @@ export default function Contact({ budgetMessage }) {
           <h1 className="tw-text-[30px] tw-leading-[30px]">Entre em contato</h1>
         </div>
 
-        {/* Honeypot (anti-spam) */}
-        <div
-          aria-hidden="true"
-          style={{ position: "absolute", left: "-10000px", opacity: 0 }}
-        >
+        {/* Honeypot */}
+        <div aria-hidden="true" style={{ position: "absolute", left: "-10000px", opacity: 0 }}>
           <label htmlFor="website">Website</label>
           <input id="website" type="text" autoComplete="off" {...register("website")} />
         </div>
@@ -222,7 +293,7 @@ export default function Contact({ budgetMessage }) {
           {errors.email && <span className="tw-text-red">*Campo obrigatório</span>}
         </div>
 
-        {/* Empresa (opcional) */}
+        {/* Empresa */}
         <div className="tw-flex tw-flex-col tw-w-full tw-max-w-[600px] tw-mb-[20px]">
           <label htmlFor="company">Empresa / Órgão público (opcional):</label>
           <input
@@ -234,7 +305,7 @@ export default function Contact({ budgetMessage }) {
           />
         </div>
 
-        {/* Estado/Cidade */}
+        {/* Estado / Cidade */}
         <div className="tw-flex tw-gap-[20px] tw-w-full tw-max-w-[600px] tw-mb-[20px]">
           <div className="tw-flex tw-flex-col tw-w-1/2">
             <label htmlFor="estado">Estado:</label>
@@ -287,7 +358,7 @@ export default function Contact({ budgetMessage }) {
           {errors.message && <span className="tw-text-red">*Campo obrigatório</span>}
         </div>
 
-        {/* Hidden: gclid/gbraid/wbraid */}
+        {/* Hidden fields */}
         <input type="hidden" {...register("gclid")} />
         <input type="hidden" {...register("gbraid")} />
         <input type="hidden" {...register("wbraid")} />
@@ -303,6 +374,6 @@ export default function Contact({ budgetMessage }) {
           {loading}
         </button>
       </form>
-    </>
-  );
+    </>
+  );
 }
