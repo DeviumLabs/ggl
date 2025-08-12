@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import api from "../../services/api";
 import Head from "next/head";
 import Image from "next/image";
 
-// Components
 import Header from "../../components/header";
 import Footer from "../../components/footer";
 import Contact from "../../components/contact";
@@ -31,6 +30,21 @@ export default function SingleProduct({ product, categories }) {
   const [contactMessage, setContactMessage] = useState("");
   const [table, setTable] = useState(0);
 
+  useEffect(() => {
+    if (!product?.slug || !categories?.categoryArray?.[0] || !window.gtag) return;
+    const cat = categories.categoryArray[0];
+    window.gtag("event", "view_item", {
+      items: [
+        {
+          item_id: product.slug,
+          item_name: `${cat.singleName} ${product.name}`,
+          item_category: cat.name,
+          item_variant: titlePrincipal,
+        },
+      ],
+    });
+  }, [product, categories, titlePrincipal]);
+
   if (product.error) {
     return (
       <div className="tw-h-[100vh] tw-flex tw-items-center tw-flex-col tw-justify-center tw-w-full">
@@ -44,6 +58,18 @@ export default function SingleProduct({ product, categories }) {
     setContactMessage(
       `Gostaria de ter mais informações sobre o produto ${categories.categoryArray[0].singleName} ${product.name}`
     );
+
+    if (window.gtag) {
+      const cat = categories.categoryArray[0];
+      window.gtag("event", "request_quote_click", {
+        item_id: product.slug,
+        item_name: `${cat.singleName} ${product.name}`,
+        item_category: cat.name,
+        item_variant: titlePrincipal,
+        location: "product_page",
+      });
+    }
+
     window.location.assign("#contato");
   };
 
@@ -71,7 +97,6 @@ export default function SingleProduct({ product, categories }) {
     }
   };
 
-
   return (
     <div>
       <Head>
@@ -83,7 +108,7 @@ export default function SingleProduct({ product, categories }) {
           content={
             product.description ||
             categories?.categoryArray?.[0]?.description ||
-            `Conheça os móveis de aço da GGL: qualidade, durabilidade e acabamento superior.`
+            "Conheça os móveis de aço da GGL: qualidade, durabilidade e acabamento superior."
           }
         />
         <meta name="robots" content="index, follow" />
@@ -124,6 +149,21 @@ export default function SingleProduct({ product, categories }) {
                         setTable(i);
                         if (!!product.models[i]) {
                           setTitlePrincipal(product.models[i].name);
+                        }
+                        if (window.gtag) {
+                          const cat = categories.categoryArray[0];
+                          window.gtag("event", "select_item", {
+                            item_list_name: "product_thumbnails",
+                            items: [
+                              {
+                                item_id: product.slug,
+                                item_name: `${cat.singleName} ${product.name}`,
+                                item_category: cat.name,
+                                item_variant: product.models[i]?.name || `variante_${i + 1}`,
+                                index: i + 1,
+                              },
+                            ],
+                          });
                         }
                       }}
                     />

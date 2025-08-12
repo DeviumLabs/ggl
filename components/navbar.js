@@ -1,4 +1,19 @@
 export default function Navbar({ categories }) {
+  const handleProductClick = (category, product) => {
+    if (window.gtag) {
+      window.gtag("event", "select_item", {
+        item_list_name: category.name,
+        items: [
+          {
+            item_id: product.slug,
+            item_name: product.name,
+            item_category: category.name,
+          },
+        ],
+      });
+    }
+  };
+
   return (
     <nav className="tw-absolute tw-left-0 tw-z-[300] tw-w-[15%] tw-min-w-[200px] tw-bg-blue tw-px-[10px] tw-py-[30px]">
       <h1 className="tw-text-white ">
@@ -8,12 +23,14 @@ export default function Navbar({ categories }) {
 
       <div className="tw-mb-[20px] tw-flex tw-flex-col">
         {categories.categoryArray.map((_category, i) => (
-          <div className="tw-mt-[20px]">
+          <div className="tw-mt-[20px]" key={i}>
             <h3 className="tw-font-light tw-text-white">{_category.name}</h3>
             <div className="tw-flex tw-flex-col">
-              {_category.products.map((product, i) => (
+              {_category.products.map((product, j) => (
                 <a
+                  key={j}
                   href={`/produtos/${_category.slug}?product=${product.slug}`}
+                  onClick={() => handleProductClick(_category, product)}
                   className="tw-text-white tw-pl-[10px] tw-text-[14px] tw-font-light hover:tw-underline"
                 >
                   ● {product.name}
@@ -23,6 +40,6 @@ export default function Navbar({ categories }) {
           </div>
         ))}
       </div>
-    </nav>
-  );
+    </nav>
+  );
 }

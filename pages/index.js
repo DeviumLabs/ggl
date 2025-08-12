@@ -1,35 +1,22 @@
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-
-//Components
 import Header from "../components/header";
 import Footer from "../components/footer";
 import Contact from "../components/contact";
-
-//player
 import ReactPlayer from "react-player";
-
-//icons
 import { AiOutlineCloudDownload } from "react-icons/ai";
-
-//api
 import api from "../services/api";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export async function getStaticProps() {
   const res = await api.get("/category?category=all");
-
-  return {
-    props: {
-      categories: res.data,
-    },
-    revalidate: 5,
-  };
+  return { props: { categories: res.data }, revalidate: 5 };
 }
 
 export default function Home({ categories }) {
   const [isClient, setIsClient] = useState(false);
+  const catalogRef = useRef(null);
 
   useEffect(() => {
     setIsClient(true);
@@ -37,12 +24,58 @@ export default function Home({ categories }) {
     if (hash) {
       setTimeout(() => {
         const element = document.querySelector(hash);
-        if (element) {
-          element.scrollIntoView({ behavior: "smooth" });
-        }
+        if (element) element.scrollIntoView({ behavior: "smooth" });
       }, 100);
     }
   }, []);
+
+  useEffect(() => {
+    if (!isClient || !window.gtag) return;
+    window.gtag("event", "view_homepage", {});
+    if (categories?.categoryArray?.length) {
+      window.gtag("event", "view_item_list", {
+        item_list_name: "Homepage categorias",
+        items: categories.categoryArray.map((c, i) => ({
+          item_id: c.slug,
+          item_name: c.name,
+          index: i + 1,
+        })),
+      });
+    }
+  }, [isClient, categories]);
+
+  useEffect(() => {
+    if (!isClient || !catalogRef.current) return;
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((en) => {
+          if (en.isIntersecting && window.gtag) {
+            window.gtag("event", "catalog_view", { section: "homepage" });
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+    obs.observe(catalogRef.current);
+    return () => obs.disconnect();
+  }, [isClient]);
+
+  const onCtaClick = () => {
+    if (window.gtag) window.gtag("event", "cta_click", { position: "hero", text: "Solicitar orçamento" });
+  };
+
+  const onCategoryClick = (category) => {
+    if (window.gtag) {
+      window.gtag("event", "select_item", {
+        item_list_name: "Homepage categorias",
+        items: [{ item_id: category.slug, item_name: category.name }],
+      });
+    }
+  };
+
+  const onCatalogDownload = (where) => {
+    if (window.gtag) window.gtag("event", "catalog_download", { location: where, file: "/assets/catalogo.pdf" });
+  };
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -58,11 +91,8 @@ export default function Home({ categories }) {
       "areaServed": "BR",
       "availableLanguage": "Portuguese"
     },
-    "sameAs": [
-      "https://www.instagram.com/gglmoveisdeaco/",
-    ]
+    "sameAs": ["https://www.instagram.com/gglmoveisdeaco/"]
   };
-
 
   return (
     <div>
@@ -97,6 +127,7 @@ export default function Home({ categories }) {
                 <a
                   href="#contato"
                   className="tw-text-white tw-w-fit tw-relative before:tw-content-[''] before:tw-absolute before:tw-left-0 before:tw-bottom-0 before:tw-bg-white before:tw-h-[2px] before:tw-w-1/2 hover:before:tw-w-full before:tw-duration-500 tw-text-[16px] tw-font-medium"
+                  onClick={onCtaClick}
                 >
                   Solicitar orçamento
                 </a>
@@ -104,8 +135,6 @@ export default function Home({ categories }) {
             </div>
           </section>
 
-
-          {/* Título das categorias */}
           <div className="tw-w-full tw-px-[20px]">
             <h2 className="tw-flex tw-justify-center tw-items-center tw-text-[24px] tw-text-darkBlue tw-my-[60px]">
               <hr className="tw-w-[30%] tw-bg-blue tw-rounded-[10px] tw-h-[3px] tw-mr-[30px]" />
@@ -114,7 +143,6 @@ export default function Home({ categories }) {
             </h2>
           </div>
 
-          {/* Lista de categorias */}
           <section className="tw-px-[20px] tw-flex tw-justify-center tw-items-center tw-flex-wrap tw-gap-y-[80px] tw-gap-x-[40px] tw-mb-[120px] tw-max-w-[1024px] tw-w-full tw-mx-auto">
             {categories.categoryArray.map((category) => (
               <Link
@@ -122,7 +150,10 @@ export default function Home({ categories }) {
                 href={`/produtos/${category.slug}?product=${category.products[0].slug}`}
                 passHref
               >
-                <a className="tw-flex tw-flex-col tw-items-center tw-transition-transform tw-duration-300 hover:tw-scale-105">
+                <a
+                  className="tw-flex tw-flex-col tw-items-center tw-transition-transform tw-duration-300 hover:tw-scale-105"
+                  onClick={() => onCategoryClick(category)}
+                >
                   <div className="tw-w-[100px] md:tw-w-[160px]">
                     <Image
                       src={category.image}
@@ -143,15 +174,20 @@ export default function Home({ categories }) {
             ))}
           </section>
 
-          {/* Catálogo */}
           <section
             className="tw-px-[20px] tw-max-w-[1024px] tw-w-full tw-mx-auto tw-pt-[150px] pb-[100px] tw-mt-[-100px]"
             id="catalogo"
+            ref={catalogRef}
           >
             <small className="tw-text-blue">CATÁLOGO</small>
             <h2 className="tw-text-[30px]">Nosso catálogo</h2>
             <div className="tw-flex tw-items-center tw-justify-around tw-mt-[40px] tw-flex-col md:tw-flex-row tw-gap-[20px]">
-              <a href="/assets/catalogo.pdf" target="_blank" rel="noopener noreferrer">
+              <a
+                href="/assets/catalogo.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => onCatalogDownload("imagem")}
+              >
                 <Image
                   src="/assets/banners/catalogo.png"
                   alt="Download do catálogo da GGL"
@@ -159,7 +195,6 @@ export default function Home({ categories }) {
                   height={424}
                   layout="intrinsic"
                 />
-
               </a>
               <div>
                 <p className="tw-max-w-[360px] tw-w-full tw-mb-[30px]">
@@ -170,6 +205,7 @@ export default function Home({ categories }) {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="tw-flex tw-items-center hover:tw-underline"
+                  onClick={() => onCatalogDownload("botao")}
                 >
                   <AiOutlineCloudDownload />
                   <span className="tw-ml-[10px]">Baixar catálogo</span>
@@ -178,7 +214,6 @@ export default function Home({ categories }) {
             </div>
           </section>
 
-          {/* Sobre a empresa */}
           <section
             className="tw-px-[20px] tw-py-[200px] tw-max-w-[1024px] tw-w-full tw-mx-auto tw-mt-[-100px]"
             id="sobre"
@@ -210,6 +245,6 @@ export default function Home({ categories }) {
       )}
 
       <Footer />
-    </div>
-  );
+    </div>
+  );
 }

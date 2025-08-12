@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
@@ -41,6 +41,9 @@ export default function Contact({ budgetMessage }) {
       .join("");
   };
 
+  const formStartedRef = useRef(false);
+  const progressSentRef = useRef(false);
+
   useEffect(() => {
     const fetchEstados = async () => {
       try {
@@ -79,6 +82,37 @@ export default function Contact({ budgetMessage }) {
     setValue("wbraid", setBest("wbraid", wbraid));
   }, [setValue]);
 
+  useEffect(() => {
+    if (window.gtag) {
+      window.gtag("event", "view_contact_form", { form_id: "contact_form" });
+    }
+  }, []);
+
+  const checkFormProgress = () => {
+    const filled = [
+      watch("name"),
+      watch("phone"),
+      watch("email"),
+      watch("estado"),
+      watch("cidade"),
+    ].filter(Boolean).length;
+    if (!progressSentRef.current && filled >= 3 && window.gtag) {
+      window.gtag("event", "form_progress", {
+        form_id: "contact_form",
+        progress: "50%",
+      });
+      progressSentRef.current = true;
+    }
+  };
+
+  const handleFieldChange = () => {
+    if (!formStartedRef.current && window.gtag) {
+      window.gtag("event", "start_form", { form_id: "contact_form" });
+      formStartedRef.current = true;
+    }
+    checkFormProgress();
+  };
+
   const onSubmit = async ({
     name,
     email,
@@ -97,6 +131,10 @@ export default function Contact({ budgetMessage }) {
       return;
     }
     if (isSending) return;
+
+    if (window.gtag) {
+      window.gtag("event", "form_submit", { form_id: "contact_form" });
+    }
 
     const body = `
       <h3>Novo contato via site GGL Móveis</h3>
@@ -122,8 +160,9 @@ export default function Contact({ budgetMessage }) {
       reset();
 
       if (window.gtag) {
-        const { first_name, last_name } = splitName(name);
+        window.gtag("event", "form_submit_success", { form_id: "contact_form" });
 
+        const { first_name, last_name } = splitName(name);
         const emailNorm = norm(email);
         const phoneDigits = withDDI55(onlyDigits(phone));
         const firstNorm = norm(first_name);
@@ -134,21 +173,15 @@ export default function Contact({ budgetMessage }) {
         let userData = null;
 
         if (window.crypto?.subtle) {
-          const [
-            email_h,
-            phone_h,
-            first_h,
-            last_h,
-            city_h,
-            state_h,
-          ] = await Promise.all([
-            sha256(emailNorm),
-            sha256(phoneDigits),
-            sha256(firstNorm),
-            sha256(lastNorm),
-            sha256(cityNorm),
-            sha256(stateNorm),
-          ]);
+          const [email_h, phone_h, first_h, last_h, city_h, state_h] =
+            await Promise.all([
+              sha256(emailNorm),
+              sha256(phoneDigits),
+              sha256(firstNorm),
+              sha256(lastNorm),
+              sha256(cityNorm),
+              sha256(stateNorm),
+            ]);
 
           userData = {
             email: email_h,
@@ -157,7 +190,7 @@ export default function Contact({ budgetMessage }) {
             last_name: last_h,
             city: city_h,
             region: state_h,
-            country: "BR", 
+            country: "BR",
           };
         }
 
@@ -223,7 +256,7 @@ export default function Contact({ budgetMessage }) {
           <input
             id="name"
             type="text"
-            {...register("name", { required: true })}
+            {...register("name", { required: true, onChange: handleFieldChange })}
             autoComplete="name"
             className="tw-border-blue tw-border-[1px] tw-py-[12px] tw-px-[12px]"
           />
@@ -239,7 +272,7 @@ export default function Contact({ budgetMessage }) {
                 : "(99) 9999-99999"
             }
             maskChar={null}
-            {...register("phone", { required: true })}
+            {...register("phone", { required: true, onChange: handleFieldChange })}
           >
             {(inputProps) => (
               <input
@@ -260,7 +293,7 @@ export default function Contact({ budgetMessage }) {
           <input
             id="email"
             type="email"
-            {...register("email", { required: true })}
+            {...register("email", { required: true, onChange: handleFieldChange })}
             autoComplete="email"
             className="tw-border-blue tw-border-[1px] tw-py-[12px] tw-px-[12px]"
           />
@@ -272,7 +305,7 @@ export default function Contact({ budgetMessage }) {
           <input
             id="company"
             type="text"
-            {...register("company")}
+            {...register("company", { onChange: handleFieldChange })}
             autoComplete="organization"
             className="tw-border-blue tw-border-[1px] tw-py-[12px] tw-px-[12px]"
           />
@@ -283,7 +316,7 @@ export default function Contact({ budgetMessage }) {
             <label htmlFor="estado">Estado:</label>
             <select
               id="estado"
-              {...register("estado", { required: true })}
+              {...register("estado", { required: true, onChange: handleFieldChange })}
               autoComplete="address-level1"
               className="tw-border-blue tw-border-[1px] tw-py-[12px] tw-px-[12px]"
             >
@@ -301,7 +334,7 @@ export default function Contact({ budgetMessage }) {
             <label htmlFor="cidade">Cidade:</label>
             <select
               id="cidade"
-              {...register("cidade", { required: true })}
+              {...register("cidade", { required: true, onChange: handleFieldChange })}
               autoComplete="address-level2"
               className="tw-border-blue tw-border-[1px] tw-py-[12px] tw-px-[12px]"
               disabled={cidades.length === 0}
@@ -322,7 +355,7 @@ export default function Contact({ budgetMessage }) {
           <textarea
             id="message"
             defaultValue={budgetMessage || ""}
-            {...register("message", { required: true })}
+            {...register("message", { required: true, onChange: handleFieldChange })}
             autoComplete="off"
             className="tw-border-blue tw-border-[1px] tw-py-[12px] tw-px-[12px]"
           />

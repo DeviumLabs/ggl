@@ -3,14 +3,13 @@ import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 
-//Components
 import Header from "../../components/header";
 import Footer from "../../components/footer";
 import Contact from "../../components/contact";
+import { useEffect } from "react";
 
 export async function getStaticProps() {
   const res = await api.get("/category?category=all");
-
   return {
     props: {
       categories: res.data,
@@ -20,6 +19,20 @@ export async function getStaticProps() {
 }
 
 export default function Produtos({ categories }) {
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.gtag) return;
+    if (categories?.categoryArray?.length) {
+      window.gtag("event", "view_item_list", {
+        item_list_name: "Produtos - categorias",
+        items: categories.categoryArray.map((cat, index) => ({
+          item_id: cat.slug,
+          item_name: cat.name,
+          index: index + 1,
+        })),
+      });
+    }
+  }, [categories]);
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
@@ -29,6 +42,20 @@ export default function Produtos({ categories }) {
       name: cat.name,
       url: `https://www.gglmoveis.com.br/produtos/${cat.slug}?product=${cat.products[0].slug}`,
     })),
+  };
+
+  const onCategoryClick = (cat, index) => {
+    if (!window.gtag) return;
+    window.gtag("event", "select_item", {
+      item_list_name: "Produtos - categorias",
+      items: [
+        {
+          item_id: cat.slug,
+          item_name: cat.name,
+          index: index + 1,
+        },
+      ],
+    });
   };
 
   return (
@@ -48,7 +75,6 @@ export default function Produtos({ categories }) {
         />
       </Head>
 
-
       <Header />
 
       <main className="tw-mt-[120px]">
@@ -64,13 +90,16 @@ export default function Produtos({ categories }) {
         </section>
 
         <section className="tw-px-[20px] tw-flex tw-justify-center tw-flex-wrap tw-gap-y-[80px] tw-gap-x-[40px] tw-mt-[80px] tw-mb-[100px]">
-          {categories.categoryArray.map((category) => (
+          {categories.categoryArray.map((category, idx) => (
             <Link
               key={category.slug}
               href={`/produtos/${category.slug}?product=${category.products[0].slug}`}
               passHref
             >
-              <a className="tw-max-w-[350px] tw-w-full tw-transition-transform tw-duration-300 hover:tw-scale-105">
+              <a
+                className="tw-max-w-[350px] tw-w-full tw-transition-transform tw-duration-300 hover:tw-scale-105"
+                onClick={() => onCategoryClick(category, idx)}
+              >
                 <Image
                   src={category.image}
                   alt={`Imagem da categoria ${category.name} da GGL Móveis de Aço`}

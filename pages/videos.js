@@ -1,11 +1,12 @@
 import Head from "next/head";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Header from "../components/header";
 import Footer from "../components/footer";
 import Contact from "../components/contact";
 
 export default function Videos() {
   const [isClient, setIsClient] = useState(false);
+  const impressionSent = useRef(new Set());
 
   const videos = [
     { name: "Montagem de Gondola Central", id: "nPwJHr-P7ek" },
@@ -25,6 +26,41 @@ export default function Videos() {
       }
     }
   }, []);
+
+  useEffect(() => {
+    if (!isClient) return;
+    if (window.gtag) {
+      window.gtag("event", "view_video_list", {
+        items: videos.map((v, i) => ({
+          item_id: v.id,
+          item_name: v.name,
+          index: i + 1,
+        })),
+      });
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((en) => {
+          if (!en.isIntersecting) return;
+          const id = en.target.getAttribute("data-video-id");
+          const name = en.target.getAttribute("data-video-name");
+          if (!id || impressionSent.current.has(id)) return;
+          impressionSent.current.add(id);
+          if (window.gtag) {
+            window.gtag("event", "video_impression", {
+              video_id: id,
+              video_name: name,
+            });
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+
+    document.querySelectorAll(".js-video-card").forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, [isClient]);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -48,6 +84,14 @@ export default function Videos() {
     }))
   };
 
+  const handleVideoClick = (v) => {
+    if (window.gtag) {
+      window.gtag("event", "video_click", {
+        video_id: v.id,
+        video_name: v.name,
+      });
+    }
+  };
 
   return (
     <div>
@@ -66,7 +110,6 @@ export default function Videos() {
         />
       </Head>
 
-
       <Header />
 
       {isClient && (
@@ -77,9 +120,14 @@ export default function Videos() {
             {videos.map((v) => (
               <div
                 key={v.id}
-                className="tw-flex tw-flex-col tw-items-center tw-transition-transform tw-duration-300 hover:tw-scale-105"
+                className="tw-flex tw-flex-col tw-items-center tw-transition-transform tw-duration-300 hover:tw-scale-105 js-video-card"
+                data-video-id={v.id}
+                data-video-name={v.name}
               >
-                <div className="tw-relative tw-overflow-hidden tw-aspect-video tw-w-full sm:tw-w-[400px]">
+                <div
+                  className="tw-relative tw-overflow-hidden tw-aspect-video tw-w-full sm:tw-w-[400px]"
+                  onClick={() => handleVideoClick(v)}
+                >
                   <iframe
                     className="tw-aspect-video tw-top-0 tw-left-0 tw-w-full tw-h-full"
                     src={`https://www.youtube.com/embed/${v.id}`}
@@ -101,6 +149,6 @@ export default function Videos() {
         </main>
       )}
       <Footer />
-    </div>
-  );
+    </div>
+  );
 }

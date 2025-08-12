@@ -31,11 +31,21 @@ export default function ZoomLens({ src, width = 450, height = 430, zoom = 2 }) {
     lens.style.backgroundPosition = `-${lensX * zoom}px -${lensY * zoom}px`;
   };
 
+  const handleMouseEnter = () => {
+    setShowLens(true);
+    if (window.gtag) {
+      window.gtag("event", "image_zoom", {
+        event_category: "Engagement",
+        event_label: src,
+      });
+    }
+  };
+
   return (
     <div
       ref={containerRef}
       onMouseMove={handleMouseMove}
-      onMouseEnter={() => setShowLens(true)}
+      onMouseEnter={handleMouseEnter}
       onMouseLeave={() => setShowLens(false)}
       className="tw-relative"
       style={{
@@ -65,6 +75,6 @@ export default function ZoomLens({ src, width = 450, height = 430, zoom = 2 }) {
           }}
         />
       )}
-    </div>
-  );
+    </div>
+  );
 }
