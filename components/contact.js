@@ -24,6 +24,10 @@ export default function Contact({ budgetMessage }) {
 
   const norm = (s) => (s || "").toString().trim().toLowerCase();
   const onlyDigits = (s) => (s || "").toString().replace(/\D/g, "");
+  const withDDI55 = (digits) => {
+    if (!digits) return "";
+    return digits.startsWith("55") ? digits : `55${digits}`;
+  };
   const splitName = (full = "") => {
     const parts = full.trim().split(/\s+/);
     if (!parts[0]) return { first_name: "", last_name: "" };
@@ -118,24 +122,18 @@ export default function Contact({ budgetMessage }) {
       reset();
 
       if (window.gtag) {
-        window.gtag("event", "conversion", {
-          send_to: "AW-16882485681/MSWBCND8xKEaELGTmfI-",
-          value: 1.0,
-          currency: "BRL",
-          company: company || "",
-          city: cidade || "",
-          state: estado || "",
-        });
-
         const { first_name, last_name } = splitName(name);
+
         const emailNorm = norm(email);
-        const phoneDigits = onlyDigits(phone);
+        const phoneDigits = withDDI55(onlyDigits(phone));
         const firstNorm = norm(first_name);
         const lastNorm = norm(last_name);
         const cityNorm = norm(cidade);
         const stateNorm = norm(estado);
 
-        if (window.crypto && window.crypto.subtle) {
+        let userData = null;
+
+        if (window.crypto?.subtle) {
           const [
             email_h,
             phone_h,
@@ -152,45 +150,37 @@ export default function Contact({ budgetMessage }) {
             sha256(stateNorm),
           ]);
 
-          window.gtag("event", "generate_lead", {
-            value: 1.0,
-            currency: "BRL",
-            company: company || "",
-            city: cidade || "",
-            state: estado || "",
-            user_data: {
-              email: email_h,
-              phone_number: phone_h,
-              first_name: first_h,
-              last_name: last_h,
-              city: city_h,   
-              region: state_h 
-            },
-          });
-
-          window.gtag("event", "conversion", {
-            send_to: "AW-16882485681/MSWBCND8xKEaELGTmfI-",
-            value: 1.0,
-            currency: "BRL",
-            user_data: {
-              email: email_h,
-              phone_number: phone_h,
-              first_name: first_h,
-              last_name: last_h,
-              city: city_h,
-              region: state_h,
-            },
-            company: company || "",
-          });
-        } else {
-          window.gtag("event", "generate_lead", {
-            value: 1.0,
-            currency: "BRL",
-            company: company || "",
-            city: cidade || "",
-            state: estado || "",
-          });
+          userData = {
+            email: email_h,
+            phone_number: phone_h,
+            first_name: first_h,
+            last_name: last_h,
+            city: city_h,
+            region: state_h,
+            country: "BR", 
+          };
         }
+
+        window.gtag("event", "generate_lead", {
+          value: 1.0,
+          currency: "BRL",
+          company: company || "",
+          city: cidade || "",
+          state: estado || "",
+          ...(userData ? { user_data: userData } : {}),
+        });
+
+        if (userData) {
+          window.gtag("set", "user_data", userData);
+        }
+        window.gtag("event", "conversion", {
+          send_to: "AW-16882485681/MSWBCND8xKEaELGTmfI-",
+          value: 1.0,
+          currency: "BRL",
+          company: company || "",
+          city: cidade || "",
+          state: estado || "",
+        });
       }
     } catch (e) {
       console.error(e);
