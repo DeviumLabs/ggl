@@ -117,12 +117,9 @@ export default function Contact({ budgetMessage }) {
       toast.success("Mensagem enviada!");
       reset();
 
-      // ========= Disparos de mensuração =========
       if (window.gtag) {
-        // Conversão do Google Ads (como você já fazia)
         window.gtag("event", "conversion", {
           send_to: "AW-16882485681/MSWBCND8xKEaELGTmfI-",
-          // parâmetros extras úteis p/ depuração
           value: 1.0,
           currency: "BRL",
           company: company || "",
@@ -130,7 +127,6 @@ export default function Contact({ budgetMessage }) {
           state: estado || "",
         });
 
-        // ----- GA4 + Ads: User-Provided Data (hash) -----
         const { first_name, last_name } = splitName(name);
         const emailNorm = norm(email);
         const phoneDigits = onlyDigits(phone);
@@ -139,7 +135,6 @@ export default function Contact({ budgetMessage }) {
         const cityNorm = norm(cidade);
         const stateNorm = norm(estado);
 
-        // Verifica suporte a crypto API
         if (window.crypto && window.crypto.subtle) {
           const [
             email_h,
@@ -157,7 +152,6 @@ export default function Contact({ budgetMessage }) {
             sha256(stateNorm),
           ]);
 
-          // GA4: generate_lead com user_data
           window.gtag("event", "generate_lead", {
             value: 1.0,
             currency: "BRL",
@@ -165,18 +159,15 @@ export default function Contact({ budgetMessage }) {
             city: cidade || "",
             state: estado || "",
             user_data: {
-              // Campos esperados (hashes SHA-256)
               email: email_h,
               phone_number: phone_h,
               first_name: first_h,
               last_name: last_h,
-              city: city_h,   // GA pode ignorar em GA4; útil p/ Ads EC
-              region: state_h // region = estado/UF
-              // Se tiver país/CEP/rua, dá para enviar também
+              city: city_h,   
+              region: state_h 
             },
           });
 
-          // Google Ads Enhanced Conversions junto da conversão
           window.gtag("event", "conversion", {
             send_to: "AW-16882485681/MSWBCND8xKEaELGTmfI-",
             value: 1.0,
@@ -189,11 +180,9 @@ export default function Contact({ budgetMessage }) {
               city: city_h,
               region: state_h,
             },
-            // parâmetros adicionais não-padronizados
             company: company || "",
           });
         } else {
-          // Fallback: dispara sem user_data (sem hash)
           window.gtag("event", "generate_lead", {
             value: 1.0,
             currency: "BRL",
@@ -203,7 +192,6 @@ export default function Contact({ budgetMessage }) {
           });
         }
       }
-      // ===============================================
     } catch (e) {
       console.error(e);
       toast.error("Houve um erro, por favor tente novamente mais tarde!");
@@ -235,13 +223,11 @@ export default function Contact({ budgetMessage }) {
           <h1 className="tw-text-[30px] tw-leading-[30px]">Entre em contato</h1>
         </div>
 
-        {/* Honeypot */}
         <div aria-hidden="true" style={{ position: "absolute", left: "-10000px", opacity: 0 }}>
           <label htmlFor="website">Website</label>
           <input id="website" type="text" autoComplete="off" {...register("website")} />
         </div>
 
-        {/* Nome */}
         <div className="tw-flex tw-flex-col tw-w-full tw-max-w-[600px] tw-mb-[20px]">
           <label htmlFor="name">Nome:</label>
           <input
@@ -254,7 +240,6 @@ export default function Contact({ budgetMessage }) {
           {errors.name && <span className="tw-text-red">*Campo obrigatório</span>}
         </div>
 
-        {/* Telefone */}
         <div className="tw-flex tw-flex-col tw-w-full tw-max-w-[600px] tw-mb-[20px]">
           <label htmlFor="phone">Telefone:</label>
           <InputMask
@@ -280,7 +265,6 @@ export default function Contact({ budgetMessage }) {
           {errors.phone && <span className="tw-text-red">*Campo obrigatório</span>}
         </div>
 
-        {/* Email */}
         <div className="tw-flex tw-flex-col tw-w-full tw-max-w-[600px] tw-mb-[20px]">
           <label htmlFor="email">E-mail:</label>
           <input
@@ -293,7 +277,6 @@ export default function Contact({ budgetMessage }) {
           {errors.email && <span className="tw-text-red">*Campo obrigatório</span>}
         </div>
 
-        {/* Empresa */}
         <div className="tw-flex tw-flex-col tw-w-full tw-max-w-[600px] tw-mb-[20px]">
           <label htmlFor="company">Empresa / Órgão público (opcional):</label>
           <input
@@ -305,7 +288,6 @@ export default function Contact({ budgetMessage }) {
           />
         </div>
 
-        {/* Estado / Cidade */}
         <div className="tw-flex tw-gap-[20px] tw-w-full tw-max-w-[600px] tw-mb-[20px]">
           <div className="tw-flex tw-flex-col tw-w-1/2">
             <label htmlFor="estado">Estado:</label>
@@ -345,7 +327,6 @@ export default function Contact({ budgetMessage }) {
           </div>
         </div>
 
-        {/* Mensagem */}
         <div className="tw-flex tw-flex-col tw-w-full tw-max-w-[600px] tw-mb-[20px]">
           <label htmlFor="message">Mensagem:</label>
           <textarea
@@ -358,7 +339,6 @@ export default function Contact({ budgetMessage }) {
           {errors.message && <span className="tw-text-red">*Campo obrigatório</span>}
         </div>
 
-        {/* Hidden fields */}
         <input type="hidden" {...register("gclid")} />
         <input type="hidden" {...register("gbraid")} />
         <input type="hidden" {...register("wbraid")} />
