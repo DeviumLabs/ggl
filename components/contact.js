@@ -1,9 +1,8 @@
 import { useForm } from "react-hook-form";
-import React, { useRef, useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
-import { Helmet } from "react-helmet";
 import InputMask from "react-input-mask";
 
 export default function Contact({ budgetMessage }) {
@@ -12,11 +11,13 @@ export default function Contact({ budgetMessage }) {
     watch,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm();
 
   const phoneWatcher = watch("phone");
   const [loading, setLoading] = useState("ENVIAR");
+  const [isSending, setIsSending] = useState(false);
   const [estados, setEstados] = useState([]);
   const [cidades, setCidades] = useState([]);
 
@@ -39,61 +40,76 @@ export default function Contact({ budgetMessage }) {
     setCidades(estado ? estado.cidades : []);
   }, [estadoSelecionado, estados]);
 
-  const onSubmit = async ({ name, email, phone, message, estado, cidade, company }) => {
+  // Captura gclid/gbraid/wbraid
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const gclid = params.get("gclid");
+    const gbraid = params.get("gbraid");
+    const wbraid = params.get("wbraid");
+    const getBest = (key, urlVal) => {
+      if (urlVal) {
+        localStorage.setItem(key, urlVal);
+        return urlVal;
+      }
+      return localStorage.getItem(key) || "";
+    };
+    setValue("gclid", getBest("gclid", gclid));
+    setValue("gbraid", getBest("gbraid", gbraid));
+    setValue("wbraid", getBest("wbraid", wbraid));
+  }, [setValue]);
+
+  const onSubmit = async ({
+    name,
+    email,
+    phone,
+    message,
+    estado,
+    cidade,
+    company,
+    website, // honeypot
+  }) => {
+    // Se o honeypot vier preenchido, aborta silenciosamente
+    if (website) {
+      reset();
+      return;
+    }
+
+    if (isSending) return; // guarda extra contra duplo clique
+
     const body = `
       <h3>Novo contato via site GGL Móveis</h3>
       <p><strong>Nome:</strong> ${name}</p>  
       <p><strong>Email:</strong> ${email}</p>  
       <p><strong>Telefone:</strong> ${phone}</p>
-      <p>Empresa/Órgão Público: ${company || "Não informado"}</p>  
+      <p><strong>Empresa/Órgão Público:</strong> ${company || "Não informado"}</p>  
       <p><strong>Estado:</strong> ${estado}</p>
       <p><strong>Cidade:</strong> ${cidade}</p>
       <p><strong>Mensagem:</strong> ${message}</p>
     `;
 
     try {
+      setIsSending(true);
       setLoading("Enviando...");
-      const res = await axios.post("/api/mail", { body });
+      await axios.post("/api/mail", { body });
       toast.success("Mensagem enviada!");
       reset();
+
+      if (window.gtag) {
+        window.gtag("event", "conversion", {
+          send_to: "AW-16882485681/MSWBCND8xKEaELGTmfI-",
+        });
+      }
     } catch (e) {
       console.error(e);
       toast.error("Houve um erro, por favor tente novamente mais tarde!");
     } finally {
+      setIsSending(false);
       setLoading("ENVIAR");
     }
   };
 
-  const clickButton = () => {
-    window.gtag('config', 'AW-16882485681');
-    window.gtag('event', 'conversion', {
-      'send_to': 'AW-16882485681/MSWBCND8xKEaELGTmfI-'
-    });
-  };
-
   return (
     <>
-      <Helmet>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `function gtag_report_conversion(url) {
-              var callback = function () {
-                if (typeof(url) != 'undefined') {
-                  window.location = url;
-                }
-              };
-              gtag('event', 'conversion', {
-                  'send_to': 'AW-16570872797/lXFKCOfqxsAZEN3nzd09',
-                  'value': 1.0,
-                  'currency': 'BRL',
-                  'event_callback': callback
-              });
-              return false;
-            }`
-          }}
-        />
-      </Helmet>
-
       <ToastContainer />
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -105,9 +121,20 @@ export default function Contact({ budgetMessage }) {
           <h1 className="tw-text-[30px] tw-leading-[30px]">Entre em contato</h1>
         </div>
 
+        {/* Honeypot (anti-spam) */}
+        <div
+          aria-hidden="true"
+          style={{ position: "absolute", left: "-10000px", opacity: 0 }}
+        >
+          <label htmlFor="website">Website</label>
+          <input id="website" type="text" autoComplete="off" {...register("website")} />
+        </div>
+
+        {/* Nome */}
         <div className="tw-flex tw-flex-col tw-w-full tw-max-w-[600px] tw-mb-[20px]">
-          <label>Nome:</label>
+          <label htmlFor="name">Nome:</label>
           <input
+            id="name"
             type="text"
             {...register("name", { required: true })}
             autoComplete="name"
@@ -116,8 +143,9 @@ export default function Contact({ budgetMessage }) {
           {errors.name && <span className="tw-text-red">*Campo obrigatório</span>}
         </div>
 
+        {/* Telefone */}
         <div className="tw-flex tw-flex-col tw-w-full tw-max-w-[600px] tw-mb-[20px]">
-          <label htmlFor="">Telefone:</label>
+          <label htmlFor="phone">Telefone:</label>
           <InputMask
             mask={
               phoneWatcher && phoneWatcher.replace(/\D/g, "").length > 10
@@ -130,21 +158,22 @@ export default function Contact({ budgetMessage }) {
             {(inputProps) => (
               <input
                 {...inputProps}
+                id="phone"
                 type="tel"
-                className="tw-border-blue tw-border-[1px] tw-py-[12px] tw-px-[12px]"
                 autoComplete="tel"
                 inputMode="tel"
+                className="tw-border-blue tw-border-[1px] tw-py-[12px] tw-px-[12px]"
               />
             )}
           </InputMask>
-          {errors.phone && (
-            <span className="tw-text-red">*Campo obrigatório</span>
-          )}
+          {errors.phone && <span className="tw-text-red">*Campo obrigatório</span>}
         </div>
 
+        {/* Email */}
         <div className="tw-flex tw-flex-col tw-w-full tw-max-w-[600px] tw-mb-[20px]">
-          <label>E-mail:</label>
+          <label htmlFor="email">E-mail:</label>
           <input
+            id="email"
             type="email"
             {...register("email", { required: true })}
             autoComplete="email"
@@ -153,64 +182,82 @@ export default function Contact({ budgetMessage }) {
           {errors.email && <span className="tw-text-red">*Campo obrigatório</span>}
         </div>
 
+        {/* Empresa (opcional) */}
         <div className="tw-flex tw-flex-col tw-w-full tw-max-w-[600px] tw-mb-[20px]">
-          <label htmlFor="">Empresa / Órgão público (opcional)</label>
+          <label htmlFor="company">Empresa / Órgão público (opcional):</label>
           <input
+            id="company"
             type="text"
-            name="company"
             {...register("company")}
+            autoComplete="organization"
             className="tw-border-blue tw-border-[1px] tw-py-[12px] tw-px-[12px]"
           />
         </div>
 
-
+        {/* Estado/Cidade lado a lado */}
         <div className="tw-flex tw-gap-[20px] tw-w-full tw-max-w-[600px] tw-mb-[20px]">
-
           <div className="tw-flex tw-flex-col tw-w-1/2">
-            <label>Estado:</label>
+            <label htmlFor="estado">Estado:</label>
             <select
+              id="estado"
               {...register("estado", { required: true })}
+              autoComplete="address-level1"
               className="tw-border-blue tw-border-[1px] tw-py-[12px] tw-px-[12px]"
             >
               <option value="">Selecione o estado</option>
               {estados.map((estado) => (
-                <option key={estado.sigla} value={estado.sigla}>{estado.nome}</option>
+                <option key={estado.sigla} value={estado.sigla}>
+                  {estado.nome}
+                </option>
               ))}
             </select>
             {errors.estado && <span className="tw-text-red">*Campo obrigatório</span>}
           </div>
 
           <div className="tw-flex tw-flex-col tw-w-1/2">
-            <label>Cidade:</label>
+            <label htmlFor="cidade">Cidade:</label>
             <select
+              id="cidade"
               {...register("cidade", { required: true })}
+              autoComplete="address-level2"
               className="tw-border-blue tw-border-[1px] tw-py-[12px] tw-px-[12px]"
               disabled={cidades.length === 0}
             >
               <option value="">Selecione a cidade</option>
               {cidades.map((cidade) => (
-                <option key={cidade} value={cidade}>{cidade}</option>
+                <option key={cidade} value={cidade}>
+                  {cidade}
+                </option>
               ))}
             </select>
             {errors.cidade && <span className="tw-text-red">*Campo obrigatório</span>}
           </div>
-
         </div>
 
+        {/* Mensagem */}
         <div className="tw-flex tw-flex-col tw-w-full tw-max-w-[600px] tw-mb-[20px]">
-          <label>Mensagem:</label>
+          <label htmlFor="message">Mensagem:</label>
           <textarea
+            id="message"
             defaultValue={budgetMessage || ""}
             {...register("message", { required: true })}
+            autoComplete="off"
             className="tw-border-blue tw-border-[1px] tw-py-[12px] tw-px-[12px]"
           />
           {errors.message && <span className="tw-text-red">*Campo obrigatório</span>}
         </div>
 
+        <input type="hidden" {...register("gclid")} />
+        <input type="hidden" {...register("gbraid")} />
+        <input type="hidden" {...register("wbraid")} />
+
         <button
-          onClick={clickButton}
           type="submit"
-          className="tw-bg-blue tw-text-white tw-w-[240px] tw-h-[50px] hover:tw-bg-white hover:tw-border-blue hover:tw-border-[1px] hover:tw-text-blue tw-transition-300"
+          disabled={isSending}
+          aria-busy={isSending}
+          className={`tw-bg-blue tw-text-white tw-w-[240px] tw-h-[50px] hover:tw-bg-white hover:tw-border-blue hover:tw-border-[1px] hover:tw-text-blue tw-transition-300 ${
+            isSending ? "tw-opacity-60 tw-cursor-not-allowed" : ""
+          }`}
         >
           {loading}
         </button>

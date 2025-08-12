@@ -863,6 +863,10 @@ video {
   cursor: pointer;
 }
 
+.tw-cursor-not-allowed {
+  cursor: not-allowed;
+}
+
 .tw-grid-cols-1 {
   grid-template-columns: repeat(1, minmax(0, 1fr));
 }
@@ -1173,6 +1177,10 @@ video {
 
 .tw-opacity-\[20\%\] {
   opacity: 20%;
+}
+
+.tw-opacity-60 {
+  opacity: 0.6;
 }
 
 .tw-transition-transform {
