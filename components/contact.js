@@ -4,6 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import InputMask from "react-input-mask";
+import { Helmet } from "react-helmet";
 
 export default function Contact({ budgetMessage }) {
   const {
@@ -67,7 +68,7 @@ export default function Contact({ budgetMessage }) {
     estado,
     cidade,
     company,
-    website, 
+    website,
     gclid,
     gbraid,
     wbraid,
@@ -76,7 +77,7 @@ export default function Contact({ budgetMessage }) {
       reset();
       return;
     }
-    if (isSending) return; 
+    if (isSending) return;
 
     const body = `
       <h3>Novo contato via site GGL Móveis</h3>
@@ -101,7 +102,6 @@ export default function Contact({ budgetMessage }) {
       toast.success("Mensagem enviada!");
       reset();
 
-      // dispara conversão (opcional; seu tag já pode estar registrando via Enhanced)
       if (window.gtag) {
         window.gtag("event", "conversion", {
           send_to: "AW-16882485681/MSWBCND8xKEaELGTmfI-",
@@ -118,6 +118,38 @@ export default function Contact({ budgetMessage }) {
 
   return (
     <>
+      <Helmet>
+        <title>Entre em contato | GGL Móveis</title>
+        <meta
+          name="description"
+          content="Fale com a GGL Móveis de Aço. Tire dúvidas e solicite orçamento."
+        />
+        <meta name="referrer" content="strict-origin-when-cross-origin" />
+        <script
+          type="text/javascript"
+          dangerouslySetInnerHTML={{
+            __html: `
+              function gtag_report_conversion(url) {
+                var callback = function () {
+                  if (typeof(url) != 'undefined') {
+                    window.location = url;
+                  }
+                };
+                if (window.gtag) {
+                  gtag('event', 'conversion', {
+                    'send_to': 'AW-16882485681/MSWBCND8xKEaELGTmfI-',
+                    'value': 1.0,
+                    'currency': 'BRL',
+                    'event_callback': callback
+                  });
+                }
+                return false;
+              }
+            `,
+          }}
+        />
+      </Helmet>
+
       <ToastContainer />
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -130,7 +162,10 @@ export default function Contact({ budgetMessage }) {
         </div>
 
         {/* Honeypot (anti-spam) */}
-        <div aria-hidden="true" style={{ position: "absolute", left: "-10000px", opacity: 0 }}>
+        <div
+          aria-hidden="true"
+          style={{ position: "absolute", left: "-10000px", opacity: 0 }}
+        >
           <label htmlFor="website">Website</label>
           <input id="website" type="text" autoComplete="off" {...register("website")} />
         </div>
