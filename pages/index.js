@@ -61,7 +61,7 @@ export default function Home({ categories }) {
   }, [isClient]);
 
   const onCtaClick = () => {
-    if (window.gtag) window.gtag("event", "cta_click", { position: "hero", text: "Solicitar orçamento" });
+    if (window.gtag) window.gtag("event", "cta_click", { position: "hero", text: "Solicitar orçamento", location: "home_page" });
   };
 
   const onCategoryClick = (category) => {
