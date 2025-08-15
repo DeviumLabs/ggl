@@ -1,11 +1,44 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 
-export default function ZoomLens({ src, width = 450, height = 430, zoom = 2 }) {
+export default function ZoomLens({
+  src,
+  width = 450,
+  height = 430,
+  zoom = 2,
+  item_id,
+  item_name,
+}) {
   const containerRef = useRef(null);
   const lensRef = useRef(null);
   const [showLens, setShowLens] = useState(false);
   const firedRef = useRef(false);
+
+  useEffect(() => {
+    const key = `zoom_fired::${src}`;
+    firedRef.current = sessionStorage.getItem(key) === "1";
+  }, [src]);
+
+  const markFired = () => {
+    const key = `zoom_fired::${src}`;
+    firedRef.current = true;
+    sessionStorage.setItem(key, "1");
+  };
+
+  const pushZoomEvent = () => {
+    if (typeof window === "undefined") return;
+    if (firedRef.current) return;
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: "image_zoom",
+      image_src: src,
+      zoom_level: zoom,
+      component: "zoom_lens",
+      ...(item_id ? { item_id } : {}),
+      ...(item_name ? { item_name } : {}),
+    });
+    markFired();
+  };
 
   const handleMouseMove = (e) => {
     const container = containerRef.current;
@@ -13,8 +46,8 @@ export default function ZoomLens({ src, width = 450, height = 430, zoom = 2 }) {
     if (!container || !lens) return;
 
     const rect = container.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    const x = (e.clientX ?? 0) - rect.left;
+    const y = (e.clientY ?? 0) - rect.top;
 
     const halfW = lens.offsetWidth / 2;
     const halfH = lens.offsetHeight / 2;
@@ -32,22 +65,16 @@ export default function ZoomLens({ src, width = 450, height = 430, zoom = 2 }) {
 
   const handleMouseEnter = () => {
     setShowLens(true);
+    pushZoomEvent();
+  };
 
-    if (!firedRef.current && typeof window !== "undefined") {
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({
-        event: "image_zoom",
-        image_src: src,
-        zoom_level: zoom,
-        component: "zoom_lens",
-      });
-      firedRef.current = true;
-    }
+  const handleTouchStart = () => {
+    setShowLens(true);
+    pushZoomEvent();
   };
 
   const handleMouseLeave = () => {
     setShowLens(false);
-    firedRef.current = false;
   };
 
   return (
@@ -56,15 +83,13 @@ export default function ZoomLens({ src, width = 450, height = 430, zoom = 2 }) {
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      onTouchStart={handleTouchStart}
       className="tw-relative"
-      style={{
-        width: `${width}px`,
-        height: `${height}px`,
-      }}
+      style={{ width: `${width}px`, height: `${height}px` }}
     >
       <Image
         src={src}
-        alt="Produto com zoom"
+        alt={item_name ? `Zoom: ${item_name}` : "Produto com zoom"}
         width={width}
         height={height}
         className="tw-object-contain"
@@ -85,6 +110,6 @@ export default function ZoomLens({ src, width = 450, height = 430, zoom = 2 }) {
           }}
         />
       )}
-    </div>
-  );
+    </div>
+  );
 }
