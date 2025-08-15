@@ -11,6 +11,7 @@ export default function Navbar({ categories }) {
           item_id: product.slug,
           item_name: product.name,
           item_category: category.name,
+          item_category2: category.slug,
         },
       ],
     });

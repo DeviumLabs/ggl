@@ -31,11 +31,15 @@ export default function ZoomLens({
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({
       event: "image_zoom",
+      items: [{
+        item_id: product.slug,
+        item_name: product.name,
+        item_category: category.singleName,
+        item_category2: category.slug,
+      }],
       image_src: src,
       zoom_level: zoom,
       component: "zoom_lens",
-      ...(item_id ? { item_id } : {}),
-      ...(item_name ? { item_name } : {}),
     });
     markFired();
   };
@@ -110,6 +114,6 @@ export default function ZoomLens({
           }}
         />
       )}
-    </div>
-  );
+    </div>
+  );
 }
