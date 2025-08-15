@@ -6,31 +6,29 @@ import Image from "next/image";
 export default function Header() {
   const [isOpen, setOpen] = useState(false);
 
-  const sendNavEvent = (label, url) => {
-    if (window.gtag) {
-      window.gtag("event", "navigation_click", {
-        location: "header",
-        link_text: label,
-        link_url: url,
-      });
+  const dl = (evtName, params = {}) => {
+    if (typeof window !== "undefined" && Array.isArray(window.dataLayer)) {
+      window.dataLayer.push({ event: evtName, ...params });
     }
+  };
+
+  const sendNavEvent = (label, url) => {
+    dl("navigation_click", {
+      location: "header",
+      link_text: label,
+      link_url: url,
+    });
   };
 
   const sendLogoEvent = () => {
-    if (window.gtag) {
-      window.gtag("event", "logo_click", {
-        location: "header",
-      });
-    }
+    dl("logo_click", { location: "header" });
   };
 
   const sendCallEvent = (number) => {
-    if (window.gtag) {
-      window.gtag("event", "click_to_call", {
-        location: "header",
-        phone_number: number,
-      });
-    }
+    dl("click_to_call", {
+      location: "header",
+      phone_number: number,
+    });
   };
 
   return (
@@ -57,9 +55,7 @@ export default function Header() {
 
         <nav
           className="tw-fixed md:tw-static tw-top-[110px] tw-left-0 tw-w-full tw-h-full tw-flex tw-items-center tw-justify-center md:tw-justify-end tw-flex-col md:tw-flex-row tw-gap-[30px] md:tw-bg-transparent tw-bg-blue tw-text-white md:tw-text-black tw-duration-200 tw-ease-out md:!tw-translate-x-0"
-          style={{
-            transform: !isOpen ? "translateX(100%)" : "translateX(0)",
-          }}
+          style={{ transform: !isOpen ? "translateX(100%)" : "translateX(0)" }}
           aria-label="Menu de navegação principal"
         >
           <Link href="/" passHref>
@@ -73,6 +69,7 @@ export default function Header() {
               Home
             </a>
           </Link>
+
           <Link href="/#sobre" passHref>
             <a
               className="hover:tw-text-blue tw-transition-[0.4s]"
@@ -84,6 +81,7 @@ export default function Header() {
               Sobre
             </a>
           </Link>
+
           <Link href="/produtos" passHref>
             <a
               className="hover:tw-text-blue tw-transition-[0.4s]"
@@ -95,6 +93,7 @@ export default function Header() {
               Produtos
             </a>
           </Link>
+
           <Link href="/#catalogo" passHref>
             <a
               className="hover:tw-text-blue tw-transition-[0.4s]"
@@ -106,6 +105,7 @@ export default function Header() {
               Catálogo
             </a>
           </Link>
+
           <Link href="/videos" passHref>
             <a
               className="hover:tw-text-blue tw-transition-[0.4s]"
@@ -117,6 +117,7 @@ export default function Header() {
               Vídeos
             </a>
           </Link>
+
           <Link href="#contato" passHref>
             <a
               className="hover:tw-text-blue tw-transition-[0.4s]"

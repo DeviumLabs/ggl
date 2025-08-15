@@ -2,7 +2,6 @@ import api from "../../services/api";
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
-
 import Header from "../../components/header";
 import Footer from "../../components/footer";
 import Contact from "../../components/contact";
@@ -11,26 +10,27 @@ import { useEffect } from "react";
 export async function getStaticProps() {
   const res = await api.get("/category?category=all");
   return {
-    props: {
-      categories: res.data,
-    },
+    props: { categories: res.data },
     revalidate: 5,
   };
 }
 
 export default function Produtos({ categories }) {
   useEffect(() => {
-    if (typeof window === "undefined" || !window.gtag) return;
-    if (categories?.categoryArray?.length) {
-      window.gtag("event", "view_item_list", {
-        item_list_name: "Produtos - categorias",
-        items: categories.categoryArray.map((cat, index) => ({
-          item_id: cat.slug,
-          item_name: cat.name,
-          index: index + 1,
-        })),
-      });
-    }
+    if (typeof window === "undefined") return;
+    const list = categories?.categoryArray || [];
+    if (!list.length) return;
+
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: "view_item_list",
+      item_list_name: "Produtos - categorias",
+      items: list.map((cat, index) => ({
+        item_id: cat.slug,
+        item_name: cat.name,
+        index: index + 1,
+      })),
+    });
   }, [categories]);
 
   const jsonLd = {
@@ -45,8 +45,10 @@ export default function Produtos({ categories }) {
   };
 
   const onCategoryClick = (cat, index) => {
-    if (!window.gtag) return;
-    window.gtag("event", "select_item", {
+    if (typeof window === "undefined") return;
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: "select_item",
       item_list_name: "Produtos - categorias",
       items: [
         {
@@ -55,8 +57,11 @@ export default function Produtos({ categories }) {
           index: index + 1,
         },
       ],
+      location: "products_list_page",
     });
   };
+
+  const list = categories?.categoryArray || [];
 
   return (
     <div>
@@ -90,7 +95,7 @@ export default function Produtos({ categories }) {
         </section>
 
         <section className="tw-px-[20px] tw-flex tw-justify-center tw-flex-wrap tw-gap-y-[80px] tw-gap-x-[40px] tw-mt-[80px] tw-mb-[100px]">
-          {categories.categoryArray.map((category, idx) => (
+          {list.map((category, idx) => (
             <Link
               key={category.slug}
               href={`/produtos/${category.slug}?product=${category.products[0].slug}`}

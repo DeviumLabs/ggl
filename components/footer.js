@@ -1,40 +1,46 @@
-import { Fragment } from "react";
+import { Fragment, useCallback, useMemo } from "react";
 import Image from "next/image";
-import Whatsapp from "./whatsapp";
 
 export default function Footer() {
-  const sendFooterNavEvent = (label, url) => {
-    if (window.gtag) {
-      window.gtag("event", "navigation_click", {
-        location: "footer",
-        link_text: label,
-        link_url: url,
-      });
-    }
-  };
+  const pushDL = useCallback((event, params) => {
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event, ...params });
+  }, []);
 
-  const sendFooterCallEvent = (number) => {
-    if (window.gtag) {
-      window.gtag("event", "click_to_call", {
-        location: "footer",
-        phone_number: number,
-      });
-    }
-  };
+  const sendFooterNavEvent = useCallback((label, url) => {
+    pushDL("navigation_click", {
+      location: "footer",
+      link_text: label,
+      link_url: url,
+    });
+  }, [pushDL]);
 
-  const sendSocialClickEvent = (platform, url) => {
-    if (window.gtag) {
-      window.gtag("event", "social_click", {
-        location: "footer",
-        platform,
-        link_url: url,
-      });
-    }
-  };
+  const sendFooterCallEvent = useCallback((number) => {
+    pushDL("click_to_call", {
+      location: "footer",
+      phone_number: number,
+    });
+  }, [pushDL]);
+
+  const sendSocialClickEvent = useCallback((platform, url) => {
+    pushDL("social_click", {
+      location: "footer",
+      platform,
+      link_url: url,
+    });
+  }, [pushDL]);
+
+  const navItems = useMemo(() => ([
+    { label: "Home", url: "/" },
+    { label: "Sobre", url: "/#sobre" },
+    { label: "Produtos", url: "/produtos" },
+    { label: "Catálogo", url: "/#catalogo" },
+    { label: "Vídeos", url: "/videos" },
+    { label: "Contato", url: "#contato" },
+  ]), []);
 
   return (
     <Fragment>
-      {/* <Whatsapp /> */}
       <footer className="tw-bg-darkBlue tw-pt-[30px] tw-pb-[10px] tw-px-[20px] tw-w-full">
         <div className="tw-w-full tw-grid tw-grid-cols-1 md:tw-grid-cols-3 tw-gap-[40px] tw-max-w-[1400px] tw-mx-auto">
           <div className="tw-flex tw-justify-start">
@@ -44,20 +50,17 @@ export default function Footer() {
           <div>
             <h2 className="tw-text-[24px] tw-text-white tw-mb-[10px]">Navegação</h2>
             <ul className="tw-flex tw-flex-col tw-gap-[4px]">
-              {["Home", "Sobre", "Produtos", "Catálogo", "Vídeos", "Contato"].map((label, i) => {
-                const urls = ["/", "/#sobre", "/produtos", "/#catalogo", "/videos", "#contato"];
-                return (
-                  <li key={i}>
-                    <a
-                      href={urls[i]}
-                      className="tw-text-white hover:tw-underline"
-                      onClick={() => sendFooterNavEvent(label, urls[i])}
-                    >
-                      {label}
-                    </a>
-                  </li>
-                );
-              })}
+              {navItems.map((item) => (
+                <li key={item.label}>
+                  <a
+                    href={item.url}
+                    className="tw-text-white hover:tw-underline"
+                    onClick={() => sendFooterNavEvent(item.label, item.url)}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -80,7 +83,7 @@ export default function Footer() {
 
             <div className="tw-mb-[10px]">
               <h3 className="tw-text-white tw-font-medium">Contato:</h3>
-              <p className="tw-text-white tw-text-sm">
+              <p className="tw-text-white tw-text-sm tw-flex tw-flex-col">
                 <a
                   href="tel:+554230252200"
                   className="hover:tw-underline"
@@ -88,13 +91,12 @@ export default function Footer() {
                 >
                   (42) 3025 2200
                 </a>
-
                 <a
                   href="tel:+554230255045"
                   className="hover:tw-underline"
                   onClick={() => sendFooterCallEvent("+554230255045")}
                 >
-                  (42) 3025 5045
+                  (42) 3025 5045
                 </a>
               </p>
             </div>

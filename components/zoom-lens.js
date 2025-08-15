@@ -5,23 +5,22 @@ export default function ZoomLens({ src, width = 450, height = 430, zoom = 2 }) {
   const containerRef = useRef(null);
   const lensRef = useRef(null);
   const [showLens, setShowLens] = useState(false);
+  const firedRef = useRef(false);
 
   const handleMouseMove = (e) => {
     const container = containerRef.current;
     const lens = lensRef.current;
-
     if (!container || !lens) return;
 
     const rect = container.getBoundingClientRect();
-
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
-    const lensWidth = lens.offsetWidth / 2;
-    const lensHeight = lens.offsetHeight / 2;
+    const halfW = lens.offsetWidth / 2;
+    const halfH = lens.offsetHeight / 2;
 
-    let lensX = x - lensWidth;
-    let lensY = y - lensHeight;
+    let lensX = x - halfW;
+    let lensY = y - halfH;
 
     lensX = Math.max(0, Math.min(lensX, width - lens.offsetWidth));
     lensY = Math.max(0, Math.min(lensY, height - lens.offsetHeight));
@@ -33,12 +32,22 @@ export default function ZoomLens({ src, width = 450, height = 430, zoom = 2 }) {
 
   const handleMouseEnter = () => {
     setShowLens(true);
-    if (window.gtag) {
-      window.gtag("event", "image_zoom", {
-        event_category: "Engagement",
-        event_label: src,
+
+    if (!firedRef.current && typeof window !== "undefined") {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: "image_zoom",
+        image_src: src,
+        zoom_level: zoom,
+        component: "zoom_lens",
       });
+      firedRef.current = true;
     }
+  };
+
+  const handleMouseLeave = () => {
+    setShowLens(false);
+    firedRef.current = false;
   };
 
   return (
@@ -46,7 +55,7 @@ export default function ZoomLens({ src, width = 450, height = 430, zoom = 2 }) {
       ref={containerRef}
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
-      onMouseLeave={() => setShowLens(false)}
+      onMouseLeave={handleMouseLeave}
       className="tw-relative"
       style={{
         width: `${width}px`,
@@ -61,6 +70,7 @@ export default function ZoomLens({ src, width = 450, height = 430, zoom = 2 }) {
         className="tw-object-contain"
         style={{ width: "100%", height: "100%" }}
       />
+
       {showLens && (
         <div
           ref={lensRef}
@@ -75,6 +85,6 @@ export default function ZoomLens({ src, width = 450, height = 430, zoom = 2 }) {
           }}
         />
       )}
-    </div>
-  );
+    </div>
+  );
 }

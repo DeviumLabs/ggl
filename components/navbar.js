@@ -1,17 +1,17 @@
 export default function Navbar({ categories }) {
   const handleProductClick = (category, product) => {
-    if (window.gtag) {
-      window.gtag("event", "select_item", {
-        item_list_name: category.name,
-        items: [
-          {
-            item_id: product.slug,
-            item_name: product.name,
-            item_category: category.name,
-          },
-        ],
-      });
-    }
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: "select_item",
+      item_list_name: category.name,
+      items: [
+        {
+          item_id: product.slug,
+          item_name: product.name,
+          item_category: category.name,
+        },
+      ],
+    });
   };
 
   return (
@@ -40,6 +40,6 @@ export default function Navbar({ categories }) {
           </div>
         ))}
       </div>
-    </nav>
-  );
+    </nav>
+  );
 }

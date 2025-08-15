@@ -31,21 +31,26 @@ export default function SingleProduct({ product, categories }) {
   const [table, setTable] = useState(0);
 
   useEffect(() => {
-    if (!product?.slug || !categories?.categoryArray?.[0] || !window.gtag) return;
-    const cat = categories.categoryArray[0];
-    window.gtag("event", "view_item", {
+    const cat = categories?.categoryArray?.[0];
+    if (!product?.slug || !cat || typeof window === "undefined") return;
+
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: "view_item",
       items: [
         {
           item_id: product.slug,
           item_name: `${cat.singleName} ${product.name}`,
           item_category: cat.name,
+          item_category2: cat.slug,
           item_variant: titlePrincipal,
         },
       ],
+      location: "product_page",
     });
   }, [product, categories, titlePrincipal]);
 
-  if (product.error) {
+  if (product?.error) {
     return (
       <div className="tw-h-[100vh] tw-flex tw-items-center tw-flex-col tw-justify-center tw-w-full">
         <h1>O Produto selecionado não existe ou possui informações incorretas!</h1>
@@ -55,16 +60,19 @@ export default function SingleProduct({ product, categories }) {
   }
 
   const createBudget = () => {
+    const cat = categories?.categoryArray?.[0];
     setContactMessage(
       `Gostaria de ter mais informações sobre o produto ${categories.categoryArray[0].singleName} ${product.name}`
     );
 
-    if (window.gtag) {
-      const cat = categories.categoryArray[0];
-      window.gtag("event", "request_quote_click", {
+    if (typeof window !== "undefined") {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: "request_quote_click",
         item_id: product.slug,
         item_name: `${cat.singleName} ${product.name}`,
-        item_category: cat.name,
+        item_category: cat?.name,
+        item_category2: cat?.slug,
         item_variant: titlePrincipal,
         location: "product_page",
       });
@@ -83,10 +91,7 @@ export default function SingleProduct({ product, categories }) {
       categories?.categoryArray?.[0]?.description ||
       "Produto em aço de alta durabilidade e resistência.",
     "sku": product.slug,
-    "brand": {
-      "@type": "Brand",
-      "name": "GGL Móveis de Aço"
-    },
+    "brand": { "@type": "Brand", "name": "GGL Móveis de Aço" },
     "offers": {
       "@type": "Offer",
       "url": `https://www.gglmoveis.com.br/produtos/${categories.categoryArray[0].slug}?product=${product.slug}`,
@@ -145,24 +150,29 @@ export default function SingleProduct({ product, categories }) {
                       height={80}
                       className="tw-object-contain tw-mr-[10px] hover:tw-scale-[1.1] tw-cursor-pointer"
                       onClick={() => {
+                        const cat = categories.categoryArray[0];
                         setPrincipalImage(image);
                         setTable(i);
                         if (!!product.models[i]) {
                           setTitlePrincipal(product.models[i].name);
                         }
-                        if (window.gtag) {
-                          const cat = categories.categoryArray[0];
-                          window.gtag("event", "select_item", {
+
+                        if (typeof window !== "undefined") {
+                          window.dataLayer = window.dataLayer || [];
+                          window.dataLayer.push({
+                            event: "select_item",
                             item_list_name: "product_thumbnails",
                             items: [
                               {
                                 item_id: product.slug,
                                 item_name: `${cat.singleName} ${product.name}`,
                                 item_category: cat.name,
+                                item_category2: cat.slug,
                                 item_variant: product.models[i]?.name || `variante_${i + 1}`,
                                 index: i + 1,
                               },
                             ],
+                            location: "product_page",
                           });
                         }
                       }}

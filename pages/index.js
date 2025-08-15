@@ -20,7 +20,7 @@ export default function Home({ categories }) {
 
   useEffect(() => {
     setIsClient(true);
-    const hash = window.location.hash;
+    const hash = typeof window !== "undefined" ? window.location.hash : "";
     if (hash) {
       setTimeout(() => {
         const element = document.querySelector(hash);
@@ -30,12 +30,17 @@ export default function Home({ categories }) {
   }, []);
 
   useEffect(() => {
-    if (!isClient || !window.gtag) return;
-    window.gtag("event", "view_homepage", {});
-    if (categories?.categoryArray?.length) {
-      window.gtag("event", "view_item_list", {
+    if (!isClient || typeof window === "undefined") return;
+    window.dataLayer = window.dataLayer || [];
+
+    window.dataLayer.push({ event: "view_homepage" });
+
+    const list = categories?.categoryArray || [];
+    if (list.length) {
+      window.dataLayer.push({
+        event: "view_item_list",
         item_list_name: "Homepage categorias",
-        items: categories.categoryArray.map((c, i) => ({
+        items: list.map((c, i) => ({
           item_id: c.slug,
           item_name: c.name,
           index: i + 1,
@@ -45,12 +50,13 @@ export default function Home({ categories }) {
   }, [isClient, categories]);
 
   useEffect(() => {
-    if (!isClient || !catalogRef.current) return;
+    if (!isClient || typeof window === "undefined" || !catalogRef.current) return;
     const obs = new IntersectionObserver(
       (entries) => {
         entries.forEach((en) => {
-          if (en.isIntersecting && window.gtag) {
-            window.gtag("event", "catalog_view", { section: "homepage" });
+          if (en.isIntersecting) {
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({ event: "catalog_view", section: "homepage" });
           }
         });
       },
@@ -61,20 +67,35 @@ export default function Home({ categories }) {
   }, [isClient]);
 
   const onCtaClick = () => {
-    if (window.gtag) window.gtag("event", "cta_click", { position: "hero", text: "Solicitar orçamento", location: "home_page" });
+    if (typeof window === "undefined") return;
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: "cta_click",
+      position: "hero",
+      text: "Solicitar orçamento",
+      location: "home_page",
+    });
   };
 
   const onCategoryClick = (category) => {
-    if (window.gtag) {
-      window.gtag("event", "select_item", {
-        item_list_name: "Homepage categorias",
-        items: [{ item_id: category.slug, item_name: category.name }],
-      });
-    }
+    if (typeof window === "undefined") return;
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: "select_item",
+      item_list_name: "Homepage categorias",
+      items: [{ item_id: category.slug, item_name: category.name }],
+      location: "home_page",
+    });
   };
 
   const onCatalogDownload = (where) => {
-    if (window.gtag) window.gtag("event", "catalog_download", { location: where, file: "/assets/catalogo.pdf" });
+    if (typeof window === "undefined") return;
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: "catalog_download",
+      location: where,
+      file: "/assets/catalogo.pdf",
+    });
   };
 
   const jsonLd = {
@@ -83,7 +104,8 @@ export default function Home({ categories }) {
     "name": "GGL Móveis de Aço",
     "url": "https://www.gglmoveis.com.br",
     "logo": "https://www.gglmoveis.com.br/logo.svg",
-    "description": "Fabricante de móveis de aço para ambientes corporativos, industriais e institucionais. Qualidade, durabilidade e acabamento superior.",
+    "description":
+      "Fabricante de móveis de aço para ambientes corporativos, industriais e institucionais. Qualidade, durabilidade e acabamento superior.",
     "contactPoint": {
       "@type": "ContactPoint",
       "telephone": "+55-42-3025-2200",
@@ -98,7 +120,10 @@ export default function Home({ categories }) {
     <div>
       <Head>
         <title>Móveis de Aço para Empresas | GGL Móveis de Aço</title>
-        <meta name="description" content="Soluções em móveis de aço para empresas, escolas, indústrias e órgãos públicos. Conheça a GGL e solicite um orçamento." />
+        <meta
+          name="description"
+          content="Soluções em móveis de aço para empresas, escolas, indústrias e órgãos públicos. Conheça a GGL e solicite um orçamento."
+        />
         <meta name="robots" content="index, follow" />
         <link rel="canonical" href="https://www.gglmoveis.com.br/" />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
@@ -144,7 +169,7 @@ export default function Home({ categories }) {
           </div>
 
           <section className="tw-px-[20px] tw-flex tw-justify-center tw-items-center tw-flex-wrap tw-gap-y-[80px] tw-gap-x-[40px] tw-mb-[120px] tw-max-w-[1024px] tw-w-full tw-mx-auto">
-            {categories.categoryArray.map((category) => (
+            {(categories?.categoryArray || []).map((category) => (
               <Link
                 key={category.slug}
                 href={`/produtos/${category.slug}?product=${category.products[0].slug}`}
@@ -245,6 +270,6 @@ export default function Home({ categories }) {
       )}
 
       <Footer />
-    </div>
-  );
+    </div>
+  );
 }

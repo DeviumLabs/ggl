@@ -18,26 +18,28 @@ export default function Videos() {
   useEffect(() => {
     setIsClient(true);
 
-    const hash = window.location.hash;
-    if (hash) {
-      const element = document.getElementById(hash.replace("#", ""));
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
+    if (typeof window !== "undefined") {
+      const hash = window.location.hash;
+      if (hash) {
+        const el = document.getElementById(hash.replace("#", ""));
+        if (el) el.scrollIntoView({ behavior: "smooth" });
       }
     }
   }, []);
 
+
   useEffect(() => {
-    if (!isClient) return;
-    if (window.gtag) {
-      window.gtag("event", "view_video_list", {
-        items: videos.map((v, i) => ({
-          item_id: v.id,
-          item_name: v.name,
-          index: i + 1,
-        })),
-      });
-    }
+    if (!isClient || typeof window === "undefined") return;
+
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: "view_video_list",
+      items: videos.map((v, i) => ({
+        item_id: v.id,
+        item_name: v.name,
+        index: i + 1,
+      })),
+    });
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -46,21 +48,25 @@ export default function Videos() {
           const id = en.target.getAttribute("data-video-id");
           const name = en.target.getAttribute("data-video-name");
           if (!id || impressionSent.current.has(id)) return;
+
           impressionSent.current.add(id);
-          if (window.gtag) {
-            window.gtag("event", "video_impression", {
-              video_id: id,
-              video_name: name,
-            });
-          }
+          window.dataLayer.push({
+            event: "video_impression",
+            video_id: id,
+            video_name: name,
+            visibility_threshold: 0.5,
+          });
         });
       },
       { threshold: 0.5 }
     );
 
-    document.querySelectorAll(".js-video-card").forEach((el) => observer.observe(el));
+    document
+      .querySelectorAll(".js-video-card")
+      .forEach((el) => observer.observe(el));
+
     return () => observer.disconnect();
-  }, [isClient]);
+  }, [isClient, videos]);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -85,12 +91,14 @@ export default function Videos() {
   };
 
   const handleVideoClick = (v) => {
-    if (window.gtag) {
-      window.gtag("event", "video_click", {
-        video_id: v.id,
-        video_name: v.name,
-      });
-    }
+    if (typeof window === "undefined") return;
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: "video_click",
+      video_id: v.id,
+      video_name: v.name,
+      location: "videos_page",
+    });
   };
 
   return (
@@ -136,7 +144,7 @@ export default function Videos() {
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     allowFullScreen
-                  ></iframe>
+                  />
                 </div>
                 <h2 className="tw-mt-[10px] tw-text-center tw-text-[18px]">
                   {v.name}
@@ -149,6 +157,6 @@ export default function Videos() {
         </main>
       )}
       <Footer />
-    </div>
-  );
+    </div>
+  );
 }
