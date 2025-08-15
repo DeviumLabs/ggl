@@ -24,21 +24,11 @@ export default function Contact({ budgetMessage }) {
 
   const norm = (s) => (s || "").toString().trim().toLowerCase();
   const onlyDigits = (s) => (s || "").toString().replace(/\D/g, "");
-  const withDDI55 = (digits) => {
-    if (!digits) return "";
-    return digits.startsWith("55") ? digits : `55${digits}`;
-  };
+  const withDDI55 = (digits) => (!digits ? "" : digits.startsWith("55") ? digits : `55${digits}`);
   const splitName = (full = "") => {
     const parts = full.trim().split(/\s+/);
     if (!parts[0]) return { first_name: "", last_name: "" };
     return { first_name: parts[0], last_name: parts.slice(1).join(" ") };
-  };
-  const sha256 = async (str) => {
-    const enc = new TextEncoder().encode(str);
-    const buf = await crypto.subtle.digest("SHA-256", enc);
-    return Array.from(new Uint8Array(buf))
-      .map((b) => b.toString(16).padStart(2, "0"))
-      .join("");
   };
 
   const formStartedRef = useRef(false);
@@ -83,21 +73,20 @@ export default function Contact({ budgetMessage }) {
   }, [setValue]);
 
   useEffect(() => {
-    if (window.gtag) {
-      window.gtag("event", "view_contact_form", { form_id: "contact_form" });
-    }
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: "view_contact_form",
+      form_id: "contact_form",
+    });
   }, []);
 
   const checkFormProgress = () => {
-    const filled = [
-      watch("name"),
-      watch("phone"),
-      watch("email"),
-      watch("estado"),
-      watch("cidade"),
-    ].filter(Boolean).length;
-    if (!progressSentRef.current && filled >= 3 && window.gtag) {
-      window.gtag("event", "form_progress", {
+    const filled = [watch("name"), watch("phone"), watch("email"), watch("estado"), watch("cidade")]
+      .filter(Boolean).length;
+    if (!progressSentRef.current && filled >= 3) {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: "form_progress",
         form_id: "contact_form",
         progress: "50%",
       });
@@ -106,8 +95,12 @@ export default function Contact({ budgetMessage }) {
   };
 
   const handleFieldChange = () => {
-    if (!formStartedRef.current && window.gtag) {
-      window.gtag("event", "start_form", { form_id: "contact_form" });
+    if (!formStartedRef.current) {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: "start_form",
+        form_id: "contact_form",
+      });
       formStartedRef.current = true;
     }
     checkFormProgress();
@@ -132,9 +125,11 @@ export default function Contact({ budgetMessage }) {
     }
     if (isSending) return;
 
-    if (window.gtag) {
-      window.gtag("event", "form_submit", { form_id: "contact_form" });
-    }
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: "form_submit",
+      form_id: "contact_form",
+    });
 
     const body = `
       <h3>Novo contato via site GGL Móveis</h3>
@@ -159,62 +154,33 @@ export default function Contact({ budgetMessage }) {
       toast.success("Mensagem enviada!");
       reset();
 
-      if (window.gtag) {
-        window.gtag("event", "form_submit_success", { form_id: "contact_form" });
+      const { first_name, last_name } = splitName(name);
+      const payload = {
+        event: "form_submit_success",
+        form_id: "contact_form",
+        value: 1.0,
+        currency: "BRL",
+        company: company || "",
+        city: cidade || "",
+        state: estado || "",
+        user_data: {
+          email: norm(email),
+          phone_number: withDDI55(onlyDigits(phone)),
+          first_name: norm(first_name),
+          last_name: norm(last_name),
+          city: norm(cidade),
+          region: norm(estado),
+          country: "BR",
+        },
+      };
 
-        const { first_name, last_name } = splitName(name);
-        const emailNorm = norm(email);
-        const phoneDigits = withDDI55(onlyDigits(phone));
-        const firstNorm = norm(first_name);
-        const lastNorm = norm(last_name);
-        const cityNorm = norm(cidade);
-        const stateNorm = norm(estado);
+      window.dataLayer.push(payload);
 
-        let userData = null;
+      window.dataLayer.push({
+        event: "generate_lead",
+        ...payload,
+      });
 
-        if (window.crypto?.subtle) {
-          const [email_h, phone_h, first_h, last_h, city_h, state_h] =
-            await Promise.all([
-              sha256(emailNorm),
-              sha256(phoneDigits),
-              sha256(firstNorm),
-              sha256(lastNorm),
-              sha256(cityNorm),
-              sha256(stateNorm),
-            ]);
-
-          userData = {
-            email: email_h,
-            phone_number: phone_h,
-            first_name: first_h,
-            last_name: last_h,
-            city: city_h,
-            region: state_h,
-            country: "BR",
-          };
-        }
-
-        window.gtag("event", "generate_lead", {
-          value: 1.0,
-          currency: "BRL",
-          company: company || "",
-          city: cidade || "",
-          state: estado || "",
-          ...(userData ? { user_data: userData } : {}),
-        });
-
-        if (userData) {
-          window.gtag("set", "user_data", userData);
-        }
-        window.gtag("event", "conversion", {
-          send_to: "AW-16882485681/MSWBCND8xKEaELGTmfI-",
-          value: 1.0,
-          currency: "BRL",
-          company: company || "",
-          city: cidade || "",
-          state: estado || "",
-        });
-      }
     } catch (e) {
       console.error(e);
       toast.error("Houve um erro, por favor tente novamente mais tarde!");

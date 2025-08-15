@@ -1,18 +1,8 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
-require("dotenv").config();
 
 class MyDocument extends Document {
   static async getInitialProps(ctx) {
-    const originalRenderPage = ctx.renderPage;
-
-    ctx.renderPage = () =>
-      originalRenderPage({
-        enhanceApp: (App) => App,
-        enhanceComponent: (Component) => Component,
-      });
-
     const initialProps = await Document.getInitialProps(ctx);
-
     return initialProps;
   }
 
@@ -20,18 +10,19 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>
-          <script async src="https://www.googletagmanager.com/gtag/js?id=G-ESC22234MN"></script>
+          {/* Google Tag Manager */}
           <script
             dangerouslySetInnerHTML={{
               __html: `
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', 'AW-16882485681');
-                gtag('config', 'G-ESC22234MN');
+                (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+                j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+                'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+                })(window,document,'script','dataLayer','GTM-NMZW62HG');
               `,
             }}
           />
+          {/* End Google Tag Manager */}
 
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
@@ -44,6 +35,17 @@ class MyDocument extends Document {
           <meta name="theme-color" content="#ffffff" />
         </Head>
         <body>
+          {/* Google Tag Manager (noscript) */}
+          <noscript
+            dangerouslySetInnerHTML={{
+              __html: `
+                <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMZW62HG"
+                height="0" width="0" style="display:none;visibility:hidden"></iframe>
+              `,
+            }}
+          />
+          {/* End Google Tag Manager (noscript) */}
+
           <Main />
           <NextScript />
         </body>
@@ -52,4 +54,4 @@ class MyDocument extends Document {
   }
 }
 
-export default MyDocument;
+export default MyDocument;
