@@ -3,6 +3,8 @@ export default function Navbar({ categories }) {
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({
       event: "select_item",
+      location: "navbar",
+      item_list_name: "Navbar categorias",
       item_list_name: category.name,
       items: [
         {
