@@ -154,32 +154,37 @@ export default function Contact({ budgetMessage }) {
       toast.success("Mensagem enviada!");
       reset();
 
-      window.dataLayer = window.dataLayer || [];
+      const { first_name, last_name } = splitName(name);
 
+      const cleanedCompany = (company || "").toString().trim();
+      const cleanedCity = norm(cidade); 
+      const cleanedRegion = (estado || "").toString().trim().toUpperCase();
+      const cleanedEmail = norm(email);
+      const cleanedPhone = withDDI55(onlyDigits(phone));
+
+      window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({
         event: "form_submit_success",
         form_id: "contact_form",
-        company: company || "",
-        city: cidade || "",
-        state: estado || "",
+        company: cleanedCompany,
+        city: cleanedCity,
+        state: cleanedRegion,
       });
 
-      const { first_name, last_name } = splitName(name);
       window.dataLayer.push({
         event: "generate_lead",
         value: 1.0,
         currency: "BRL",
-        company: company || "",
-        city: cidade || "",
-        state: estado || "",
-
+        company: cleanedCompany,
+        city: cleanedCity,
+        state: cleanedRegion,
         user_data: {
-          email: norm(email),
-          phone_number: withDDI55(onlyDigits(phone)),
+          email: cleanedEmail,
+          phone_number: cleanedPhone,
           first_name: norm(first_name),
           last_name: norm(last_name),
-          city: norm(cidade),
-          region: norm(estado),
+          city: cleanedCity,
+          region: cleanedRegion,
           country: "BR",
         },
       });
