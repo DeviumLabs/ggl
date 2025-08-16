@@ -154,15 +154,25 @@ export default function Contact({ budgetMessage }) {
       toast.success("Mensagem enviada!");
       reset();
 
-      const { first_name, last_name } = splitName(name);
-      const payload = {
+      window.dataLayer = window.dataLayer || [];
+
+      window.dataLayer.push({
         event: "form_submit_success",
         form_id: "contact_form",
+        company: company || "",
+        city: cidade || "",
+        state: estado || "",
+      });
+
+      const { first_name, last_name } = splitName(name);
+      window.dataLayer.push({
+        event: "generate_lead",
         value: 1.0,
         currency: "BRL",
         company: company || "",
         city: cidade || "",
         state: estado || "",
+
         user_data: {
           email: norm(email),
           phone_number: withDDI55(onlyDigits(phone)),
@@ -172,13 +182,6 @@ export default function Contact({ budgetMessage }) {
           region: norm(estado),
           country: "BR",
         },
-      };
-
-      window.dataLayer.push(payload);
-
-      window.dataLayer.push({
-        event: "generate_lead",
-        ...payload,
       });
 
     } catch (e) {
@@ -336,13 +339,12 @@ export default function Contact({ budgetMessage }) {
           type="submit"
           disabled={isSending}
           aria-busy={isSending}
-          className={`tw-bg-blue tw-text-white tw-w-[240px] tw-h-[50px] hover:tw-bg-white hover:tw-border-blue hover:tw-border-[1px] hover:tw-text-blue tw-transition-300 ${
-            isSending ? "tw-opacity-60 tw-cursor-not-allowed" : ""
-          }`}
+          className={`tw-bg-blue tw-text-white tw-w-[240px] tw-h-[50px] hover:tw-bg-white hover:tw-border-blue hover:tw-border-[1px] hover:tw-text-blue tw-transition-300 ${isSending ? "tw-opacity-60 tw-cursor-not-allowed" : ""
+            }`}
         >
           {loading}
         </button>
       </form>
-    </>
-  );
+    </>
+  );
 }

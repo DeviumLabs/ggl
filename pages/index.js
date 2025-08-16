@@ -33,12 +33,13 @@ export default function Home({ categories }) {
     if (!isClient || typeof window === "undefined") return;
     window.dataLayer = window.dataLayer || [];
 
-    window.dataLayer.push({ event: "view_homepage" });
+    window.dataLayer.push({ event: "view_homepage", location: "home_page" });
 
     const list = categories?.categoryArray || [];
     if (list.length) {
       window.dataLayer.push({
         event: "view_item_list",
+        location: "home_page",
         item_list_name: "Homepage categorias",
         items: list.map((c, i) => ({
           item_id: c.slug,
@@ -56,7 +57,7 @@ export default function Home({ categories }) {
         entries.forEach((en) => {
           if (en.isIntersecting) {
             window.dataLayer = window.dataLayer || [];
-            window.dataLayer.push({ event: "catalog_view", section: "homepage" });
+            window.dataLayer.push({ event: "catalog_view", location: "home_page" });
           }
         });
       },

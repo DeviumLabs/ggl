@@ -24,6 +24,7 @@ export default function Produtos({ categories }) {
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({
       event: "view_item_list",
+      location: "products_list_page",
       item_list_name: "Produtos - categorias",
       items: list.map((cat, index) => ({
         item_id: cat.slug,
