@@ -5,7 +5,6 @@ export default function Navbar({ categories }) {
       event: "select_item",
       location: "navbar",
       item_list_name: "Navbar categorias",
-      item_list_name: category.name,
       items: [
         {
           item_id: product.slug,
