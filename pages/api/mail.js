@@ -9,9 +9,13 @@ globalThis._MAIL_RL_ = globalThis._MAIL_RL_ || new Map();
 const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || "https://www.gglmoveis.com.br,https://gglmoveis.com.br")
   .split(",").map(s => s.trim());
 
-const isEmail = (s="") => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
+const isEmail = (s = "") => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
+const esc = (s = "") =>
+  s.replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[c]));
 
-const esc = (s="") => s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const parseList = (v = "") => v.split(",").map(s => s.trim()).filter(Boolean);
+
+const DEFAULT_TO = ["ggl@gglmoveis.com.br", "felipeschandle@gmail.com", "pedro.neto72pn@gmail.com"];
 
 export default async function handler(req, res) {
   const origin = req.headers.origin || "";
@@ -34,16 +38,21 @@ export default async function handler(req, res) {
   recent.push(now);
   globalThis._MAIL_RL_.set(ip, recent);
 
+  const body = req.body || {};
+  const legacy = (body.form && typeof body.form === "object") ? body.form : body;
+  const replyToInBody = body.replyTo ?? legacy.replyTo;
+
   const {
     name = "", email = "", phone = "", company = "", estado = "", cidade = "", message = "",
-    gclid = "", gbraid = "", wbraid = "", replyTo = ""
-  } = req.body || {};
+    gclid = "", gbraid = "", wbraid = ""
+  } = legacy;
 
   if (!name || !email || !phone || !message) {
     return res.status(400).json({ error: "Campos obrigatórios ausentes." });
   }
   if (!isEmail(email)) return res.status(400).json({ error: "E-mail inválido." });
-  const replyToHeader = isEmail(replyTo) ? replyTo : undefined;
+
+  const replyToHeader = isEmail(replyToInBody || email) ? (replyToInBody || email) : undefined;
 
   const html = `
     <h3>Novo contato via site GGL Móveis</h3>
@@ -53,7 +62,7 @@ export default async function handler(req, res) {
     <p><strong>Empresa:</strong> ${esc(company || "-")}</p>
     <p><strong>Estado:</strong> ${esc(estado)}</p>
     <p><strong>Cidade:</strong> ${esc(cidade)}</p>
-    <p><strong>Mensagem:</strong><br/>${esc(message).replace(/\n/g,"<br/>")}</p>
+    <p><strong>Mensagem:</strong><br/>${esc(message).replace(/\n/g, "<br/>")}</p>
     <hr/>
     <p><em>Códigos do anúncio</em></p>
     <p>gclid: ${esc(gclid || "-")}</p>
@@ -62,12 +71,11 @@ export default async function handler(req, res) {
   `.trim();
 
   try {
-    const toList =
-      process.env.MAIL_TO?.split(",").map(s => s.trim()).filter(Boolean) ||
-      ["ggl@gglmoveis.com.br"];
+    const parsedTo = parseList(process.env.MAIL_TO);
+    const toList = parsedTo.length ? parsedTo : DEFAULT_TO;
 
     const data = await resend.emails.send({
-      from: process.env.MAIL_FROM || "GGL Móveis <contato@dotwave.com.br>", 
+      from: process.env.MAIL_FROM || "GGL Móveis <contato@dotwave.com.br>",
       to: toList,
       subject: "Novo contato via site - GGL Móveis",
       html,
