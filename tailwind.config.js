@@ -24,6 +24,11 @@ module.exports = {
         blue: "#0058C2",
         darkBlue: "#073998",
       },
+      fontFamily: {
+        sans: ['var(--font-jakarta)', 'system-ui', 'sans-serif'],
+        serif: ['var(--font-merri)', 'serif'],
+        display: ['var(--font-nanum)', 'sans-serif'],
+      },
     },
   },
 

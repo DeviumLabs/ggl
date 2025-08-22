@@ -141,6 +141,7 @@ export default function Home({ categories }) {
               alt="Banner principal da GGL"
               fill
               priority
+              fetchpriority="high"
               quality={90}
               sizes="100vw"
               style={{ objectFit: "cover" }}
