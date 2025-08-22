@@ -136,20 +136,19 @@ export default function Contact({ budgetMessage }) {
       setLoading("Enviando...");
 
       await axios.post("/api/mail", {
-        replyTo: email, 
-        form: {
-          name,
-          email,
-          phone,
-          company: company || "",
-          estado,
-          cidade,
-          message: message || "",
-          gclid: gclid || "",
-          gbraid: gbraid || "",
-          wbraid: wbraid || "",
-        },
+        replyTo: email,
+        name,
+        email,
+        phone,
+        company: company || "",
+        estado,
+        cidade,
+        message: message || "",
+        gclid: gclid || "",
+        gbraid: gbraid || "",
+        wbraid: wbraid || ""
       });
+
 
       toast.success("Mensagem enviada!");
       reset();
