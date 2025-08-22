@@ -2,27 +2,28 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Globais que você já usava */
-html,
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 a {
   color: inherit;
   text-decoration: none;
-  font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 p, span, small {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: inherit;
 }
 
 h1 {
-  font-family: 'Merriweather', serif;
+  font-family: var(--font-merri), Georgia, "Times New Roman", Times, serif;
 }
 
 * {
@@ -30,9 +31,12 @@ h1 {
   scroll-behavior: smooth;
 }
 
-/* Complementos que estavam no antigo input.css */
+@media (prefers-reduced-motion: reduce) {
+  * { scroll-behavior: auto; }
+}
+
 footer p, footer h3, footer h1, footer span {
-  color: white;
+  color: #fff;
 }
 
 #catalogo svg {
@@ -40,14 +44,13 @@ footer p, footer h3, footer h1, footer span {
 }
 
 button {
-  transition: all ease 0.6s;
+  transition: background-color .3s ease, color .3s ease, border-color .3s ease, transform .2s ease;
 }
 
-/* Botões do react-alice-carousel */
-.alice-carousel__next-btn{
+.alice-carousel__next-btn,
+.alice-carousel__prev-btn {
   position: absolute;
   top: 35%;
-  right: 20px;
   width: 70px !important;
   height: 70px;
   background: #0058C2;
@@ -57,52 +60,31 @@ button {
   border-radius: 50%;
 }
 
-.alice-carousel__next-btn span{
-  color: white;
+.alice-carousel__next-btn { right: 20px; }
+.alice-carousel__prev-btn { left: 20px; }
+
+.alice-carousel__next-btn span,
+.alice-carousel__prev-btn span {
+  color: #fff;
   font-size: 30px;
-  font-family: 'Nanum Gothic', sans-serif;
+  font-family: var(--font-nanum), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
-.alice-carousel__next-btn span:after{
+.alice-carousel__next-btn span:after,
+.alice-carousel__prev-btn span:after {
   display: flex !important;
   width: 70px !important;
   justify-content: center;
   align-items: center;
 }
 
-.alice-carousel__prev-btn{
-  position: absolute;
-  top: 35%;
-  left: 20px;
-  width: 70px !important;
-  height: 70px;
-  background: #0058C2;
-  display: flex !important;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-}
-
-.alice-carousel__prev-btn span{
-  color: white;
-  font-size: 30px;
-  font-family: 'Nanum Gothic', sans-serif;
-}
-
-.alice-carousel__prev-btn span:after{
-  display: flex !important;
-  width: 70px !important;
-  justify-content: center;
-  align-items: center;
-}
-
-.alice-carousel__dots{
+.alice-carousel__dots {
   display: none !important;
 }
 
-/* Tabela */
-td{
-  border: 1px solid black;
+table { border-collapse: collapse; }
+td {
+  border: 1px solid #000;
   width: 25%;
   padding: 5px 5px 5px 10px;
 }
