@@ -17,7 +17,6 @@ export default function Videos() {
 
   useEffect(() => {
     setIsClient(true);
-
     if (typeof window !== "undefined") {
       const hash = window.location.hash;
       if (hash) {
@@ -26,7 +25,6 @@ export default function Videos() {
       }
     }
   }, []);
-
 
   useEffect(() => {
     if (!isClient || typeof window === "undefined") return;
@@ -61,10 +59,7 @@ export default function Videos() {
       { threshold: 0.5 }
     );
 
-    document
-      .querySelectorAll(".js-video-card")
-      .forEach((el) => observer.observe(el));
-
+    document.querySelectorAll(".js-video-card").forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, [isClient, videos]);
 
@@ -82,10 +77,7 @@ export default function Videos() {
         "thumbnailUrl": `https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`,
         "uploadDate": "2010-01-01",
         "embedUrl": `https://www.youtube.com/embed/${v.id}`,
-        "publisher": {
-          "@type": "Organization",
-          "name": "GGL Móveis de Aço"
-        }
+        "publisher": { "@type": "Organization", "name": "GGL Móveis de Aço" }
       }
     }))
   };
@@ -101,6 +93,80 @@ export default function Videos() {
     });
   };
 
+  const VideoCard = ({ v }) => {
+    const [playing, setPlaying] = useState(false);
+
+    const play = () => {
+      setPlaying(true);
+      handleVideoClick(v);
+      if (typeof window !== "undefined") {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: "video_play",
+          video_id: v.id,
+          video_name: v.name,
+          location: "videos_page",
+        });
+      }
+    };
+
+    const onKey = (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        play();
+      }
+    };
+
+    return (
+      <div
+        className="tw-flex tw-flex-col tw-items-center tw-transition-transform tw-duration-300 hover:tw-scale-105 js-video-card"
+        data-video-id={v.id}
+        data-video-name={v.name}
+      >
+        <div
+          className="tw-relative tw-overflow-hidden tw-aspect-video tw-w-full sm:tw-w-[400px]"
+        >
+          {!playing ? (
+            <button
+              type="button"
+              onClick={play}
+              onKeyDown={onKey}
+              className="tw-relative tw-w-full tw-h-full tw-block"
+              aria-label={`Reproduzir vídeo: ${v.name}`}
+            >
+              <img
+                src={`https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`}
+                alt={`Thumb do vídeo ${v.name}`}
+                loading="lazy"
+                decoding="async"
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              />
+              <span
+                className="tw-absolute tw-top-1/2 tw-left-1/2 tw-rounded-full tw-bg-white tw-w-16 tw-h-16 tw-flex tw-items-center tw-justify-center tw-transform -tw-translate-x-1/2 -tw-translate-y-1/2"
+                aria-hidden="true"
+              >
+                ▶
+              </span>
+            </button>
+          ) : (
+            <iframe
+              className="tw-aspect-video tw-top-0 tw-left-0 tw-w-full tw-h-full"
+              src={`https://www.youtube-nocookie.com/embed/${v.id}?autoplay=1&rel=0`}
+              title={v.name}
+              aria-label={`Vídeo de ${v.name}`}
+              frameBorder="0"
+              loading="lazy"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+              referrerPolicy="strict-origin-when-cross-origin"
+            />
+          )}
+        </div>
+        <h2 className="tw-mt-[10px] tw-text-center tw-text-[18px]">{v.name}</h2>
+      </div>
+    );
+  };
+
   return (
     <div>
       <Head>
@@ -112,6 +178,9 @@ export default function Videos() {
         <meta name="robots" content="index, follow" />
         <link rel="icon" href="/favicon.ico" />
         <link rel="canonical" href="https://www.gglmoveis.com.br/videos" />
+        <link rel="preconnect" href="https://www.youtube-nocookie.com" />
+        <link rel="preconnect" href="https://i.ytimg.com" />
+        <link rel="preconnect" href="https://www.google.com" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -126,30 +195,7 @@ export default function Videos() {
 
           <section className="tw-px-[20px] tw-pt-[30px] tw-flex tw-justify-center tw-items-center tw-flex-wrap tw-gap-[40px] tw-mb-[120px] tw-max-w-[1280px] tw-w-full tw-mx-auto">
             {videos.map((v) => (
-              <div
-                key={v.id}
-                className="tw-flex tw-flex-col tw-items-center tw-transition-transform tw-duration-300 hover:tw-scale-105 js-video-card"
-                data-video-id={v.id}
-                data-video-name={v.name}
-              >
-                <div
-                  className="tw-relative tw-overflow-hidden tw-aspect-video tw-w-full sm:tw-w-[400px]"
-                  onClick={() => handleVideoClick(v)}
-                >
-                  <iframe
-                    className="tw-aspect-video tw-top-0 tw-left-0 tw-w-full tw-h-full"
-                    src={`https://www.youtube.com/embed/${v.id}`}
-                    title={v.name}
-                    aria-label={`Vídeo de ${v.name}`}
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowFullScreen
-                  />
-                </div>
-                <h2 className="tw-mt-[10px] tw-text-center tw-text-[18px]">
-                  {v.name}
-                </h2>
-              </div>
+              <VideoCard key={v.id} v={v} />
             ))}
           </section>
 

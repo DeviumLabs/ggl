@@ -37,7 +37,7 @@ export default function Produtos({ categories }) {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    itemListElement: categories.categoryArray.map((cat, index) => ({
+    itemListElement: (categories?.categoryArray || []).map((cat, index) => ({
       "@type": "ListItem",
       position: index + 1,
       name: cat.name,
@@ -63,6 +63,7 @@ export default function Produtos({ categories }) {
   };
 
   const list = categories?.categoryArray || [];
+  const isSvg = (src) => typeof src === "string" && /\.svg(\?.*)?$/i.test(src);
 
   return (
     <div>
@@ -86,9 +87,7 @@ export default function Produtos({ categories }) {
       <main className="tw-mt-[120px]">
         <section className="tw-px-[20px] tw-flex-col md:tw-flex-row tw-flex tw-items-center">
           <div className="tw-w-full">
-            <h1 className="tw-text-[35px] tw-mb-[10px] tw-text-center">
-              PRODUTOS
-            </h1>
+            <h1 className="tw-text-[35px] tw-mb-[10px] tw-text-center">PRODUTOS</h1>
             <p className="tw-text-center">
               Produtos da mais excelente qualidade para sua empresa.
             </p>
@@ -96,31 +95,47 @@ export default function Produtos({ categories }) {
         </section>
 
         <section className="tw-px-[20px] tw-flex tw-justify-center tw-flex-wrap tw-gap-y-[80px] tw-gap-x-[40px] tw-mt-[80px] tw-mb-[100px]">
-          {list.map((category, idx) => (
-            <Link
-              key={category.slug}
-              href={`/produtos/${category.slug}?product=${category.products[0].slug}`}
-              passHref
-            >
-              <a
+          {list.map((category, idx) => {
+            const href = `/produtos/${category.slug}?product=${category.products[0].slug}`;
+            const img = category.image;
+
+            return (
+              <Link
+                key={category.slug}
+                href={href}
                 className="tw-max-w-[350px] tw-w-full tw-transition-transform tw-duration-300 hover:tw-scale-105"
                 onClick={() => onCategoryClick(category, idx)}
               >
-                <Image
-                  src={category.image}
-                  alt={`Imagem da categoria ${category.name} da GGL Móveis de Aço`}
-                  width={350}
-                  height={300}
-                  layout="responsive"
-                  className="tw-object-contain tw-transition-transform tw-duration-300"
-                />
+                <div className="tw-w-full tw-h-[300px] tw-flex tw-items-center tw-justify-center">
+                  {isSvg(img) ? (
+                    <img
+                      src={img}
+                      alt={`Imagem da categoria ${category.name} da GGL Móveis de Aço`}
+                      width={350}
+                      height={300}
+                      loading="lazy"
+                      decoding="async"
+                      style={{ width: "100%", height: "100%", objectFit: "contain" }}
+                    />
+                  ) : (
+                    <Image
+                      src={img}
+                      alt={`Imagem da categoria ${category.name} da GGL Móveis de Aço`}
+                      width={350}
+                      height={300}
+                      sizes="(max-width: 768px) 90vw, 350px"
+                      style={{ width: "100%", height: "100%", objectFit: "contain" }}
+                    />
+                  )}
+                </div>
+
                 <div className="tw-mt-[20px]">
                   <h1 className="tw-text-[22px]">{category.name}</h1>
                   <p>{category.description}</p>
                 </div>
-              </a>
-            </Link>
-          ))}
+              </Link>
+            );
+          })}
         </section>
 
         <Contact />

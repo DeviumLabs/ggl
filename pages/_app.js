@@ -1,5 +1,5 @@
 import "../styles/globals.css";
-import "../dist/output.css";
+import "react-alice-carousel/lib/alice-carousel.css";
 
 function MyApp({ Component, pageProps }) {
   return <Component {...pageProps} />;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import api from "../../services/api";
 import Head from "next/head";
 import Image from "next/image";
@@ -18,20 +18,29 @@ export async function getServerSideProps(context) {
 
   return {
     props: {
-      product: res.data,
-      categories: categories.data,
+      product: res.data || null,
+      categories: categories.data || null,
     },
   };
 }
 
 export default function SingleProduct({ product, categories }) {
-  const [principalImage, setPrincipalImage] = useState(product.images[0]);
-  const [titlePrincipal, setTitlePrincipal] = useState(product.models[0].name);
+  const cat = useMemo(() => categories?.categoryArray?.[0] ?? null, [categories]);
+  const images = useMemo(() => (Array.isArray(product?.images) && product.images.length ? product.images : ["/assets/placeholder.png"]), [product]);
+  const models = useMemo(() => (Array.isArray(product?.models) && product.models.length ? product.models : [{ name: product?.name || "Modelo", scale: { height: "-", width: "-", depth: "-" } }]), [product]);
+
+  const [principalImage, setPrincipalImage] = useState(images[0]);
+  const [titlePrincipal, setTitlePrincipal] = useState(models[0]?.name || product?.name || "");
   const [contactMessage, setContactMessage] = useState("");
   const [table, setTable] = useState(0);
 
   useEffect(() => {
-    const cat = categories?.categoryArray?.[0];
+    setPrincipalImage(images[0]);
+    setTitlePrincipal(models[0]?.name || product?.name || "");
+    setTable(0);
+  }, [images, models, product?.name]);
+
+  useEffect(() => {
     if (!product?.slug || !cat || typeof window === "undefined") return;
 
     window.dataLayer = window.dataLayer || [];
@@ -48,9 +57,9 @@ export default function SingleProduct({ product, categories }) {
       ],
       location: "product_page",
     });
-  }, [product, categories, titlePrincipal]);
+  }, [product?.slug, product?.name, cat, titlePrincipal]);
 
-  if (product?.error) {
+  if (!product || product?.error) {
     return (
       <div className="tw-h-[100vh] tw-flex tw-items-center tw-flex-col tw-justify-center tw-w-full">
         <h1>O Produto selecionado não existe ou possui informações incorretas!</h1>
@@ -60,9 +69,8 @@ export default function SingleProduct({ product, categories }) {
   }
 
   const createBudget = () => {
-    const cat = categories?.categoryArray?.[0];
     setContactMessage(
-      `Gostaria de ter mais informações sobre o produto ${categories.categoryArray[0].singleName} ${product.name}`
+      `Gostaria de ter mais informações sobre o produto ${categories?.categoryArray?.[0]?.singleName || ""} ${product.name}`
     );
 
     if (typeof window !== "undefined") {
@@ -70,7 +78,7 @@ export default function SingleProduct({ product, categories }) {
       window.dataLayer.push({
         event: "request_quote_click",
         item_id: product.slug,
-        item_name: `${cat.singleName} ${product.name}`,
+        item_name: `${cat?.singleName} ${product.name}`,
         item_category: cat?.name,
         item_category2: cat?.slug,
         item_variant: titlePrincipal,
@@ -84,17 +92,17 @@ export default function SingleProduct({ product, categories }) {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
-    "name": `${categories.categoryArray[0].singleName} ${product.name}`,
-    "image": product.images,
+    "name": `${categories?.categoryArray?.[0]?.singleName || ""} ${product.name}`,
+    "image": images,
     "description":
       product.description ||
-      categories?.categoryArray?.[0]?.description ||
+      cat?.description ||
       "Produto em aço de alta durabilidade e resistência.",
     "sku": product.slug,
     "brand": { "@type": "Brand", "name": "GGL Móveis de Aço" },
     "offers": {
       "@type": "Offer",
-      "url": `https://www.gglmoveis.com.br/produtos/${categories.categoryArray[0].slug}?product=${product.slug}`,
+      "url": `https://www.gglmoveis.com.br/produtos/${cat?.slug}?product=${product.slug}`,
       "availability": "https://schema.org/InStock",
       "itemCondition": "https://schema.org/NewCondition",
       "priceCurrency": "BRL",
@@ -106,20 +114,20 @@ export default function SingleProduct({ product, categories }) {
     <div>
       <Head>
         <title>
-          GGL Móveis de Aço | {categories.categoryArray[0].name} - {product.name}
+          GGL Móveis de Aço | {cat?.name} - {product.name}
         </title>
         <meta
           name="description"
           content={
             product.description ||
-            categories?.categoryArray?.[0]?.description ||
+            cat?.description ||
             "Conheça os móveis de aço da GGL: qualidade, durabilidade e acabamento superior."
           }
         />
         <meta name="robots" content="index, follow" />
         <link
           rel="canonical"
-          href={`https://www.gglmoveis.com.br/produtos/${categories.categoryArray[0].slug}?product=${product.slug}`}
+          href={`https://www.gglmoveis.com.br/produtos/${cat?.slug}?product=${product.slug}`}
         />
         <script
           type="application/ld+json"
@@ -137,25 +145,33 @@ export default function SingleProduct({ product, categories }) {
         >
           <div className="tw-w-full lg:tw-w-[50%]">
             <div id="principal-image">
-              <ZoomLens src={principalImage} />
+              <ZoomLens
+                key={principalImage}
+                src={principalImage}
+                width={600}
+                height={520}
+                zoom={2}
+                item_id={product.slug}
+                item_name={`${cat?.singleName} ${product.name}`}
+                item_category={cat?.name}
+                item_category2={cat?.slug}
+              />
 
-              <div className="tw-flex tw-mt-[20px] tw-w-full tw-overflow-x-auto tw-overflow-y-hidden md:tw-w-auto">
-                {product.images.length > 1 &&
-                  product.images.map((image, i) => (
+              {images.length > 1 && (
+                <div className="tw-flex tw-mt-[20px] tw-w-full tw-overflow-x-auto tw-overflow-y-hidden md:tw-w-auto">
+                  {images.map((image, i) => (
                     <Image
                       src={image}
-                      key={i}
+                      key={`${image}-${i}`}
                       alt={`${product.name} - ${i + 1}`}
                       width={80}
                       height={80}
+                      sizes="80px"
                       className="tw-object-contain tw-mr-[10px] hover:tw-scale-[1.1] tw-cursor-pointer"
                       onClick={() => {
-                        const cat = categories.categoryArray[0];
                         setPrincipalImage(image);
                         setTable(i);
-                        if (!!product.models[i]) {
-                          setTitlePrincipal(product.models[i].name);
-                        }
+                        if (models[i]) setTitlePrincipal(models[i].name);
 
                         if (typeof window !== "undefined") {
                           window.dataLayer = window.dataLayer || [];
@@ -165,10 +181,10 @@ export default function SingleProduct({ product, categories }) {
                             items: [
                               {
                                 item_id: product.slug,
-                                item_name: `${cat.singleName} ${product.name}`,
-                                item_category: cat.name,
-                                item_category2: cat.slug,
-                                item_variant: product.models[i]?.name || `variante_${i + 1}`,
+                                item_name: `${cat?.singleName} ${product.name}`,
+                                item_category: cat?.name,
+                                item_category2: cat?.slug,
+                                item_variant: models[i]?.name || `variante_${i + 1}`,
                                 index: i + 1,
                               },
                             ],
@@ -178,7 +194,8 @@ export default function SingleProduct({ product, categories }) {
                       }}
                     />
                   ))}
-              </div>
+                </div>
+              )}
             </div>
           </div>
 
@@ -195,13 +212,13 @@ export default function SingleProduct({ product, categories }) {
                   <td>Largura</td>
                   <td>Profundidade</td>
                 </tr>
-                {product.models.map((model, i) => (
+                {models.map((model, i) => (
                   <tr
-                    key={i}
+                    key={`${model.name}-${i}`}
                     className="tw-w-[800px] tw-min-w-[600px] tw-flex md:tw-w-full"
                     style={{
                       fontWeight:
-                        product.images.length === 1
+                        images.length === 1
                           ? 600
                           : i === table || product?.allBold
                             ? 600
@@ -209,16 +226,16 @@ export default function SingleProduct({ product, categories }) {
                     }}
                   >
                     <td>{model.name}</td>
-                    <td>{model.scale.height}</td>
-                    <td>{model.scale.width}</td>
-                    <td>{model.scale.depth}</td>
+                    <td>{model.scale?.height ?? "-"}</td>
+                    <td>{model.scale?.width ?? "-"}</td>
+                    <td>{model.scale?.depth ?? "-"}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
 
             <button
-              type="submit"
+              type="button"
               className="tw-bg-blue tw-mt-[30px] tw-text-white tw-w-[240px] tw-h-[50px] hover:tw-bg-white hover:tw-border-blue hover:tw-border-[1px] hover:tw-text-blue tw-transition-300"
               onClick={createBudget}
             >

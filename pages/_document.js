@@ -1,14 +1,9 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
 
 class MyDocument extends Document {
-  static async getInitialProps(ctx) {
-    const initialProps = await Document.getInitialProps(ctx);
-    return initialProps;
-  }
-
   render() {
     return (
-      <Html>
+      <Html lang="pt-BR">
         <Head>
           {/* Google Tag Manager */}
           <script
@@ -25,12 +20,17 @@ class MyDocument extends Document {
           {/* End Google Tag Manager */}
 
           <link rel="preconnect" href="https://fonts.googleapis.com" />
-          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+          <link
+            rel="preconnect"
+            href="https://fonts.gstatic.com"
+            crossOrigin="anonymous"
+          />
           <link
             href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700&family=Nanum+Gothic:wght@700&display=swap"
             rel="stylesheet"
           />
-          <link rel="icon" href="/logo.svg" />
+
+          <link rel="icon" href="/logo.svg" type="image/svg+xml" />
           <meta name="msapplication-TileColor" content="#da532c" />
           <meta name="theme-color" content="#ffffff" />
         </Head>
@@ -54,4 +54,4 @@ class MyDocument extends Document {
   }
 }
 
-export default MyDocument;
+export default MyDocument;

@@ -4,7 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import InputMask from "react-input-mask";
-import { Helmet } from "react-helmet";
+import Head from "next/head";
 
 export default function Contact({ budgetMessage }) {
   const {
@@ -131,33 +131,32 @@ export default function Contact({ budgetMessage }) {
       form_id: "contact_form",
     });
 
-    const body = `
-      <h3>Novo contato via site GGL Móveis</h3>
-      <p><strong>Nome:</strong> ${name}</p>
-      <p><strong>Email:</strong> ${email}</p>
-      <p><strong>Telefone:</strong> ${phone}</p>
-      <p><strong>Empresa/Órgão Público:</strong> ${company || "Não informado"}</p>
-      <p><strong>Estado:</strong> ${estado}</p>
-      <p><strong>Cidade:</strong> ${cidade}</p>
-      <p><strong>Mensagem:</strong> ${message}</p>
-      <hr/>
-      <p><em>(códigos do anúncio)</em></p>
-      <p>gclid: ${gclid || "-"}</p>
-      <p>gbraid: ${gbraid || "-"}</p>
-      <p>wbraid: ${wbraid || "-"}</p>
-    `;
-
     try {
       setIsSending(true);
       setLoading("Enviando...");
-      await axios.post("/api/mail", { body });
+
+      await axios.post("/api/mail", {
+        replyTo: email, 
+        form: {
+          name,
+          email,
+          phone,
+          company: company || "",
+          estado,
+          cidade,
+          message: message || "",
+          gclid: gclid || "",
+          gbraid: gbraid || "",
+          wbraid: wbraid || "",
+        },
+      });
+
       toast.success("Mensagem enviada!");
       reset();
 
       const { first_name, last_name } = splitName(name);
-
       const cleanedCompany = (company || "").toString().trim();
-      const cleanedCity = norm(cidade); 
+      const cleanedCity = norm(cidade);
       const cleanedRegion = (estado || "").toString().trim().toUpperCase();
       const cleanedEmail = norm(email);
       const cleanedPhone = withDDI55(onlyDigits(phone));
@@ -188,7 +187,6 @@ export default function Contact({ budgetMessage }) {
           country: "BR",
         },
       });
-
     } catch (e) {
       console.error(e);
       toast.error("Houve um erro, por favor tente novamente mais tarde!");
@@ -200,14 +198,14 @@ export default function Contact({ budgetMessage }) {
 
   return (
     <>
-      <Helmet>
+      <Head>
         <title>Entre em contato | GGL Móveis</title>
         <meta
           name="description"
           content="Fale com a GGL Móveis de Aço. Tire dúvidas e solicite orçamento."
         />
         <meta name="referrer" content="strict-origin-when-cross-origin" />
-      </Helmet>
+      </Head>
 
       <ToastContainer />
       <form
@@ -234,7 +232,7 @@ export default function Contact({ budgetMessage }) {
             autoComplete="name"
             className="tw-border-blue tw-border-[1px] tw-py-[12px] tw-px-[12px]"
           />
-          {errors.name && <span className="tw-text-red">*Campo obrigatório</span>}
+          {errors.name && <span className="tw-text-red-600">*Campo obrigatório</span>}
         </div>
 
         <div className="tw-flex tw-flex-col tw-w-full tw-max-w-[600px] tw-mb-[20px]">
@@ -259,7 +257,7 @@ export default function Contact({ budgetMessage }) {
               />
             )}
           </InputMask>
-          {errors.phone && <span className="tw-text-red">*Campo obrigatório</span>}
+          {errors.phone && <span className="tw-text-red-600">*Campo obrigatório</span>}
         </div>
 
         <div className="tw-flex tw-flex-col tw-w-full tw-max-w-[600px] tw-mb-[20px]">
@@ -271,7 +269,7 @@ export default function Contact({ budgetMessage }) {
             autoComplete="email"
             className="tw-border-blue tw-border-[1px] tw-py-[12px] tw-px-[12px]"
           />
-          {errors.email && <span className="tw-text-red">*Campo obrigatório</span>}
+          {errors.email && <span className="tw-text-red-600">*Campo obrigatório</span>}
         </div>
 
         <div className="tw-flex tw-flex-col tw-w-full tw-max-w-[600px] tw-mb-[20px]">
@@ -301,7 +299,7 @@ export default function Contact({ budgetMessage }) {
                 </option>
               ))}
             </select>
-            {errors.estado && <span className="tw-text-red">*Campo obrigatório</span>}
+            {errors.estado && <span className="tw-text-red-600">*Campo obrigatório</span>}
           </div>
 
           <div className="tw-flex tw-flex-col tw-w-1/2">
@@ -320,7 +318,7 @@ export default function Contact({ budgetMessage }) {
                 </option>
               ))}
             </select>
-            {errors.cidade && <span className="tw-text-red">*Campo obrigatório</span>}
+            {errors.cidade && <span className="tw-text-red-600">*Campo obrigatório</span>}
           </div>
         </div>
 
@@ -333,7 +331,7 @@ export default function Contact({ budgetMessage }) {
             autoComplete="off"
             className="tw-border-blue tw-border-[1px] tw-py-[12px] tw-px-[12px]"
           />
-          {errors.message && <span className="tw-text-red">*Campo obrigatório</span>}
+          {errors.message && <span className="tw-text-red-600">*Campo obrigatório</span>}
         </div>
 
         <input type="hidden" {...register("gclid")} />
@@ -344,8 +342,7 @@ export default function Contact({ budgetMessage }) {
           type="submit"
           disabled={isSending}
           aria-busy={isSending}
-          className={`tw-bg-blue tw-text-white tw-w-[240px] tw-h-[50px] hover:tw-bg-white hover:tw-border-blue hover:tw-border-[1px] hover:tw-text-blue tw-transition-300 ${isSending ? "tw-opacity-60 tw-cursor-not-allowed" : ""
-            }`}
+          className={`tw-bg-blue tw-text-white tw-w-[240px] tw-h-[50px] hover:tw-bg-white hover:tw-border-blue hover:tw-border-[1px] hover:tw-text-blue tw-transition tw-duration-300 ${isSending ? "tw-opacity-60 tw-cursor-not-allowed" : ""}`}
         >
           {loading}
         </button>

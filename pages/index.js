@@ -4,7 +4,6 @@ import Link from "next/link";
 import Header from "../components/header";
 import Footer from "../components/footer";
 import Contact from "../components/contact";
-import ReactPlayer from "react-player";
 import { AiOutlineCloudDownload } from "react-icons/ai";
 import api from "../services/api";
 import { useEffect, useRef, useState } from "react";
@@ -117,6 +116,8 @@ export default function Home({ categories }) {
     "sameAs": ["https://www.instagram.com/gglmoveisdeaco/"]
   };
 
+  const isSvg = (src) => typeof src === "string" && /\.svg(\?.*)?$/i.test(src);
+
   return (
     <div>
       <Head>
@@ -138,12 +139,13 @@ export default function Home({ categories }) {
             <Image
               src="/assets/banners/uepg-banner1.png"
               alt="Banner principal da GGL"
-              layout="fill"
-              objectFit="cover"
-              quality={90}
+              fill
               priority
+              quality={90}
+              sizes="100vw"
+              style={{ objectFit: "cover" }}
             />
-            <div className="tw-absolute tw-top-0 tw-left-0 tw-w-full tw-h-full tw-bg-[#0058C2] tw-opacity-[20%] z-[1]" />
+            <div className="tw-absolute tw-inset-0 tw-bg-[#0058C2] tw-opacity-[20%] z-[1]" />
             <div className="tw-relative tw-z-[2] tw-flex tw-items-center tw-justify-start tw-max-w-[1597px] tw-px-[5%] tw-mx-auto tw-w-full tw-py-[150px]">
               <div className="tw-flex tw-flex-col tw-text-white">
                 <h1 className="tw-text-[30px] md:tw-text-[40px] tw-mb-[20px]">GGL</h1>
@@ -161,6 +163,7 @@ export default function Home({ categories }) {
             </div>
           </section>
 
+          {/* TÍTULO */}
           <div className="tw-w-full tw-px-[20px]">
             <h2 className="tw-flex tw-justify-center tw-items-center tw-text-[24px] tw-text-darkBlue tw-my-[60px]">
               <hr className="tw-w-[30%] tw-bg-blue tw-rounded-[10px] tw-h-[3px] tw-mr-[30px]" />
@@ -169,37 +172,50 @@ export default function Home({ categories }) {
             </h2>
           </div>
 
-          <section className="tw-px-[20px] tw-flex tw-justify-center tw-items-center tw-flex-wrap tw-gap-y-[80px] tw-gap-x-[40px] tw-mb-[120px] tw-max-w-[1024px] tw-w-full tw-mx-auto">
-            {(categories?.categoryArray || []).map((category) => (
-              <Link
-                key={category.slug}
-                href={`/produtos/${category.slug}?product=${category.products[0].slug}`}
-                passHref
-              >
-                <a
+          {/* CATEGORIAS */}
+          <section className="tw-px-[20px] tw-flex tw-justify-center tw-items-start tw-flex-wrap tw-gap-y-[80px] tw-gap-x-[40px] tw-mb-[120px] tw-max-w-[1024px] tw-w-full tw-mx-auto">
+            {(categories?.categoryArray || []).map((category) => {
+              const img = category.image;
+              return (
+                <Link
+                  key={category.slug}
+                  href={`/produtos/${category.slug}?product=${category.products[0].slug}`}
                   className="tw-flex tw-flex-col tw-items-center tw-transition-transform tw-duration-300 hover:tw-scale-105"
                   onClick={() => onCategoryClick(category)}
                 >
-                  <div className="tw-w-[100px] md:tw-w-[160px]">
-                    <Image
-                      src={category.image}
-                      alt={`Categoria ${category.name} da GGL Móveis de Aço`}
-                      width={160}
-                      height={160}
-                      layout="intrinsic"
-                      className="tw-object-contain"
-                    />
+                  <div className="tw-w-[160px] tw-h-[160px] tw-flex tw-items-center tw-justify-center">
+                    {isSvg(img) ? (
+                      <img
+                        src={img}
+                        alt={`Categoria ${category.name} da GGL Móveis de Aço`}
+                        width={160}
+                        height={160}
+                        loading="lazy"
+                        decoding="async"
+                        style={{ width: "100%", height: "100%", objectFit: "contain" }}
+                      />
+                    ) : (
+                      <Image
+                        src={img}
+                        alt={`Categoria ${category.name} da GGL Móveis de Aço`}
+                        width={160}
+                        height={160}
+                        sizes="160px"
+                        style={{ width: "100%", height: "100%", objectFit: "contain" }}
+                      />
+                    )}
                   </div>
-                  <div className="tw-mt-[20px]">
+                  <div className="tw-mt-[20px] tw-text-center">
                     <h3 className="tw-text-[18px] tw-bg-darkBlue tw-text-white tw-py-[5px] tw-px-[10px]">
                       {category.name}
                     </h3>
                   </div>
-                </a>
-              </Link>
-            ))}
+                </Link>
+              );
+            })}
           </section>
 
+          {/* CATÁLOGO */}
           <section
             className="tw-px-[20px] tw-max-w-[1024px] tw-w-full tw-mx-auto tw-pt-[150px] pb-[100px] tw-mt-[-100px]"
             id="catalogo"
@@ -219,7 +235,7 @@ export default function Home({ categories }) {
                   alt="Download do catálogo da GGL"
                   width={300}
                   height={424}
-                  layout="intrinsic"
+                  sizes="300px"
                 />
               </a>
               <div>
@@ -240,6 +256,7 @@ export default function Home({ categories }) {
             </div>
           </section>
 
+          {/* SOBRE */}
           <section
             className="tw-px-[20px] tw-py-[200px] tw-max-w-[1024px] tw-w-full tw-mx-auto tw-mt-[-100px]"
             id="sobre"
@@ -260,6 +277,7 @@ export default function Home({ categories }) {
                   alt="Instalações da empresa GGL"
                   width={800}
                   height={600}
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                   className="tw-w-full tw-h-auto"
                 />
               </div>

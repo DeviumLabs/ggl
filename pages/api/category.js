@@ -4,33 +4,33 @@ export default function handler(req, res) {
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
   );
-  res.setHeader("Access-Control-Allow-Methods", "GET");
+  res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
+  res.setHeader("Access-Control-Max-Age", "86400");
 
-  const category_selected = req.query.category;
+  if (req.method === "OPTIONS") {
+    return res.status(204).end();
+  }
+  if (req.method !== "GET") {
+    res.setHeader("Allow", "GET, OPTIONS");
+    return res.status(405).json({ error: "Method Not Allowed" });
+  }
+
+  res.setHeader("Content-Type", "application/json; charset=utf-8");
+  res.setHeader("Cache-Control", "s-maxage=300, stale-while-revalidate=59");
+
+  const categorySelected = String(req.query.category ?? "all");
 
   let categoryArray = [];
-
-  categories.map((category) => {
-    if (category_selected == category.slug) {
-      categoryArray.push(category);
-    }
-  });
-
-  if (category_selected == "all") {
+  if (categorySelected === "all") {
     categoryArray = categories;
-  }
-  if (category_selected == "estante") {
-    categories.map((category) => {
-      if (
-        category.category == "estantes-convencionais" ||
-        category.category == "estantes-armazenagem"
-      ) {
-        categoryArray.push(category);
-      }
-    });
+  } else if (categorySelected === "estante") {
+    const group = new Set(["estantes-convencionais", "estantes-armazenagem"]);
+    categoryArray = categories.filter((c) => group.has(c.category));
+  } else {
+    categoryArray = categories.filter((c) => c.slug === categorySelected);
   }
 
-  res.status(200).json({ categoryArray });
+  return res.status(200).json({ categoryArray });
 }
 
 export const categories = [
@@ -42,53 +42,24 @@ export const categories = [
     description:
       "Nossos armários são produzidos com matéria prima de qualidade, conferindo maior durabilidade e resistência.",
     products: [
-      {
-        name: "GRSP 4/2 - 20",
-        slug: "grsp42-8",
-      },
-      {
-        name: "GRSP 2-8",
-        slug: "grsp2-8",
-      },
-      {
-        name: "GRI",
-        slug: "gri",
-      },
-      {
-        name: "Especiais",
-        slug: "especiais",
-      },
-    ],
+      { name: "GRSP 4/2 - 20", slug: "grsp42-8" },
+      { name: "GRSP 2-8", slug: "grsp2-8" },
+      { name: "GRI", slug: "gri" },
+      { name: "Especiais", slug: "especiais" }
+    ]
   },
   {
     name: "Armários",
     singleName: "Armário",
     slug: "armarios",
     image: "/assets/products/cabinets/a402_1.png",
-    description:
-      "Os armários desenvolvidos pela GGL, são os mais duradouros do ramo.",
+    description: "Os armários desenvolvidos pela GGL, são os mais duradouros do ramo.",
     products: [
-      {
-        name: "A402",
-        slug: "a402",
-      },
-      {
-        name: "Professor",
-        slug: "professor",
-      },
-      // {
-      //   name: "Carrinho Notebook",
-      //   slug: "notebook",
-      // },
-      {
-        name: "Armário de Ferramentas",
-        slug: "armario-de-ferramentas",
-      },
-      {
-        name: "Armário de Limpeza",
-        slug: "armario-de-limpeza",
-      },
-    ],
+      { name: "A402", slug: "a402" },
+      { name: "Professor", slug: "professor" },
+      { name: "Armário de Ferramentas", slug: "armario-de-ferramentas" },
+      { name: "Armário de Limpeza", slug: "armario-de-limpeza" }
+    ]
   },
   {
     name: "Arquivos",
@@ -98,35 +69,14 @@ export const categories = [
     description:
       "Em busca de estruturas para armazenar pastas ou fichas? Encontre nesta sessão os móveis necessários",
     products: [
-      {
-        name: "A-R4",
-        slug: "a-r4",
-      },
-      {
-        name: "GAM-5",
-        slug: "gam-5",
-      },
-      {
-        name: "GAM-6",
-        slug: "gam-6",
-      },
-      {
-        name: "GAM-7",
-        slug: "gam-7",
-      },
-      {
-        name: "GAM-8",
-        slug: "gam-8",
-      },
-      {
-        name: "GAM-10",
-        slug: "gam-10",
-      },
-      {
-        name: "Arquivos Mapoteca",
-        slug: "mapoteca",
-      },
-    ],
+      { name: "A-R4", slug: "a-r4" },
+      { name: "GAM-5", slug: "gam-5" },
+      { name: "GAM-6", slug: "gam-6" },
+      { name: "GAM-7", slug: "gam-7" },
+      { name: "GAM-8", slug: "gam-8" },
+      { name: "GAM-10", slug: "gam-10" },
+      { name: "Arquivos Mapoteca", slug: "mapoteca" }
+    ]
   },
   {
     name: "Estantes Convencionais",
@@ -134,14 +84,8 @@ export const categories = [
     slug: "estantes-convencionais",
     category: "estantes-convencionais",
     image: "/assets/products/shelves/estante.png",
-    description:
-      "Estantes com prateleiras livre para organização de objetos, arquivos, etc",
-    products: [
-      {
-        name: "Modelos PR",
-        slug: "pr",
-      },
-    ],
+    description: "Estantes com prateleiras livre para organização de objetos, arquivos, etc",
+    products: [{ name: "Modelos PR", slug: "pr" }]
   },
   {
     name: "Estantes Armazenagem",
@@ -150,12 +94,7 @@ export const categories = [
     category: "estantes-armazenagem",
     image: "/assets/products/shelves/encaixe.png",
     description: "Estantes com prateleiras para acondicionar material pesado",
-    products: [
-      {
-        name: "Modelos Armazenagem",
-        slug: "encaixe",
-      },
-    ],
+    products: [{ name: "Modelos Armazenagem", slug: "encaixe" }]
   },
   {
     name: "Biblioteca Encaixe",
@@ -163,18 +102,11 @@ export const categories = [
     slug: "biblioteca-encaixe",
     category: "biblioteca-encaixe",
     image: "/assets/products/shelves/ede1100.png",
-    description:
-      "Estantes com prateleiras livre para organização de livros, revistas e mídia.",
+    description: "Estantes com prateleiras livre para organização de livros, revistas e mídia.",
     products: [
-      {
-        name: "Linha EDE",
-        slug: "linha-ede",
-      },
-      {
-        name: "Linha Estantes Trapezoidal",
-        slug: "linha-estantes-trapezoidal",
-      },
-    ],
+      { name: "Linha EDE", slug: "linha-ede" },
+      { name: "Linha Estantes Trapezoidal", slug: "linha-estantes-trapezoidal" }
+    ]
   },
   {
     name: "Armários Especiais",
@@ -182,17 +114,12 @@ export const categories = [
     slug: "armarios-especiais",
     category: "armarios-especiais",
     image: "/assets/products/cabinets/especiais.png",
-    description: "Armários metálicos resistentes, ideais para armazenar com segurança objetos pessoais ou equipamentos em ambientes corporativos, escolares ou industriais.",
+    description:
+      "Armários metálicos resistentes, ideais para armazenar com segurança objetos pessoais ou equipamentos em ambientes corporativos, escolares ou industriais.",
     products: [
-      {
-        name: "Armário Guarda-Volumes",
-        slug: "armario-guarda-volumes",
-      },
-      {
-        name: "Armário Celular",
-        slug: "armario-para-celular",
-      },
-    ],
+      { name: "Armário Guarda-Volumes", slug: "armario-guarda-volumes" },
+      { name: "Armário Celular", slug: "armario-para-celular" }
+    ]
   },
   {
     name: "Biblioteca Encaixe Coluna",
@@ -200,14 +127,8 @@ export const categories = [
     slug: "encaixe-coluna",
     category: "encaixe-coluna",
     image: "/assets/products/shelves/ed10.png",
-    description:
-      "Estantes com prateleiras livre para organização de livros, revistas e mídia.",
-    products: [
-      {
-        name: "Linha PR",
-        slug: "linha-pr",
-      },
-    ],
+    description: "Estantes com prateleiras livre para organização de livros, revistas e mídia.",
+    products: [{ name: "Linha PR", slug: "linha-pr" }]
   },
   {
     name: "Porta Pallet",
@@ -217,12 +138,7 @@ export const categories = [
     image: "/assets/products/shelves/mini-porta-pallet.png",
     description:
       "Estrutura robusta para armazenagem eficiente, ideal para organizar cargas paletizadas em diversos ambientes.",
-    products: [
-      {
-        name: "Mini Porta Pallet",
-        slug: "mini-porta-pallet",
-      },
-    ],
+    products: [{ name: "Mini Porta Pallet", slug: "mini-porta-pallet" }]
   },
   {
     name: "Gondolas",
@@ -230,25 +146,14 @@ export const categories = [
     slug: "gondolas",
     image: "/assets/products/gondolas/centro.png",
     description: "Gondolas bem estruturadas e fortes para o seu varejo",
-    products: [
-      {
-        name: "Modelos",
-        slug: "modelos",
-      },
-    ],
+    products: [{ name: "Modelos", slug: "modelos" }]
   },
   {
     name: "Deslizantes",
     singleName: "Deslizante",
     slug: "deslizantes",
     image: "/assets/products/sliders/deslizante.png",
-    description:
-      "Armários deslizantes para facilitar a abertura e otimizar o espaço.",
-    products: [
-      {
-        name: "Deslizante Inicial",
-        slug: "deslizante-inicial",
-      },
-    ],
-  },
+    description: "Armários deslizantes para facilitar a abertura e otimizar o espaço.",
+    products: [{ name: "Deslizante Inicial", slug: "deslizante-inicial" }]
+  }
 ];

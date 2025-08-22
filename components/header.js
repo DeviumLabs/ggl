@@ -1,56 +1,44 @@
 import Link from "next/link";
 import { Squash as Hamburger } from "hamburger-react";
 import { useState } from "react";
-import Image from "next/image";
 
 export default function Header() {
   const [isOpen, setOpen] = useState(false);
 
   const dl = (evtName, params = {}) => {
-    if (typeof window !== "undefined" && Array.isArray(window.dataLayer)) {
+    if (typeof window !== "undefined") {
+      window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({ event: evtName, ...params });
     }
   };
 
   const sendNavEvent = (label, url) => {
-    dl("navigation_click", {
-      location: "header",
-      link_text: label,
-      link_url: url,
-    });
+    dl("navigation_click", { location: "header", link_text: label, link_url: url });
   };
 
-  const sendLogoEvent = () => {
-    dl("logo_click", { location: "header" });
-  };
-
-  const sendCallEvent = (number) => {
-    dl("click_to_call", {
-      location: "header",
-      phone_number: number,
-    });
-  };
+  const sendLogoEvent = () => dl("logo_click", { location: "header" });
+  const sendCallEvent = (number) => dl("click_to_call", { location: "header", phone_number: number });
 
   return (
     <header className="tw-flex tw-items-center tw-z-[400] tw-bg-white tw-w-[100%] tw-px-[20px] tw-fixed tw-top-0 tw-left-0 tw-justify-center tw-border-black tw-border-b-[1px] tw-h-[110px]">
       <div className="tw-flex tw-items-center tw-justify-between tw-max-w-[1280px] tw-w-full">
-        <Link href="/" passHref>
-          <a
-            className="tw-relative tw-w-[140px] md:tw-w-[220px] tw-h-[50px] md:tw-h-[70px]"
-            aria-label="Ir para a Home"
-            onClick={() => {
-              sendLogoEvent();
-              setOpen(false);
-            }}
-          >
-            <Image
-              src="/assets/icons/logo.svg"
-              alt="Logo da GGL Móveis de Aço"
-              layout="fill"
-              objectFit="contain"
-              priority
-            />
-          </a>
+        <Link
+          href="/"
+          aria-label="Ir para a Home"
+          className="tw-relative tw-w-[140px] md:tw-w-[220px] tw-h-[50px] md:tw-h-[70px]"
+          onClick={() => {
+            sendLogoEvent();
+            setOpen(false);
+          }}
+        >
+          <img
+            src="/assets/icons/logo.svg"
+            alt="Logo da GGL Móveis de Aço"
+            width={220}
+            height={70}
+            decoding="async"
+            style={{ width: "100%", height: "100%", objectFit: "contain" }}
+          />
         </Link>
 
         <nav
@@ -58,76 +46,70 @@ export default function Header() {
           style={{ transform: !isOpen ? "translateX(100%)" : "translateX(0)" }}
           aria-label="Menu de navegação principal"
         >
-          <Link href="/" passHref>
-            <a
-              className="hover:tw-text-blue tw-transition-[0.4s]"
-              onClick={() => {
-                sendNavEvent("Home", "/");
-                setOpen(false);
-              }}
-            >
-              Home
-            </a>
+          <Link
+            href="/"
+            className="hover:tw-text-blue tw-transition-[0.4s]"
+            onClick={() => {
+              sendNavEvent("Home", "/");
+              setOpen(false);
+            }}
+          >
+            Home
           </Link>
 
-          <Link href="/#sobre" passHref>
-            <a
-              className="hover:tw-text-blue tw-transition-[0.4s]"
-              onClick={() => {
-                sendNavEvent("Sobre", "/#sobre");
-                setOpen(false);
-              }}
-            >
-              Sobre
-            </a>
+          <Link
+            href="/#sobre"
+            className="hover:tw-text-blue tw-transition-[0.4s]"
+            onClick={() => {
+              sendNavEvent("Sobre", "/#sobre");
+              setOpen(false);
+            }}
+          >
+            Sobre
           </Link>
 
-          <Link href="/produtos" passHref>
-            <a
-              className="hover:tw-text-blue tw-transition-[0.4s]"
-              onClick={() => {
-                sendNavEvent("Produtos", "/produtos");
-                setOpen(false);
-              }}
-            >
-              Produtos
-            </a>
+          <Link
+            href="/produtos"
+            className="hover:tw-text-blue tw-transition-[0.4s]"
+            onClick={() => {
+              sendNavEvent("Produtos", "/produtos");
+              setOpen(false);
+            }}
+          >
+            Produtos
           </Link>
 
-          <Link href="/#catalogo" passHref>
-            <a
-              className="hover:tw-text-blue tw-transition-[0.4s]"
-              onClick={() => {
-                sendNavEvent("Catálogo", "/#catalogo");
-                setOpen(false);
-              }}
-            >
-              Catálogo
-            </a>
+          <Link
+            href="/#catalogo"
+            className="hover:tw-text-blue tw-transition-[0.4s]"
+            onClick={() => {
+              sendNavEvent("Catálogo", "/#catalogo");
+              setOpen(false);
+            }}
+          >
+            Catálogo
           </Link>
 
-          <Link href="/videos" passHref>
-            <a
-              className="hover:tw-text-blue tw-transition-[0.4s]"
-              onClick={() => {
-                sendNavEvent("Vídeos", "/videos");
-                setOpen(false);
-              }}
-            >
-              Vídeos
-            </a>
+          <Link
+            href="/videos"
+            className="hover:tw-text-blue tw-transition-[0.4s]"
+            onClick={() => {
+              sendNavEvent("Vídeos", "/videos");
+              setOpen(false);
+            }}
+          >
+            Vídeos
           </Link>
 
-          <Link href="#contato" passHref>
-            <a
-              className="hover:tw-text-blue tw-transition-[0.4s]"
-              onClick={() => {
-                sendNavEvent("Contato", "#contato");
-                setOpen(false);
-              }}
-            >
-              Contato
-            </a>
+          <Link
+            href="#contato"
+            className="hover:tw-text-blue tw-transition-[0.4s]"
+            onClick={() => {
+              sendNavEvent("Contato", "#contato");
+              setOpen(false);
+            }}
+          >
+            Contato
           </Link>
 
           <div className="tw-border-t md:tw-border-t-0 md:tw-border-l tw-border-white md:tw-border-black tw-pt-[20px] md:tw-pt-[0] md:tw-pl-[20px]">
@@ -154,5 +136,5 @@ export default function Header() {
         </div>
       </div>
     </header>
-  );
+  );
 }

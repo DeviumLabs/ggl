@@ -30,21 +30,33 @@ export default function Footer() {
     });
   }, [pushDL]);
 
-  const navItems = useMemo(() => ([
-    { label: "Home", url: "/" },
-    { label: "Sobre", url: "/#sobre" },
-    { label: "Produtos", url: "/produtos" },
-    { label: "Catálogo", url: "/#catalogo" },
-    { label: "Vídeos", url: "/videos" },
-    { label: "Contato", url: "#contato" },
-  ]), []);
+  const navItems = useMemo(
+    () => [
+      { label: "Home", url: "/" },
+      { label: "Sobre", url: "/#sobre" },
+      { label: "Produtos", url: "/produtos" },
+      { label: "Catálogo", url: "/#catalogo" },
+      { label: "Vídeos", url: "/videos" },
+      { label: "Contato", url: "#contato" },
+    ],
+    []
+  );
 
   return (
     <Fragment>
       <footer className="tw-bg-darkBlue tw-pt-[30px] tw-pb-[10px] tw-px-[20px] tw-w-full">
         <div className="tw-w-full tw-grid tw-grid-cols-1 md:tw-grid-cols-3 tw-gap-[40px] tw-max-w-[1400px] tw-mx-auto">
           <div className="tw-flex tw-justify-start">
-            <Image src="/assets/icons/white-logo.svg" alt="Logo GGL" width={250} height={80} />
+            <div className="tw-w-[260px] md:tw-w-[340px] lg:tw-w-[400px]">
+              <Image
+                src="/assets/icons/white-logo.svg"
+                alt="Logo GGL"
+                width={400}
+                height={128}
+                sizes="(max-width:768px) 260px, (max-width:1024px) 340px, 400px"
+                style={{ width: "100%", height: "auto" }}
+              />
+            </div>
           </div>
 
           <div>
@@ -75,8 +87,10 @@ export default function Footer() {
             <div className="tw-mb-[10px]">
               <h3 className="tw-text-white tw-font-medium">Endereço:</h3>
               <p className="tw-text-white tw-text-sm">
-                R. Dr. Eugênio José Bocchi, 645<br />
-                Boa Vista, Ponta Grossa - PR<br />
+                R. Dr. Eugênio José Bocchi, 645
+                <br />
+                Boa Vista, Ponta Grossa - PR
+                <br />
                 84070-430
               </p>
             </div>
@@ -108,9 +122,19 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 aria-label="Instagram GGL"
                 className="tw-bg-white tw-w-[40px] tw-h-[40px] tw-rounded-full tw-flex tw-items-center tw-justify-center tw-transition-transform tw-duration-300 hover:tw-scale-110"
-                onClick={() => sendSocialClickEvent("instagram", "https://www.instagram.com/gglmoveisdeaco/")}
+                onClick={() =>
+                  sendSocialClickEvent(
+                    "instagram",
+                    "https://www.instagram.com/gglmoveisdeaco/"
+                  )
+                }
               >
-                <Image src="/assets/icons/instagram.svg" alt="Instagram GGL" width={24} height={24} />
+                <Image
+                  src="/assets/icons/instagram.svg"
+                  alt="Instagram GGL"
+                  width={24}
+                  height={24}
+                />
               </a>
 
               <a
@@ -119,9 +143,16 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 aria-label="YouTube GGL"
                 className="tw-bg-white tw-w-[40px] tw-h-[40px] tw-rounded-full tw-flex tw-items-center tw-justify-center tw-transition-transform tw-duration-300 hover:tw-scale-110"
-                onClick={() => sendSocialClickEvent("youtube", "https://www.youtube.com/@GGLmoveis")}
+                onClick={() =>
+                  sendSocialClickEvent("youtube", "https://www.youtube.com/@GGLmoveis")
+                }
               >
-                <Image src="/assets/icons/youtube.svg" alt="YouTube GGL" width={24} height={24} />
+                <Image
+                  src="/assets/icons/youtube.svg"
+                  alt="YouTube GGL"
+                  width={24}
+                  height={24}
+                />
               </a>
 
               <a
@@ -130,9 +161,16 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 aria-label="Facebook GGL"
                 className="tw-bg-white tw-w-[40px] tw-h-[40px] tw-rounded-full tw-flex tw-items-center tw-justify-center tw-transition-transform tw-duration-300 hover:tw-scale-110"
-                onClick={() => sendSocialClickEvent("facebook", "https://www.facebook.com/gglmoveis/")}
+                onClick={() =>
+                  sendSocialClickEvent("facebook", "https://www.facebook.com/gglmoveis/")
+                }
               >
-                <Image src="/assets/icons/facebook.svg" alt="Facebook GGL" width={24} height={20} />
+                <Image
+                  src="/assets/icons/facebook.svg"
+                  alt="Facebook GGL"
+                  width={24}
+                  height={20}
+                />
               </a>
             </div>
           </div>
@@ -145,7 +183,8 @@ export default function Footer() {
             rel="noopener noreferrer"
             className="tw-text-white hover:tw-underline"
           >
-            &copy; {new Date().getFullYear()} GGL Móveis. Todos os direitos reservados | Desenvolvido por <strong>Devlara</strong>
+            &copy; {new Date().getFullYear()} GGL Móveis. Todos os direitos reservados | Desenvolvido
+            por <strong>Devlara</strong>
           </a>
         </div>
       </footer>
