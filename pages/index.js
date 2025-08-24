@@ -247,17 +247,17 @@ export default function Home({ categories }) {
                   href="/assets/catalogo.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="tw-flex tw-items-center hover:tw-underline"
+                  className="tw-flex tw-items-center tw-gap-2 hover:tw-underline"
                   onClick={() => onCatalogDownload("botao")}
                 >
-                  <AiOutlineCloudDownload />
-                  <span className="tw-ml-[10px]">Baixar catálogo</span>
+                  <AiOutlineCloudDownload size={26} className="tw-shrink-0" aria-hidden="true" />
+                  <span className="tw-text-[18px] md:tw-text-[20px]">Baixar catálogo</span>
                 </a>
+
               </div>
             </div>
           </section>
 
-          {/* SOBRE */}
           <section
             className="tw-px-[20px] tw-py-[200px] tw-max-w-[1024px] tw-w-full tw-mx-auto tw-mt-[-100px]"
             id="sobre"

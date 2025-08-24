@@ -143,8 +143,21 @@ export default function SingleProduct({ product, categories }) {
           id="product-wrapper"
           className="tw-flex tw-mb-[150px] tw-justify-between tw-flex-col lg:tw-flex-row tw-w-full md:tw-w-[85%] md:tw-ml-[15%] tw-px-[20px] tw-pt-[300px] md:tw-py-0 tw-gap-[20px]"
         >
-          <div className="tw-w-full lg:tw-w-[50%]">
-            <div id="principal-image">
+          <div id="principal-image" className="tw-flex tw-flex-col tw-items-center tw-gap-5">
+            {/* MOBILE: centralizado e pode cortar laterais */}
+            <div className="md:tw-hidden tw-relative tw-w-full tw-max-w-[520px] tw-aspect-[3/4] tw-overflow-hidden tw-mx-auto">
+              <Image
+                src={principalImage}
+                alt={`${product.name} - principal`}
+                fill
+                sizes="100vw"
+                className="tw-object-cover tw-object-center"  // cobre o container e centraliza
+                priority={false}
+              />
+            </div>
+
+            {/* DESKTOP: mantém o ZoomLens como está */}
+            <div className="tw-hidden md:tw-block">
               <ZoomLens
                 key={principalImage}
                 src={principalImage}
@@ -156,47 +169,56 @@ export default function SingleProduct({ product, categories }) {
                 item_category={cat?.name}
                 item_category2={cat?.slug}
               />
-
-              {images.length > 1 && (
-                <div className="tw-flex tw-mt-[20px] tw-w-full tw-overflow-x-auto tw-overflow-y-hidden md:tw-w-auto">
-                  {images.map((image, i) => (
-                    <Image
-                      src={image}
-                      key={`${image}-${i}`}
-                      alt={`${product.name} - ${i + 1}`}
-                      width={80}
-                      height={80}
-                      sizes="80px"
-                      className="tw-object-contain tw-mr-[10px] hover:tw-scale-[1.1] tw-cursor-pointer"
-                      onClick={() => {
-                        setPrincipalImage(image);
-                        setTable(i);
-                        if (models[i]) setTitlePrincipal(models[i].name);
-
-                        if (typeof window !== "undefined") {
-                          window.dataLayer = window.dataLayer || [];
-                          window.dataLayer.push({
-                            event: "select_item",
-                            item_list_name: "product_thumbnails",
-                            items: [
-                              {
-                                item_id: product.slug,
-                                item_name: `${cat?.singleName} ${product.name}`,
-                                item_category: cat?.name,
-                                item_category2: cat?.slug,
-                                item_variant: models[i]?.name || `variante_${i + 1}`,
-                                index: i + 1,
-                              },
-                            ],
-                            location: "product_page",
-                          });
-                        }
-                      }}
-                    />
-                  ))}
-                </div>
-              )}
             </div>
+
+            {images.length > 1 && (
+              <div
+                className="
+        tw-flex tw-mt-[20px] tw-w-full tw-overflow-x-auto tw-overflow-y-hidden
+        tw-justify-center md:tw-justify-start tw-gap-[10px] tw-mx-auto tw-max-w-[520px] tw-px-[6px]
+      "
+              >
+                {images.length > 1 && (
+                  <div className="tw-flex tw-mt-[20px] tw-w-full tw-overflow-x-auto tw-overflow-y-hidden md:tw-w-auto">
+                    {images.map((image, i) => (
+                      <Image
+                        src={image}
+                        key={`${image}-${i}`}
+                        alt={`${product.name} - ${i + 1}`}
+                        width={80}
+                        height={80}
+                        sizes="80px"
+                        className="tw-object-contain tw-mr-[10px] hover:tw-scale-[1.1] tw-cursor-pointer"
+                        onClick={() => {
+                          setPrincipalImage(image);
+                          setTable(i);
+                          if (models[i]) setTitlePrincipal(models[i].name);
+
+                          if (typeof window !== "undefined") {
+                            window.dataLayer = window.dataLayer || [];
+                            window.dataLayer.push({
+                              event: "select_item",
+                              item_list_name: "product_thumbnails",
+                              items: [
+                                {
+                                  item_id: product.slug,
+                                  item_name: `${cat?.singleName} ${product.name}`,
+                                  item_category: cat?.name,
+                                  item_category2: cat?.slug,
+                                  item_variant: models[i]?.name || `variante_${i + 1}`,
+                                  index: i + 1,
+                                },
+                              ],
+                              location: "product_page",
+                            });
+                          }
+                        }}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           <div className="tw-w-full lg:tw-w-[50%] tw-mt-[50px] lg:tw-mt-0">
@@ -204,35 +226,34 @@ export default function SingleProduct({ product, categories }) {
             <p>{product.description}</p>
 
             <h2 className="tw-text-[32px] tw-mt-[50px]">Medidas</h2>
-            <table className="tw-font-light tw-w-[calc(100vw-15%)] sm:tw-w-full tw-inline-block">
-              <tbody className="tw-inline-block tw-w-[calc(100vw-15%)] md:tw-w-full tw-overflow-x-auto">
-                <tr className="tw-w-[800px] tw-min-w-[600px] tw-flex md:tw-w-full tw-font-bold">
-                  <td>Modelo</td>
-                  <td>Altura</td>
-                  <td>Largura</td>
-                  <td>Profundidade</td>
-                </tr>
-                {models.map((model, i) => (
-                  <tr
-                    key={`${model.name}-${i}`}
-                    className="tw-w-[800px] tw-min-w-[600px] tw-flex md:tw-w-full"
-                    style={{
-                      fontWeight:
-                        images.length === 1
-                          ? 600
-                          : i === table || product?.allBold
-                            ? 600
-                            : 300,
-                    }}
-                  >
-                    <td>{model.name}</td>
-                    <td>{model.scale?.height ?? "-"}</td>
-                    <td>{model.scale?.width ?? "-"}</td>
-                    <td>{model.scale?.depth ?? "-"}</td>
+
+            <div className="tw-w-full tw-overflow-x-auto">
+              <table className="tw-w-full tw-min-w-[600px] tw-font-light tw-border-collapse">
+                <thead>
+                  <tr className="tw-font-bold">
+                    <th className="tw-text-left tw-border tw-border-black tw-pt-[5px] tw-pb-[5px] tw-pr-[5px] tw-pl-[10px]">Modelo</th>
+                    <th className="tw-text-left tw-border tw-border-black tw-pt-[5px] tw-pb-[5px] tw-pr-[5px] tw-pl-[10px]">Altura</th>
+                    <th className="tw-text-left tw-border tw-border-black tw-pt-[5px] tw-pb-[5px] tw-pr-[5px] tw-pl-[10px]">Largura</th>
+                    <th className="tw-text-left tw-border tw-border-black tw-pt-[5px] tw-pb-[5px] tw-pr-[5px] tw-pl-[10px]">Profundidade</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {models.map((model, i) => (
+                    <tr
+                      key={`${model.name}-${i}`}
+                      className={images.length === 1 || i === table || product?.allBold
+                        ? "tw-font-semibold"
+                        : "tw-font-light"}
+                    >
+                      <td className="tw-border tw-border-black tw-pt-[5px] tw-pb-[5px] tw-pr-[5px] tw-pl-[10px]">{model.name}</td>
+                      <td className="tw-border tw-border-black tw-pt-[5px] tw-pb-[5px] tw-pr-[5px] tw-pl-[10px]">{model.scale?.height ?? "-"}</td>
+                      <td className="tw-border tw-border-black tw-pt-[5px] tw-pb-[5px] tw-pr-[5px] tw-pl-[10px]">{model.scale?.width ?? "-"}</td>
+                      <td className="tw-border tw-border-black tw-pt-[5px] tw-pb-[5px] tw-pr-[5px] tw-pl-[10px]">{model.scale?.depth ?? "-"}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
 
             <button
               type="button"

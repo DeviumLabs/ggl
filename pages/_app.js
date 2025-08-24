@@ -1,5 +1,4 @@
 import "../styles/globals.css";
-import "react-alice-carousel/lib/alice-carousel.css";
 import Script from "next/script";
 import { Plus_Jakarta_Sans, Merriweather, Nanum_Gothic } from "next/font/google";
 
