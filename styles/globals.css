@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root, html, body { max-width: 100%; overflow-x: hidden; }
+
+h1 { font-family: var(--font-merri), Georgia, "Times New Roman", Times, serif; }
