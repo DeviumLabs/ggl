@@ -86,20 +86,48 @@ export default function MyApp({ Component, pageProps }) {
 
       <Component {...pageProps} />
 
-      <CookieConsent
-        location="bottom"
-        buttonText="Aceitar"
-        declineButtonText="Recusar"
-        enableDeclineButton
-        cookieName="ggl-consent"
-        onAccept={handleAccept}
-        onDecline={handleDecline}
-        style={{ background: "#0F172A", color: "#ffffff" }}
-        buttonStyle={{ background: "#0058C2", color: "#fff", fontSize: "14px", borderRadius: "6px" }}
-        declineButtonStyle={{ background: "#475569", color: "#fff", fontSize: "14px", borderRadius: "6px" }}
-      >
-        Usamos cookies para melhorar sua experiência e medir desempenho. Você pode aceitar ou recusar.
-      </CookieConsent>
+<CookieConsent
+  location="none" // desativa os estilos padrão de bottom/top
+  buttonText="Aceitar"
+  declineButtonText="Recusar"
+  enableDeclineButton
+  cookieName="ggl-consent"
+  onAccept={handleAccept}
+  onDecline={handleDecline}
+  style={{
+    background: "#ffffff",
+    color: "#0F172A",
+    position: "fixed",
+    bottom: "20px",
+    left: "20px",
+    width: "300px",
+    borderRadius: "8px",
+    boxShadow: "0 4px 10px rgba(0,0,0,0.15)",
+    padding: "16px",
+    textAlign: "left",
+    zIndex: 9999,
+  }}
+  buttonStyle={{
+    background: "#0058C2",
+    color: "#fff",
+    fontSize: "14px",
+    borderRadius: "6px",
+    padding: "6px 12px",
+  }}
+  declineButtonStyle={{
+    background: "#e5e7eb",
+    color: "#111",
+    fontSize: "14px",
+    borderRadius: "6px",
+    padding: "6px 12px",
+    marginLeft: "8px",
+  }}
+>
+  <p style={{ marginBottom: "10px", fontSize: "14px" }}>
+    Usamos cookies para melhorar sua experiência e medir desempenho.
+  </p>
+</CookieConsent>
+
     </div>
   );
 }
