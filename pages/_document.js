@@ -1,3 +1,4 @@
+// document.js
 import Document, { Html, Head, Main, NextScript } from "next/document";
 
 class MyDocument extends Document {
@@ -14,6 +15,14 @@ class MyDocument extends Document {
         <body>
           <Main />
           <NextScript />
+          <noscript
+            dangerouslySetInnerHTML={{
+              __html: `
+                <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMZW62HG"
+                  height="0" width="0" style="display:none;visibility:hidden"></iframe>
+              `,
+            }}
+          />
         </body>
       </Html>
     );
