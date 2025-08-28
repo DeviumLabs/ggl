@@ -61,7 +61,7 @@ export default function MyApp({ Component, pageProps }) {
       ad_personalization: "granted",
       analytics_storage: "granted",
     });
-    loadGTM();F
+    loadGTM();
   };
 
   const handleDecline = () => {
