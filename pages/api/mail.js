@@ -4,7 +4,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 const WINDOW_MS = 10 * 60 * 1000;
 const LIMIT = 8;
-globalThis._MAIL_RL_ = globalThis._MAIL_RL_ || new Map();
+globalThis.MAIL_RL = globalThis.MAIL_RL || new Map();
 
 const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || "https://www.gglmoveis.com.br,https://gglmoveis.com.br")
   .split(",").map(s => s.trim());
@@ -12,10 +12,10 @@ const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || "https://www.gglmoveis.c
 const isEmail = (s = "") => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
 const esc = (s = "") =>
   s.replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[c]));
-
 const parseList = (v = "") => v.split(",").map(s => s.trim()).filter(Boolean);
 
 const DEFAULT_TO = ["ggl@gglmoveis.com.br", "felipeschandle@gmail.com", "pedro.neto72pn@gmail.com"];
+const TIPO_LABEL = (t) => t === "empresa" ? "Empresa" : t === "orgao_publico" ? "Órgão Público" : "Pessoa Física";
 
 export default async function handler(req, res) {
   const origin = req.headers.origin || "";
@@ -32,19 +32,29 @@ export default async function handler(req, res) {
 
   const ip = (req.headers["x-forwarded-for"]?.toString().split(",")[0] ?? req.socket?.remoteAddress ?? "unknown").trim();
   const now = Date.now();
-  const bucket = globalThis._MAIL_RL_.get(ip) || [];
+  const bucket = globalThis.MAIL_RL.get(ip) || [];
   const recent = bucket.filter(t => now - t < WINDOW_MS);
   if (recent.length >= LIMIT) return res.status(429).json({ error: "Muitas requisições. Tente novamente mais tarde." });
   recent.push(now);
-  globalThis._MAIL_RL_.set(ip, recent);
+  globalThis.MAIL_RL.set(ip, recent);
 
   const body = req.body || {};
   const legacy = (body.form && typeof body.form === "object") ? body.form : body;
   const replyToInBody = body.replyTo ?? legacy.replyTo;
 
   const {
-    name = "", email = "", phone = "", company = "", estado = "", cidade = "", message = "",
-    gclid = "", gbraid = "", wbraid = ""
+    name = "",
+    email = "",
+    phone = "",
+    tipo_pessoa = "pf",
+    razao_social = "",
+    company = "",
+    estado = "",
+    cidade = "",
+    message = "",
+    gclid = "",
+    gbraid = "",
+    wbraid = "",
   } = legacy;
 
   if (!name || !email || !phone || !message) {
@@ -54,12 +64,18 @@ export default async function handler(req, res) {
 
   const replyToHeader = isEmail(replyToInBody || email) ? (replyToInBody || email) : undefined;
 
+  const companyFinal =
+    (tipo_pessoa === "empresa" || tipo_pessoa === "orgao_publico")
+      ? (razao_social || company || "")
+      : "";
+
   const html = `
     <h3>Novo contato via site GGL Móveis</h3>
+    <p><strong>Tipo:</strong> ${esc(TIPO_LABEL(tipo_pessoa))}</p>
+    ${companyFinal ? <p><strong>Razão social:</strong> ${esc(companyFinal)}</p> : ""}
     <p><strong>Nome:</strong> ${esc(name)}</p>
     <p><strong>Email:</strong> ${esc(email)}</p>
     <p><strong>Telefone:</strong> ${esc(phone)}</p>
-    <p><strong>Empresa:</strong> ${esc(company || "-")}</p>
     <p><strong>Estado:</strong> ${esc(estado)}</p>
     <p><strong>Cidade:</strong> ${esc(cidade)}</p>
     <p><strong>Mensagem:</strong><br/>${esc(message).replace(/\n/g, "<br/>")}</p>
