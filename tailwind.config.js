@@ -11,12 +11,6 @@ module.exports = {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
 
-  safelist: [
-    {
-      pattern: /(before|after):tw-content-.+/,
-    },
-  ],
-
   theme: {
     extend: {
       colors: {
