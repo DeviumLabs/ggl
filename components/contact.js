@@ -14,9 +14,14 @@ export default function Contact({ budgetMessage }) {
     reset,
     setValue,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      tipo_pessoa: "pf",
+    },
+  });
 
   const phoneWatcher = watch("phone");
+  const tipoPessoa = watch("tipo_pessoa");
   const [loading, setLoading] = useState("ENVIAR");
   const [isSending, setIsSending] = useState(false);
   const [estados, setEstados] = useState([]);
@@ -113,7 +118,8 @@ export default function Contact({ budgetMessage }) {
     message,
     estado,
     cidade,
-    company,
+    tipo_pessoa,
+    razao_social,
     website,
     gclid,
     gbraid,
@@ -131,6 +137,25 @@ export default function Contact({ budgetMessage }) {
       form_id: "contact_form",
     });
 
+    const company = (tipo_pessoa === "empresa" || tipo_pessoa === "orgao_publico") ? (razao_social || "") : "";
+
+    const body = `
+      <h3>Novo contato via site GGL Móveis</h3>
+      <p><strong>Tipo:</strong> ${tipo_pessoa === "pf" ? "Pessoa Física" : tipo_pessoa === "empresa" ? "Empresa" : "Órgão Público"}</p>
+      ${company ? `<p><strong>Razão social:</strong> ${company}</p>` : ""}
+      <p><strong>Nome:</strong> ${name}</p>
+      <p><strong>Email:</strong> ${email}</p>
+      <p><strong>Telefone:</strong> ${phone}</p>
+      <p><strong>Estado:</strong> ${estado}</p>
+      <p><strong>Cidade:</strong> ${cidade}</p>
+      <p><strong>Mensagem:</strong> ${message || ""}</p>
+      <hr/>
+      <p><em>(códigos do anúncio)</em></p>
+      <p>gclid: ${gclid || "-"}</p>
+      <p>gbraid: ${gbraid || "-"}</p>
+      <p>wbraid: ${wbraid || "-"}</p>
+    `;
+
     try {
       setIsSending(true);
       setLoading("Enviando...");
@@ -140,18 +165,18 @@ export default function Contact({ budgetMessage }) {
         name,
         email,
         phone,
-        company: company || "",
+        tipo_pessoa,
+        razao_social: company,
         estado,
         cidade,
         message: message || "",
         gclid: gclid || "",
         gbraid: gbraid || "",
-        wbraid: wbraid || ""
+        wbraid: wbraid || "",
       });
 
-
       toast.success("Mensagem enviada!");
-      reset();
+      reset({ tipo_pessoa: "pf" });
 
       const { first_name, last_name } = splitName(name);
       const cleanedCompany = (company || "").toString().trim();
@@ -167,6 +192,7 @@ export default function Contact({ budgetMessage }) {
         company: cleanedCompany,
         city: cleanedCity,
         state: cleanedRegion,
+        lead_type: tipo_pessoa,
       });
 
       window.dataLayer.push({
@@ -176,6 +202,7 @@ export default function Contact({ budgetMessage }) {
         company: cleanedCompany,
         city: cleanedCity,
         state: cleanedRegion,
+        lead_type: tipo_pessoa,
         user_data: {
           email: cleanedEmail,
           phone_number: cleanedPhone,
@@ -221,6 +248,53 @@ export default function Contact({ budgetMessage }) {
           <label htmlFor="website">Website</label>
           <input id="website" type="text" autoComplete="off" {...register("website")} />
         </div>
+
+        <fieldset className="tw-w-full tw-max-w-[600px] tw-mb-[20px]">
+          <legend className="tw-mb-[8px]">Você é:</legend>
+          <div className="tw-flex tw-gap-[20px]">
+            <label className="tw-flex tw-items-center tw-gap-[6px]">
+              <input
+                type="radio"
+                value="pf"
+                {...register("tipo_pessoa", { onChange: handleFieldChange })}
+              />
+              Pessoa Física
+            </label>
+            <label className="tw-flex tw-items-center tw-gap-[6px]">
+              <input
+                type="radio"
+                value="empresa"
+                {...register("tipo_pessoa", { onChange: handleFieldChange })}
+              />
+              Empresa
+            </label>
+            <label className="tw-flex tw-items-center tw-gap-[6px]">
+              <input
+                type="radio"
+                value="orgao_publico"
+                {...register("tipo_pessoa", { onChange: handleFieldChange })}
+              />
+              Órgão Público
+            </label>
+          </div>
+        </fieldset>
+
+        {(tipoPessoa === "empresa" || tipoPessoa === "orgao_publico") && (
+          <div className="tw-flex tw-flex-col tw-w-full tw-max-w-[600px] tw-mb-[20px]">
+            <label htmlFor="razao_social">Razão social:</label>
+            <input
+              id="razao_social"
+              type="text"
+              {...register("razao_social", {
+                required: true,
+                onChange: handleFieldChange,
+              })}
+              autoComplete="organization"
+              className="tw-border-blue tw-border-[1px] tw-py-[12px] tw-px-[12px]"
+            />
+            {errors.razao_social && <span className="tw-text-red-600">*Campo obrigatório</span>}
+          </div>
+        )}
 
         <div className="tw-flex tw-flex-col tw-w-full tw-max-w-[600px] tw-mb-[20px]">
           <label htmlFor="name">Nome:</label>
@@ -269,17 +343,6 @@ export default function Contact({ budgetMessage }) {
             className="tw-border-blue tw-border-[1px] tw-py-[12px] tw-px-[12px]"
           />
           {errors.email && <span className="tw-text-red-600">*Campo obrigatório</span>}
-        </div>
-
-        <div className="tw-flex tw-flex-col tw-w-full tw-max-w-[600px] tw-mb-[20px]">
-          <label htmlFor="company">Empresa / Órgão público (opcional):</label>
-          <input
-            id="company"
-            type="text"
-            {...register("company", { onChange: handleFieldChange })}
-            autoComplete="organization"
-            className="tw-border-blue tw-border-[1px] tw-py-[12px] tw-px-[12px]"
-          />
         </div>
 
         <div className="tw-flex tw-gap-[20px] tw-w-full tw-max-w-[600px] tw-mb-[20px]">
