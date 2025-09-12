@@ -7,15 +7,16 @@ const LIMIT = 8;
 globalThis.MAIL_RL = globalThis.MAIL_RL || new Map();
 
 const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || "https://www.gglmoveis.com.br,https://gglmoveis.com.br")
-  .split(",").map(s => s.trim());
+  .split(",")
+  .map((s) => s.trim());
 
 const isEmail = (s = "") => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
 const esc = (s = "") =>
-  s.replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[c]));
-const parseList = (v = "") => v.split(",").map(s => s.trim()).filter(Boolean);
+  s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const parseList = (v = "") => v.split(",").map((s) => s.trim()).filter(Boolean);
 
 const DEFAULT_TO = ["ggl@gglmoveis.com.br", "felipeschandle@gmail.com", "pedro.neto72pn@gmail.com"];
-const TIPO_LABEL = (t) => t === "empresa" ? "Empresa" : t === "orgao_publico" ? "Órgão Público" : "Pessoa Física";
+const TIPO_LABEL = (t) => (t === "empresa" ? "Empresa" : t === "orgao_publico" ? "Órgão Público" : "Pessoa Física");
 
 export default async function handler(req, res) {
   const origin = req.headers.origin || "";
@@ -33,13 +34,13 @@ export default async function handler(req, res) {
   const ip = (req.headers["x-forwarded-for"]?.toString().split(",")[0] ?? req.socket?.remoteAddress ?? "unknown").trim();
   const now = Date.now();
   const bucket = globalThis.MAIL_RL.get(ip) || [];
-  const recent = bucket.filter(t => now - t < WINDOW_MS);
+  const recent = bucket.filter((t) => now - t < WINDOW_MS);
   if (recent.length >= LIMIT) return res.status(429).json({ error: "Muitas requisições. Tente novamente mais tarde." });
   recent.push(now);
   globalThis.MAIL_RL.set(ip, recent);
 
   const body = req.body || {};
-  const legacy = (body.form && typeof body.form === "object") ? body.form : body;
+  const legacy = body.form && typeof body.form === "object" ? body.form : body;
   const replyToInBody = body.replyTo ?? legacy.replyTo;
 
   const {
@@ -65,9 +66,7 @@ export default async function handler(req, res) {
   const replyToHeader = isEmail(replyToInBody || email) ? (replyToInBody || email) : undefined;
 
   const companyFinal =
-    (tipo_pessoa === "empresa" || tipo_pessoa === "orgao_publico")
-      ? (razao_social || company || "")
-      : "";
+    tipo_pessoa === "empresa" || tipo_pessoa === "orgao_publico" ? (razao_social || company || "") : "";
 
   const html = `
     <h3>Novo contato via site GGL Móveis</h3>

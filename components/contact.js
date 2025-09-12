@@ -16,12 +16,15 @@ export default function Contact({ budgetMessage }) {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      tipo_pessoa: "pf",
+      tipo_pessoa: "pf",  
+      razao_social: "",
     },
   });
 
   const phoneWatcher = watch("phone");
   const tipoPessoa = watch("tipo_pessoa");
+  const exigeRazao = tipoPessoa === "empresa" || tipoPessoa === "orgao_publico";
+
   const [loading, setLoading] = useState("ENVIAR");
   const [isSending, setIsSending] = useState(false);
   const [estados, setEstados] = useState([]);
@@ -126,7 +129,7 @@ export default function Contact({ budgetMessage }) {
     wbraid,
   }) => {
     if (website) {
-      reset();
+      reset({ tipo_pessoa: "pf", razao_social: "" });
       return;
     }
     if (isSending) return;
@@ -137,24 +140,7 @@ export default function Contact({ budgetMessage }) {
       form_id: "contact_form",
     });
 
-    const company = (tipo_pessoa === "empresa" || tipo_pessoa === "orgao_publico") ? (razao_social || "") : "";
-
-    const body = `
-      <h3>Novo contato via site GGL Móveis</h3>
-      <p><strong>Tipo:</strong> ${tipo_pessoa === "pf" ? "Pessoa Física" : tipo_pessoa === "empresa" ? "Empresa" : "Órgão Público"}</p>
-      ${company ? `<p><strong>Razão social:</strong> ${company}</p>` : ""}
-      <p><strong>Nome:</strong> ${name}</p>
-      <p><strong>Email:</strong> ${email}</p>
-      <p><strong>Telefone:</strong> ${phone}</p>
-      <p><strong>Estado:</strong> ${estado}</p>
-      <p><strong>Cidade:</strong> ${cidade}</p>
-      <p><strong>Mensagem:</strong> ${message || ""}</p>
-      <hr/>
-      <p><em>(códigos do anúncio)</em></p>
-      <p>gclid: ${gclid || "-"}</p>
-      <p>gbraid: ${gbraid || "-"}</p>
-      <p>wbraid: ${wbraid || "-"}</p>
-    `;
+    const company = exigeRazao ? (razao_social || "") : "";
 
     try {
       setIsSending(true);
@@ -166,7 +152,7 @@ export default function Contact({ budgetMessage }) {
         email,
         phone,
         tipo_pessoa,
-        razao_social: company,
+        razao_social: company, 
         estado,
         cidade,
         message: message || "",
@@ -176,7 +162,7 @@ export default function Contact({ budgetMessage }) {
       });
 
       toast.success("Mensagem enviada!");
-      reset({ tipo_pessoa: "pf" });
+      reset({ tipo_pessoa: "pf", razao_social: "" });
 
       const { first_name, last_name } = splitName(name);
       const cleanedCompany = (company || "").toString().trim();
@@ -279,7 +265,7 @@ export default function Contact({ budgetMessage }) {
           </div>
         </fieldset>
 
-        {(tipoPessoa === "empresa" || tipoPessoa === "orgao_publico") && (
+        {exigeRazao && (
           <div className="tw-flex tw-flex-col tw-w-full tw-max-w-[600px] tw-mb-[20px]">
             <label htmlFor="razao_social">Razão social:</label>
             <input
