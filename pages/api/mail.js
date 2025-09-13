@@ -7,11 +7,22 @@ const LIMIT = 8;
 globalThis.MAIL_RL = globalThis.MAIL_RL || new Map();
 
 const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || "https://www.gglmoveis.com.br,https://gglmoveis.com.br")
-  .split(",").map((s) => s.trim());
+  .split(",")
+  .map((s) => s.trim());
 
 const isEmail = (s = "") => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
+
+// sempre devolve string
+const asStr = (v) => {
+  if (v == null) return "";
+  if (typeof v === "string") return v;
+  try { return String(v); } catch { return ""; }
+};
+
+// escapa HTML
 const esc = (s = "") =>
-  String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  asStr(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
 const parseList = (v = "") => v.split(",").map((s) => s.trim()).filter(Boolean);
 
 const DEFAULT_TO = ["ggl@gglmoveis.com.br", "felipeschandle@gmail.com", "pedro.neto72pn@gmail.com"];
@@ -30,8 +41,11 @@ export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Método não permitido" });
   if (!process.env.RESEND_API_KEY) return res.status(500).json({ error: "RESEND_API_KEY ausente" });
 
-  // Rate limit simples
-  const ip = (req.headers["x-forwarded-for"]?.toString().split(",")[0] ?? req.socket?.remoteAddress ?? "unknown").trim();
+  // rate limit
+  const ip =
+    (req.headers["x-forwarded-for"]?.toString().split(",")[0] ??
+      req.socket?.remoteAddress ??
+      "unknown").trim();
   const now = Date.now();
   const bucket = globalThis.MAIL_RL.get(ip) || [];
   const recent = bucket.filter((t) => now - t < WINDOW_MS);
@@ -43,54 +57,48 @@ export default async function handler(req, res) {
   const legacy = body.form && typeof body.form === "object" ? body.form : body;
   const replyToInBody = body.replyTo ?? legacy.replyTo;
 
-  const asStr = (v) => (typeof v === "string" ? v : "");
-  const {
-    name = "", email = "", phone = "",
-    tipo_pessoa = "pf",
-    razao_social = "", company = "",
-    estado = "", cidade = "",
-    message = "",
-    gclid = "", gbraid = "", wbraid = "",
-  } = legacy;
+  // normaliza tudo
+  const name         = asStr(legacy.name);
+  const email        = asStr(legacy.email);
+  const phone        = asStr(legacy.phone);
+  const tipo_pessoa  = asStr(legacy.tipo_pessoa || "pf");
+  const razao_social = asStr(legacy.razao_social);
+  const company      = asStr(legacy.company);
+  const estado       = asStr(legacy.estado);
+  const cidade       = asStr(legacy.cidade);
+  const message      = asStr(legacy.message);
+  const gclid        = asStr(legacy.gclid);
+  const gbraid       = asStr(legacy.gbraid);
+  const wbraid       = asStr(legacy.wbraid);
 
-  const _name = asStr(name);
-  const _email = asStr(email);
-  const _phone = asStr(phone);
-  const _tipo = asStr(tipo_pessoa);
-  const _razao = asStr(razao_social);
-  const _company = asStr(company);
-  const _estado = asStr(estado);
-  const _cidade = asStr(cidade);
-  const _msg = asStr(message);
-  const _gclid = asStr(gclid);
-  const _gbraid = asStr(gbraid);
-  const _wbraid = asStr(wbraid);
-
-  if (!_name || !_email || !_phone || !_msg) {
+  if (!name || !email || !phone || !message) {
     return res.status(400).json({ error: "Campos obrigatórios ausentes." });
   }
-  if (!isEmail(_email)) return res.status(400).json({ error: "E-mail inválido." });
+  if (!isEmail(email)) return res.status(400).json({ error: "E-mail inválido." });
 
-  const replyToHeader = isEmail(asStr(replyToInBody) || _email) ? (asStr(replyToInBody) || _email) : undefined;
+  const replyToHeader = isEmail(asStr(replyToInBody) || email) ? (asStr(replyToInBody) || email) : undefined;
 
-  const companyFinal = (_tipo === "empresa" || _tipo === "orgao_publico") ? (_razao || _company) : "";
+  const companyFinal =
+    tipo_pessoa === "empresa" || tipo_pessoa === "orgao_publico" ? (razao_social || company) : "";
 
-  const html = `
-    <h3>Novo contato via site GGL Móveis</h3>
-    <p><strong>Tipo:</strong> ${esc(TIPO_LABEL(_tipo))}</p>
-    ${companyFinal ? <p><strong>Razão social:</strong> ${esc(companyFinal)}</p> : ""}
-    <p><strong>Nome:</strong> ${esc(_name)}</p>
-    <p><strong>Email:</strong> ${esc(_email)}</p>
-    <p><strong>Telefone:</strong> ${esc(_phone)}</p>
-    <p><strong>Estado:</strong> ${esc(_estado)}</p>
-    <p><strong>Cidade:</strong> ${esc(_cidade)}</p>
-    <p><strong>Mensagem:</strong><br/>${esc(_msg).replace(/\n/g, "<br/>")}</p>
-    <hr/>
-    <p><em>Códigos do anúncio</em></p>
-    <p>gclid: ${esc(_gclid || "-")}</p>
-    <p>gbraid: ${esc(_gbraid || "-")}</p>
-    <p>wbraid: ${esc(_wbraid || "-")}</p>
-  `.trim();
+  // monta o HTML por concatenação (sem arrays/JSX)
+  let html = "";
+  html += "<h3>Novo contato via site GGL Móveis</h3>";
+  html += "<p><strong>Tipo:</strong> " + esc(TIPO_LABEL(tipo_pessoa)) + "</p>";
+  if (companyFinal) {
+    html += "<p><strong>Razão social:</strong> " + esc(companyFinal) + "</p>";
+  }
+  html += "<p><strong>Nome:</strong> " + esc(name) + "</p>";
+  html += "<p><strong>Email:</strong> " + esc(email) + "</p>";
+  html += "<p><strong>Telefone:</strong> " + esc(phone) + "</p>";
+  html += "<p><strong>Estado:</strong> " + esc(estado) + "</p>";
+  html += "<p><strong>Cidade:</strong> " + esc(cidade) + "</p>";
+  html += "<p><strong>Mensagem:</strong><br/>" + esc(message).replace(/\n/g, "<br/>") + "</p>";
+  html += "<hr/>";
+  html += "<p><em>Códigos do anúncio</em></p>";
+  html += "<p>gclid: " + esc(gclid || "-") + "</p>";
+  html += "<p>gbraid: " + esc(gbraid || "-") + "</p>";
+  html += "<p>wbraid: " + esc(wbraid || "-") + "</p>";
 
   try {
     const parsedTo = parseList(process.env.MAIL_TO);
@@ -100,7 +108,8 @@ export default async function handler(req, res) {
       from: process.env.MAIL_FROM || "GGL Móveis <contato@dotwave.com.br>",
       to: toList,
       subject: "Novo contato via site - GGL Móveis",
-      html,
+      html,                // <= usa HTML string
+      // NÃO use "react" aqui
       reply_to: replyToHeader,
     });
 
@@ -111,4 +120,6 @@ export default async function handler(req, res) {
   }
 }
 
-export const config = { api: { bodyParser: { sizeLimit: "200kb" } } };
+export const config = {
+  api: { bodyParser: { sizeLimit: "200kb" } },
+};
