@@ -2,23 +2,14 @@ import "../styles/globals.css";
 import Script from "next/script";
 import CookieConsent from "react-cookie-consent";
 import { useRef, useEffect } from "react";
+import dynamic from "next/dynamic";
 import { Plus_Jakarta_Sans, Merriweather, Nanum_Gothic } from "next/font/google";
 
-const jakarta = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  weight: ["200", "300", "400", "500", "600", "700"],
-  variable: "--font-jakarta",
-});
-const merri = Merriweather({
-  subsets: ["latin"],
-  weight: ["300", "400", "700"],
-  variable: "--font-merri",
-});
-const nanum = Nanum_Gothic({
-  subsets: ["latin"],
-  weight: ["700"],
-  variable: "--font-nanum",
-});
+const Whatsapp = dynamic(() => import("../components/whatsapp"), { ssr: false });
+
+const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"], weight: ["200", "300", "400", "500", "600", "700"], variable: "--font-jakarta" });
+const merri = Merriweather({ subsets: ["latin"], weight: ["300", "400", "700"], variable: "--font-merri" });
+const nanum = Nanum_Gothic({ subsets: ["latin"], weight: ["700"], variable: "--font-nanum" });
 
 export default function MyApp({ Component, pageProps }) {
   const gtmLoadedRef = useRef(false);
@@ -78,12 +69,9 @@ export default function MyApp({ Component, pageProps }) {
     if (typeof document === "undefined") return;
     const cookie = document.cookie.split("; ").find((c) => c.startsWith("ggl-consent="));
     if (!cookie) return;
-    const value = decodeURIComponent(cookie.split("=")[1]); 
-    if (value === "true") {
-      handleAccept();
-    } else if (value === "false") {
-      handleDecline();
-    }
+    const value = decodeURIComponent(cookie.split("=")[1]);
+    if (value === "true") handleAccept();
+    else if (value === "false") handleDecline();
   }, []);
 
   return (
@@ -103,8 +91,12 @@ export default function MyApp({ Component, pageProps }) {
 
       <Component {...pageProps} />
 
+      <Whatsapp
+        message="Olá! Vim pelo site e gostaria de falar com a GGL Móveis."
+      />
+
       <CookieConsent
-        location="none" 
+        location="none"
         buttonText="Aceitar"
         declineButtonText="Recusar"
         enableDeclineButton
