@@ -1,16 +1,15 @@
-import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import Header from "../components/header";
-import Footer from "../components/footer";
-import Contact from "../components/contact";
-import { AiOutlineCloudDownload } from "react-icons/ai";
-import api from "../services/api";
 import { useEffect, useRef, useState } from "react";
+import SeoHead from "../components/layout/SeoHead";
+import ContactForm from "../components/contact/ContactForm";
+import { categories } from "../lib/catalog";
+import { dlPush } from "../lib/analytics/dataLayer";
+import { organizationJsonLd } from "../lib/seo/buildJsonLd";
+import { AiOutlineCloudDownload } from "react-icons/ai";
 
 export async function getStaticProps() {
-  const res = await api.get("/category?category=all");
-  return { props: { categories: res.data }, revalidate: 5 };
+  return { props: { categories }, revalidate: 300 };
 }
 
 export default function Home({ categories }) {
@@ -29,35 +28,29 @@ export default function Home({ categories }) {
   }, []);
 
   useEffect(() => {
-    if (!isClient || typeof window === "undefined") return;
-    window.dataLayer = window.dataLayer || [];
+    if (!isClient) return;
 
-    window.dataLayer.push({ event: "view_homepage", location: "home_page" });
+    dlPush("view_homepage", { location: "home_page" });
 
-    const list = categories?.categoryArray || [];
-    if (list.length) {
-      window.dataLayer.push({
-        event: "view_item_list",
+    if ((categories || []).length) {
+      dlPush("view_item_list", {
         location: "home_page",
         item_list_name: "Homepage categorias",
-        items: list.map((c, i) => ({
+        items: categories.map((c, i) => ({
           item_id: c.slug,
           item_name: c.name,
-          index: i + 1,
-        })),
+          index: i + 1
+        }))
       });
     }
   }, [isClient, categories]);
 
   useEffect(() => {
-    if (!isClient || typeof window === "undefined" || !catalogRef.current) return;
+    if (!isClient || !catalogRef.current) return;
     const obs = new IntersectionObserver(
       (entries) => {
         entries.forEach((en) => {
-          if (en.isIntersecting) {
-            window.dataLayer = window.dataLayer || [];
-            window.dataLayer.push({ event: "catalog_view", location: "home_page" });
-          }
+          if (en.isIntersecting) dlPush("catalog_view", { location: "home_page" });
         });
       },
       { threshold: 0.5 }
@@ -66,74 +59,29 @@ export default function Home({ categories }) {
     return () => obs.disconnect();
   }, [isClient]);
 
-  const onCtaClick = () => {
-    if (typeof window === "undefined") return;
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({
-      event: "cta_click",
-      position: "hero",
-      text: "Solicitar orçamento",
-      location: "home_page",
-    });
-  };
+  const onCtaClick = () => dlPush("cta_click", { position: "hero", text: "Solicitar orçamento", location: "home_page" });
 
-  const onCategoryClick = (category) => {
-    if (typeof window === "undefined") return;
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({
-      event: "select_item",
+  const onCategoryClick = (category) =>
+    dlPush("select_item", {
       item_list_name: "Homepage categorias",
       items: [{ item_id: category.slug, item_name: category.name }],
-      location: "home_page",
+      location: "home_page"
     });
-  };
 
-  const onCatalogDownload = (where) => {
-    if (typeof window === "undefined") return;
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({
-      event: "catalog_download",
-      location: where,
-      file: "/assets/catalogo.pdf",
-    });
-  };
-
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "GGL Móveis de Aço",
-    "url": "https://www.gglmoveis.com.br",
-    "logo": "https://www.gglmoveis.com.br/logo.svg",
-    "description":
-      "Fabricante de móveis de aço para ambientes corporativos, industriais e institucionais. Qualidade, durabilidade e acabamento superior.",
-    "contactPoint": {
-      "@type": "ContactPoint",
-      "telephone": "+55-42-3025-2200",
-      "contactType": "customer service",
-      "areaServed": "BR",
-      "availableLanguage": "Portuguese"
-    },
-    "sameAs": ["https://www.instagram.com/gglmoveisdeaco/"]
-  };
+  const onCatalogDownload = (where) => dlPush("catalog_download", { location: where, file: "/assets/catalogo.pdf" });
 
   const isSvg = (src) => typeof src === "string" && /\.svg(\?.*)?$/i.test(src);
 
   return (
     <div>
-      <Head>
-        <title>Móveis de Aço para Empresas | GGL Móveis de Aço</title>
-        <meta
-          name="description"
-          content="Soluções em móveis de aço para empresas, escolas, indústrias e órgãos públicos. Conheça a GGL e solicite um orçamento."
-        />
-        <meta name="robots" content="index, follow" />
-        <link rel="canonical" href="https://www.gglmoveis.com.br/" />
-        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
-      </Head>
+      <SeoHead
+        title="Móveis de Aço para Empresas | GGL Móveis de Aço"
+        description="Soluções em móveis de aço para empresas, escolas, indústrias e órgãos públicos. Conheça a GGL e solicite um orçamento."
+        canonical="https://www.gglmoveis.com.br/"
+        jsonLd={organizationJsonLd()}
+      />
 
-      <Header />
-
-      {isClient && (
+      {isClient ? (
         <main className="tw-mt-[110px] tw-mb-[130px] tw-max-w-[1920px] tw-mx-auto">
           <section className="tw-relative tw-w-full">
             <Image
@@ -141,16 +89,16 @@ export default function Home({ categories }) {
               alt="Banner principal da GGL"
               fill
               priority
-              fetchpriority="high"
+              fetchPriority="high"
               quality={90}
               sizes="100vw"
               style={{ objectFit: "cover" }}
             />
-            <div className="tw-absolute tw-inset-0 tw-bg-[#0058C2] tw-opacity-[20%] z-[1]" />
+            <div className="tw-absolute tw-inset-0 tw-bg-[#0058C2] tw-opacity-[20%] tw-z-[1]" />
             <div className="tw-relative tw-z-[2] tw-flex tw-items-center tw-justify-start tw-max-w-[1597px] tw-px-[5%] tw-mx-auto tw-w-full tw-py-[150px]">
               <div className="tw-flex tw-flex-col tw-text-white">
                 <h1 className="tw-text-[30px] md:tw-text-[40px] tw-mb-[20px]">GGL</h1>
-                <p className="tw-max-w-[300px] tw-w-full tw-mb-[30px]">
+                <p className="tw-max-w-[420px] tw-w-full tw-mb-[30px]">
                   Móveis de excelente qualidade, resistência e acabamento superior para seu espaço.
                 </p>
                 <a
@@ -164,23 +112,21 @@ export default function Home({ categories }) {
             </div>
           </section>
 
-          {/* TÍTULO */}
           <div className="tw-w-full tw-px-[20px]">
-            <h2 className="tw-flex tw-justify-center tw-items-center tw-text-[24px] tw-text-darkBlue tw-my-[60px]">
+            <h2 className="tw-flex tw-justify-center tw-items-center tw-text-[24px] tw-text-blue tw-my-[60px]">
               <hr className="tw-w-[30%] tw-bg-blue tw-rounded-[10px] tw-h-[3px] tw-mr-[30px]" />
               Conheça nossa linha de produtos
               <hr className="tw-w-[30%] tw-bg-blue tw-rounded-[10px] tw-h-[3px] tw-ml-[30px]" />
             </h2>
           </div>
 
-          {/* CATEGORIAS */}
           <section className="tw-px-[20px] tw-flex tw-justify-center tw-items-start tw-flex-wrap tw-gap-y-[80px] tw-gap-x-[40px] tw-mb-[120px] tw-max-w-[1024px] tw-w-full tw-mx-auto">
-            {(categories?.categoryArray || []).map((category) => {
+            {(categories || []).map((category) => {
               const img = category.image;
               return (
                 <Link
                   key={category.slug}
-                  href={`/produtos/${category.slug}?product=${category.products[0].slug}`}
+                  href={`/produtos/${category.slug}`}
                   className="tw-flex tw-flex-col tw-items-center tw-transition-transform tw-duration-300 hover:tw-scale-105"
                   onClick={() => onCategoryClick(category)}
                 >
@@ -207,42 +153,22 @@ export default function Home({ categories }) {
                     )}
                   </div>
                   <div className="tw-mt-[20px] tw-text-center">
-                    <h3 className="tw-text-[18px] tw-bg-darkBlue tw-text-white tw-py-[5px] tw-px-[10px]">
-                      {category.name}
-                    </h3>
+                    <h3 className="tw-text-[18px] tw-bg-blue tw-text-white tw-py-[5px] tw-px-[10px]">{category.name}</h3>
                   </div>
                 </Link>
               );
             })}
           </section>
 
-          {/* CATÁLOGO */}
-          <section
-            className="tw-px-[20px] tw-max-w-[1024px] tw-w-full tw-mx-auto tw-pt-[150px] pb-[100px] tw-mt-[-100px]"
-            id="catalogo"
-            ref={catalogRef}
-          >
+          <section className="tw-px-[20px] tw-max-w-[1024px] tw-w-full tw-mx-auto tw-pt-[150px] tw-pb-[100px] tw-mt-[-100px]" id="catalogo" ref={catalogRef}>
             <small className="tw-text-blue">CATÁLOGO</small>
             <h2 className="tw-text-[30px]">Nosso catálogo</h2>
             <div className="tw-flex tw-items-center tw-justify-around tw-mt-[40px] tw-flex-col md:tw-flex-row tw-gap-[20px]">
-              <a
-                href="/assets/catalogo.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => onCatalogDownload("imagem")}
-              >
-                <Image
-                  src="/assets/banners/catalogo.png"
-                  alt="Download do catálogo da GGL"
-                  width={300}
-                  height={424}
-                  sizes="300px"
-                />
+              <a href="/assets/catalogo.pdf" target="_blank" rel="noopener noreferrer" onClick={() => onCatalogDownload("imagem")}>
+                <Image src="/assets/banners/catalogo.png" alt="Download do catálogo da GGL" width={300} height={424} sizes="300px" />
               </a>
               <div>
-                <p className="tw-max-w-[360px] tw-w-full tw-mb-[30px]">
-                  Baixe nosso catálogo para acessar especificações técnicas dos produtos da GGL.
-                </p>
+                <p className="tw-max-w-[360px] tw-w-full tw-mb-[30px]">Baixe nosso catálogo para acessar especificações técnicas dos produtos da GGL.</p>
                 <a
                   href="/assets/catalogo.pdf"
                   target="_blank"
@@ -253,22 +179,17 @@ export default function Home({ categories }) {
                   <AiOutlineCloudDownload size={26} className="tw-shrink-0" aria-hidden="true" />
                   <span className="tw-text-[18px] md:tw-text-[20px]">Baixar catálogo</span>
                 </a>
-
               </div>
             </div>
           </section>
 
-          <section
-            className="tw-px-[20px] tw-py-[200px] tw-max-w-[1024px] tw-w-full tw-mx-auto tw-mt-[-100px]"
-            id="sobre"
-          >
+          <section className="tw-px-[20px] tw-py-[200px] tw-max-w-[1024px] tw-w-full tw-mx-auto tw-mt-[-100px]" id="sobre">
             <small className="tw-text-blue">EMPRESA</small>
             <h2 className="tw-text-[30px]">Sobre nós</h2>
             <div className="tw-flex tw-items-center tw-justify-around tw-gap-[20px] tw-mt-[40px] tw-max-w-[1280px] tw-mx-auto tw-flex-col md:tw-flex-row">
               <div className="tw-w-full md:tw-w-[50%]">
                 <p className="tw-mb-[30px]">
-                  Desde 1999 fornecendo móveis de aço com qualidade e rapidez. Com sede própria de 10.300m²,
-                  produzimos nossas próprias matrizes e equipamentos para garantir precisão e acabamento superior.
+                  Desde 1999 fornecendo móveis de aço com qualidade e rapidez. Com sede própria de 10.300m², produzimos nossas próprias matrizes e equipamentos para garantir precisão e acabamento superior.
                   Atendemos diversos estados com parcerias e respeito aos clientes.
                 </p>
               </div>
@@ -285,11 +206,9 @@ export default function Home({ categories }) {
             </div>
           </section>
 
-          <Contact />
+          <ContactForm />
         </main>
-      )}
-
-      <Footer />
+      ) : null}
     </div>
   );
 }

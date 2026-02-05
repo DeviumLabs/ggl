@@ -1,11 +1,18 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  images: {
-    formats: ['image/avif', 'image/webp'],
-    deviceSizes: [360, 414, 640, 768, 1024, 1280, 1536],
-    imageSizes: [80, 200, 300, 400, 600, 800, 1200],
-  },
+  poweredByHeader: false,
+  compress: true,
+  async redirects() {
+    return [
+      {
+        source: "/produtos/:categoria",
+        has: [{ type: "query", key: "product", value: "(?<produto>.*)" }],
+        destination: "/produtos/:categoria/:produto",
+        permanent: true
+      }
+    ];
+  }
 };
 
 module.exports = nextConfig;

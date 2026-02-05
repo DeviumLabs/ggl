@@ -1,102 +1,70 @@
-import api from "../../services/api";
-import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
-import Header from "../../components/header";
-import Footer from "../../components/footer";
-import Contact from "../../components/contact";
 import { useEffect } from "react";
+import SeoHead from "../../components/layout/SeoHead";
+import ContactForm from "../../components/contact/ContactForm";
+import { categories } from "../../lib/catalog";
+import { dlPush } from "../../lib/analytics/dataLayer";
+import { itemListJsonLd } from "../../lib/seo/buildJsonLd";
 
 export async function getStaticProps() {
-  const res = await api.get("/category?category=all");
-  return {
-    props: { categories: res.data },
-    revalidate: 5,
-  };
+  return { props: { categories }, revalidate: 300 };
 }
 
 export default function Produtos({ categories }) {
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    const list = categories?.categoryArray || [];
+    const list = categories || [];
     if (!list.length) return;
 
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({
-      event: "view_item_list",
+    dlPush("view_item_list", {
       location: "products_list_page",
       item_list_name: "Produtos - categorias",
       items: list.map((cat, index) => ({
         item_id: cat.slug,
         item_name: cat.name,
-        index: index + 1,
-      })),
+        index: index + 1
+      }))
     });
   }, [categories]);
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    itemListElement: (categories?.categoryArray || []).map((cat, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
+  const jsonLd = itemListJsonLd({
+    name: "Produtos por categoria",
+    items: (categories || []).map((cat) => ({
       name: cat.name,
-      url: `https://www.gglmoveis.com.br/produtos/${cat.slug}?product=${cat.products[0].slug}`,
-    })),
-  };
+      url: `https://www.gglmoveis.com.br/produtos/${cat.slug}`
+    }))
+  });
 
-  const onCategoryClick = (cat, index) => {
-    if (typeof window === "undefined") return;
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({
+  const onCategoryClick = (cat, index) =>
+    dlPush("select_item", {
       event: "select_item",
       item_list_name: "Produtos - categorias",
-      items: [
-        {
-          item_id: cat.slug,
-          item_name: cat.name,
-          index: index + 1,
-        },
-      ],
-      location: "products_list_page",
+      items: [{ item_id: cat.slug, item_name: cat.name, index: index + 1 }],
+      location: "products_list_page"
     });
-  };
 
-  const list = categories?.categoryArray || [];
   const isSvg = (src) => typeof src === "string" && /\.svg(\?.*)?$/i.test(src);
 
   return (
     <div>
-      <Head>
-        <title>GGL Móveis de Aço | Todos os Produtos por Categoria</title>
-        <meta
-          name="description"
-          content="Confira a linha completa de móveis de aço GGL por categoria: armários, estantes, arquivos, gondolas, porta-pallets e muito mais. Qualidade e resistência para empresas."
-        />
-        <meta name="robots" content="index, follow" />
-        <link rel="icon" href="/logo.png" />
-        <link rel="canonical" href="https://www.gglmoveis.com.br/produtos" />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
-      </Head>
-
-      <Header />
+      <SeoHead
+        title="GGL Móveis de Aço | Todos os Produtos por Categoria"
+        description="Confira a linha completa de móveis de aço GGL por categoria: armários, estantes, arquivos, gôndolas, porta-pallets e muito mais."
+        canonical="https://www.gglmoveis.com.br/produtos"
+        jsonLd={jsonLd}
+      />
 
       <main className="tw-mt-[120px]">
         <section className="tw-px-[20px] tw-flex-col md:tw-flex-row tw-flex tw-items-center">
           <div className="tw-w-full">
             <h1 className="tw-text-[35px] tw-mb-[10px] tw-text-center">PRODUTOS</h1>
-            <p className="tw-text-center">
-              Produtos da mais excelente qualidade para sua empresa.
-            </p>
+            <p className="tw-text-center">Produtos da mais excelente qualidade para sua empresa.</p>
           </div>
         </section>
 
         <section className="tw-px-[20px] tw-flex tw-justify-center tw-flex-wrap tw-gap-y-[80px] tw-gap-x-[40px] tw-mt-[80px] tw-mb-[100px]">
-          {list.map((category, idx) => {
-            const href = `/produtos/${category.slug}?product=${category.products[0].slug}`;
+          {(categories || []).map((category, idx) => {
+            const href = `/produtos/${category.slug}`;
             const img = category.image;
 
             return (
@@ -130,7 +98,7 @@ export default function Produtos({ categories }) {
                 </div>
 
                 <div className="tw-mt-[20px]">
-                  <h1 className="tw-text-[22px]">{category.name}</h1>
+                  <h2 className="tw-text-[22px]">{category.name}</h2>
                   <p>{category.description}</p>
                 </div>
               </Link>
@@ -138,10 +106,8 @@ export default function Produtos({ categories }) {
           })}
         </section>
 
-        <Contact />
+        <ContactForm />
       </main>
-
-      <Footer />
     </div>
   );
 }

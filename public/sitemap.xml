@@ -1,109 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://www.gglmoveis.com.br/</loc><lastmod>2026-02-05</lastmod><changefreq>monthly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://www.gglmoveis.com.br/produtos</loc><lastmod>2026-02-05</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.gglmoveis.com.br/videos</loc><lastmod>2026-02-05</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
 
-  <url>
-    <loc>https://www.gglmoveis.com.br/</loc>
-    <lastmod>2025-08-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>1.0</priority>
-  </url>
+  <url><loc>https://www.gglmoveis.com.br/produtos/armarios-vestiarios</loc><lastmod>2026-02-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.gglmoveis.com.br/produtos/armarios</loc><lastmod>2026-02-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.gglmoveis.com.br/produtos/arquivos</loc><lastmod>2026-02-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.gglmoveis.com.br/produtos/estantes-convencionais</loc><lastmod>2026-02-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.gglmoveis.com.br/produtos/estantes-armazenagem</loc><lastmod>2026-02-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.gglmoveis.com.br/produtos/biblioteca-encaixe</loc><lastmod>2026-02-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.gglmoveis.com.br/produtos/armarios-especiais</loc><lastmod>2026-02-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.gglmoveis.com.br/produtos/encaixe-coluna</loc><lastmod>2026-02-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.gglmoveis.com.br/produtos/porta-pallet</loc><lastmod>2026-02-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.gglmoveis.com.br/produtos/gondolas</loc><lastmod>2026-02-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.gglmoveis.com.br/produtos/deslizantes</loc><lastmod>2026-02-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
 
-  <url>
-    <loc>https://www.gglmoveis.com.br/#sobre</loc>
-    <lastmod>2025-08-04</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
-  </url>
+  <url><loc>https://www.gglmoveis.com.br/produtos/armarios-vestiarios/grsp42-8</loc><lastmod>2026-02-05</lastmod><changefreq>yearly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.gglmoveis.com.br/produtos/armarios-vestiarios/grsp2-8</loc><lastmod>2026-02-05</lastmod><changefreq>yearly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.gglmoveis.com.br/produtos/armarios-vestiarios/gri</loc><lastmod>2026-02-05</lastmod><changefreq>yearly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.gglmoveis.com.br/produtos/armarios-vestiarios/especiais</loc><lastmod>2026-02-05</lastmod><changefreq>yearly</changefreq><priority>0.7</priority></url>
 
-  <url>
-    <loc>https://www.gglmoveis.com.br/#contato</loc>
-    <lastmod>2025-08-04</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
-  </url>
+  <url><loc>https://www.gglmoveis.com.br/produtos/armarios/a402</loc><lastmod>2026-02-05</lastmod><changefreq>yearly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.gglmoveis.com.br/produtos/armarios/professor</loc><lastmod>2026-02-05</lastmod><changefreq>yearly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.gglmoveis.com.br/produtos/armarios/armario-de-ferramentas</loc><lastmod>2026-02-05</lastmod><changefreq>yearly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.gglmoveis.com.br/produtos/armarios/armario-de-limpeza</loc><lastmod>2026-02-05</lastmod><changefreq>yearly</changefreq><priority>0.7</priority></url>
 
-  <url>
-    <loc>https://www.gglmoveis.com.br/produtos</loc>
-    <lastmod>2025-08-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
+  <url><loc>https://www.gglmoveis.com.br/produtos/arquivos/a-r4</loc><lastmod>2026-02-05</lastmod><changefreq>yearly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.gglmoveis.com.br/produtos/arquivos/gam-5</loc><lastmod>2026-02-05</lastmod><changefreq>yearly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.gglmoveis.com.br/produtos/arquivos/gam-6</loc><lastmod>2026-02-05</lastmod><changefreq>yearly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.gglmoveis.com.br/produtos/arquivos/gam-7</loc><lastmod>2026-02-05</lastmod><changefreq>yearly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.gglmoveis.com.br/produtos/arquivos/gam-8</loc><lastmod>2026-02-05</lastmod><changefreq>yearly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.gglmoveis.com.br/produtos/arquivos/gam-10</loc><lastmod>2026-02-05</lastmod><changefreq>yearly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.gglmoveis.com.br/produtos/arquivos/mapoteca</loc><lastmod>2026-02-05</lastmod><changefreq>yearly</changefreq><priority>0.7</priority></url>
 
-  <url>
-    <loc>https://www.gglmoveis.com.br/produtos/armarios-vestiarios?product=grsp42-8</loc>
-    <lastmod>2025-08-04</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.8</priority>
-  </url>
+  <url><loc>https://www.gglmoveis.com.br/produtos/estantes-convencionais/pr</loc><lastmod>2026-02-05</lastmod><changefreq>yearly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.gglmoveis.com.br/produtos/estantes-armazenagem/encaixe</loc><lastmod>2026-02-05</lastmod><changefreq>yearly</changefreq><priority>0.7</priority></url>
 
-  <url>
-    <loc>https://www.gglmoveis.com.br/produtos/armarios?product=a402</loc>
-    <lastmod>2025-08-04</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.8</priority>
-  </url>
+  <url><loc>https://www.gglmoveis.com.br/produtos/biblioteca-encaixe/linha-ede</loc><lastmod>2026-02-05</lastmod><changefreq>yearly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.gglmoveis.com.br/produtos/biblioteca-encaixe/linha-estantes-trapezoidal</loc><lastmod>2026-02-05</lastmod><changefreq>yearly</changefreq><priority>0.7</priority></url>
 
-  <url>
-    <loc>https://www.gglmoveis.com.br/produtos/arquivos?product=a-r4</loc>
-    <lastmod>2025-08-04</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.8</priority>
-  </url>
+  <url><loc>https://www.gglmoveis.com.br/produtos/armarios-especiais/armario-guarda-volumes</loc><lastmod>2026-02-05</lastmod><changefreq>yearly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.gglmoveis.com.br/produtos/armarios-especiais/armario-para-celular</loc><lastmod>2026-02-05</lastmod><changefreq>yearly</changefreq><priority>0.7</priority></url>
 
-  <url>
-    <loc>https://www.gglmoveis.com.br/produtos/estantes-convencionais?product=pr</loc>
-    <lastmod>2025-08-04</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <url>
-    <loc>https://www.gglmoveis.com.br/produtos/estantes-armazenagem?product=encaixe</loc>
-    <lastmod>2025-08-04</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <url>
-    <loc>https://www.gglmoveis.com.br/produtos/biblioteca-encaixe?product=linha-ede</loc>
-    <lastmod>2025-08-04</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <url>
-    <loc>https://www.gglmoveis.com.br/produtos/armarios-especiais?product=armario-guarda-volumes</loc>
-    <lastmod>2025-08-04</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://www.gglmoveis.com.br/produtos/encaixe-coluna?product=linha-pr</loc>
-    <lastmod>2025-08-04</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <url>
-    <loc>https://www.gglmoveis.com.br/produtos/porta-pallet?product=mini-porta-pallet</loc>
-    <lastmod>2025-08-04</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://www.gglmoveis.com.br/produtos/gondolas?product=modelos</loc>
-    <lastmod>2025-08-04</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <url>
-    <loc>https://www.gglmoveis.com.br/produtos/deslizantes?product=deslizante-inicial</loc>
-    <lastmod>2025-08-04</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
+  <url><loc>https://www.gglmoveis.com.br/produtos/encaixe-coluna/linha-pr</loc><lastmod>2026-02-05</lastmod><changefreq>yearly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.gglmoveis.com.br/produtos/porta-pallet/mini-porta-pallet</loc><lastmod>2026-02-05</lastmod><changefreq>yearly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.gglmoveis.com.br/produtos/gondolas/modelos</loc><lastmod>2026-02-05</lastmod><changefreq>yearly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.gglmoveis.com.br/produtos/deslizantes/deslizante-inicial</loc><lastmod>2026-02-05</lastmod><changefreq>yearly</changefreq><priority>0.7</priority></url>
 </urlset>

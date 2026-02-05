@@ -12,14 +12,16 @@ const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || "https://www.gglmoveis.c
 
 const isEmail = (s = "") => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
 
-// sempre devolve string
 const asStr = (v) => {
   if (v == null) return "";
   if (typeof v === "string") return v;
-  try { return String(v); } catch { return ""; }
+  try {
+    return String(v);
+  } catch {
+    return "";
+  }
 };
 
-// escapa HTML
 const esc = (s = "") =>
   asStr(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
@@ -41,11 +43,7 @@ export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Método não permitido" });
   if (!process.env.RESEND_API_KEY) return res.status(500).json({ error: "RESEND_API_KEY ausente" });
 
-  // rate limit
-  const ip =
-    (req.headers["x-forwarded-for"]?.toString().split(",")[0] ??
-      req.socket?.remoteAddress ??
-      "unknown").trim();
+  const ip = (req.headers["x-forwarded-for"]?.toString().split(",")[0] ?? req.socket?.remoteAddress ?? "unknown").trim();
   const now = Date.now();
   const bucket = globalThis.MAIL_RL.get(ip) || [];
   const recent = bucket.filter((t) => now - t < WINDOW_MS);
@@ -57,37 +55,30 @@ export default async function handler(req, res) {
   const legacy = body.form && typeof body.form === "object" ? body.form : body;
   const replyToInBody = body.replyTo ?? legacy.replyTo;
 
-  // normaliza tudo
-  const name         = asStr(legacy.name);
-  const email        = asStr(legacy.email);
-  const phone        = asStr(legacy.phone);
-  const tipo_pessoa  = asStr(legacy.tipo_pessoa || "pf");
+  const name = asStr(legacy.name);
+  const email = asStr(legacy.email);
+  const phone = asStr(legacy.phone);
+  const tipo_pessoa = asStr(legacy.tipo_pessoa || "pf");
   const razao_social = asStr(legacy.razao_social);
-  const company      = asStr(legacy.company);
-  const estado       = asStr(legacy.estado);
-  const cidade       = asStr(legacy.cidade);
-  const message      = asStr(legacy.message);
-  const gclid        = asStr(legacy.gclid);
-  const gbraid       = asStr(legacy.gbraid);
-  const wbraid       = asStr(legacy.wbraid);
+  const company = asStr(legacy.company);
+  const estado = asStr(legacy.estado);
+  const cidade = asStr(legacy.cidade);
+  const message = asStr(legacy.message);
+  const gclid = asStr(legacy.gclid);
+  const gbraid = asStr(legacy.gbraid);
+  const wbraid = asStr(legacy.wbraid);
 
-  if (!name || !email || !phone || !message) {
-    return res.status(400).json({ error: "Campos obrigatórios ausentes." });
-  }
+  if (!name || !email || !phone || !message) return res.status(400).json({ error: "Campos obrigatórios ausentes." });
   if (!isEmail(email)) return res.status(400).json({ error: "E-mail inválido." });
 
   const replyToHeader = isEmail(asStr(replyToInBody) || email) ? (asStr(replyToInBody) || email) : undefined;
 
-  const companyFinal =
-    tipo_pessoa === "empresa" || tipo_pessoa === "orgao_publico" ? (razao_social || company) : "";
+  const companyFinal = tipo_pessoa === "empresa" || tipo_pessoa === "orgao_publico" ? (razao_social || company) : "";
 
-  // monta o HTML por concatenação (sem arrays/JSX)
   let html = "";
   html += "<h3>Novo contato via site GGL Móveis</h3>";
   html += "<p><strong>Tipo:</strong> " + esc(TIPO_LABEL(tipo_pessoa)) + "</p>";
-  if (companyFinal) {
-    html += "<p><strong>Razão social:</strong> " + esc(companyFinal) + "</p>";
-  }
+  if (companyFinal) html += "<p><strong>Razão social:</strong> " + esc(companyFinal) + "</p>";
   html += "<p><strong>Nome:</strong> " + esc(name) + "</p>";
   html += "<p><strong>Email:</strong> " + esc(email) + "</p>";
   html += "<p><strong>Telefone:</strong> " + esc(phone) + "</p>";
@@ -108,18 +99,16 @@ export default async function handler(req, res) {
       from: process.env.MAIL_FROM || "GGL Móveis <contato@dotwave.com.br>",
       to: toList,
       subject: "Novo contato via site - GGL Móveis",
-      html,                // <= usa HTML string
-      // NÃO use "react" aqui
-      reply_to: replyToHeader,
+      html,
+      reply_to: replyToHeader
     });
 
     return res.status(200).json({ success: true, id: data?.id || null });
-  } catch (error) {
-    console.error("Erro ao enviar e-mail:", error);
+  } catch {
     return res.status(500).json({ error: "Erro ao enviar e-mail" });
   }
 }
 
 export const config = {
-  api: { bodyParser: { sizeLimit: "200kb" } },
+  api: { bodyParser: { sizeLimit: "200kb" } }
 };

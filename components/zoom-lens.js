@@ -1,17 +1,8 @@
 import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
+import { dlPush } from "../lib/analytics/dataLayer";
 
-export default function ZoomLens({
-  src,
-  width = 450,
-  height = 430,
-  zoom = 2,
-  item_id,
-  item_name,
-  item_category,
-  item_category2,
-  priority = false,
-}) {
+export default function ZoomLens({ src, width = 450, height = 430, zoom = 2, item_id, item_name, item_category, item_category2, priority = false }) {
   const containerRef = useRef(null);
   const lensRef = useRef(null);
   const firedRef = useRef(false);
@@ -38,21 +29,20 @@ export default function ZoomLens({
     if (typeof window === "undefined") return;
     if (firedRef.current) return;
 
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({
-      event: "image_zoom",
+    dlPush("image_zoom", {
       items: [
         {
           item_id: item_id || "unknown",
           item_name: item_name || "unknown",
           item_category: item_category || undefined,
-          item_category2: item_category2 || undefined,
-        },
+          item_category2: item_category2 || undefined
+        }
       ],
       image_src: src,
       zoom_level: zoom,
-      component: "zoom_lens",
+      component: "zoom_lens"
     });
+
     markFired();
   };
 
@@ -67,14 +57,12 @@ export default function ZoomLens({
     const x = (clientX ?? 0) - rect.left;
     const y = (clientY ?? 0) - rect.top;
 
-    let lensX = clamp(x - LENS_W / 2, 0, width - LENS_W);
-    let lensY = clamp(y - LENS_H / 2, 0, height - LENS_H);
+    const lensX = clamp(x - LENS_W / 2, 0, width - LENS_W);
+    const lensY = clamp(y - LENS_H / 2, 0, height - LENS_H);
     setLensPos({ x: lensX, y: lensY });
   };
 
-  const handleMouseMove = (e) => {
-    handlePointer(e.clientX, e.clientY);
-  };
+  const handleMouseMove = (e) => handlePointer(e.clientX, e.clientY);
   const handleTouchStart = (e) => {
     setShowLens(true);
     pushZoomEvent();
@@ -116,27 +104,14 @@ export default function ZoomLens({
         style={{ width: "100%", height: "100%" }}
       />
 
-      {showLens && (
+      {showLens ? (
         <div
           ref={lensRef}
           aria-hidden="true"
           className="tw-absolute tw-border tw-border-gray-400 tw-pointer-events-none tw-overflow-hidden tw-rounded"
-          style={{
-            width: `${LENS_W}px`,
-            height: `${LENS_H}px`,
-            left: `${lensPos.x}px`,
-            top: `${lensPos.y}px`,
-          }}
+          style={{ width: `${LENS_W}px`, height: `${LENS_H}px`, left: `${lensPos.x}px`, top: `${lensPos.y}px` }}
         >
-          <div
-            className="tw-absolute"
-            style={{
-              left: `${-lensPos.x * zoom}px`,
-              top: `${-lensPos.y * zoom}px`,
-              width: `${width * zoom}px`,
-              height: `${height * zoom}px`,
-            }}
-          >
+          <div className="tw-absolute" style={{ left: `${-lensPos.x * zoom}px`, top: `${-lensPos.y * zoom}px`, width: `${width * zoom}px`, height: `${height * zoom}px` }}>
             <Image
               src={src}
               alt=""
@@ -149,7 +124,7 @@ export default function ZoomLens({
             />
           </div>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

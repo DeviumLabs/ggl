@@ -1,23 +1,14 @@
 import Link from "next/link";
 import { Squash as Hamburger } from "hamburger-react";
 import { useState } from "react";
+import { dlPush } from "../lib/analytics/dataLayer";
 
 export default function Header() {
   const [isOpen, setOpen] = useState(false);
 
-  const dl = (evtName, params = {}) => {
-    if (typeof window !== "undefined") {
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({ event: evtName, ...params });
-    }
-  };
-
-  const sendNavEvent = (label, url) => {
-    dl("navigation_click", { location: "header", link_text: label, link_url: url });
-  };
-
-  const sendLogoEvent = () => dl("logo_click", { location: "header" });
-  const sendCallEvent = (number) => dl("click_to_call", { location: "header", phone_number: number });
+  const sendNavEvent = (label, url) => dlPush("navigation_click", { location: "header", link_text: label, link_url: url });
+  const sendLogoEvent = () => dlPush("logo_click", { location: "header" });
+  const sendCallEvent = (number) => dlPush("click_to_call", { location: "header", phone_number: number });
 
   return (
     <header className="tw-flex tw-items-center tw-z-[400] tw-bg-white tw-w-[100%] tw-px-[20px] tw-fixed tw-top-0 tw-left-0 tw-justify-center tw-border-black tw-border-b-[1px] tw-h-[110px]">
@@ -113,19 +104,11 @@ export default function Header() {
           </Link>
 
           <div className="tw-border-t md:tw-border-t-0 md:tw-border-l tw-border-white md:tw-border-black tw-pt-[20px] md:tw-pt-[0] md:tw-pl-[20px]">
-            <a
-              href="tel:+554230252200"
-              className="tw-font-[300] hover:tw-underline"
-              onClick={() => sendCallEvent("+554230252200")}
-            >
+            <a href="tel:+554230252200" className="tw-font-[300] hover:tw-underline" onClick={() => sendCallEvent("+554230252200")}>
               (42) 3025 2200
             </a>
             <br />
-            <a
-              href="tel:+554230255045"
-              className="tw-font-[300] hover:tw-underline"
-              onClick={() => sendCallEvent("+554230255045")}
-            >
+            <a href="tel:+554230255045" className="tw-font-[300] hover:tw-underline" onClick={() => sendCallEvent("+554230255045")}>
               (42) 3025 5045
             </a>
           </div>

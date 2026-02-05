@@ -1,30 +1,17 @@
-/** @type {import('tailwindcss').Config} */
 module.exports = {
+  content: ["./pages/**/*.{js,jsx}", "./components/**/*.{js,jsx}", "./lib/**/*.{js,jsx}"],
   prefix: "tw-",
-
-  content: [
-    "./pages/**/*.{js,ts,jsx,tsx}",
-    "./components/**/*.{js,ts,jsx,tsx}",
-    "./layouts/**/*.{js,ts,jsx,tsx}",
-    "./sections/**/*.{js,ts,jsx,tsx}",
-    "./app/**/*.{js,ts,jsx,tsx}",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
-
   theme: {
     extend: {
       colors: {
-        lightBackground: "#F2F2F2",
         blue: "#0058C2",
-        darkBlue: "#073998",
+        darkBlue: "#0F172A"
       },
       fontFamily: {
-        sans: ['var(--font-jakarta)', 'system-ui', 'sans-serif'],
-        serif: ['var(--font-merri)', 'serif'],
-        display: ['var(--font-nanum)', 'sans-serif'],
-      },
-    },
+        sans: ["var(--font-jakarta)", "system-ui", "-apple-system", "Segoe UI", "Roboto", "Arial", "sans-serif"],
+        serif: ["var(--font-merri)", "ui-serif", "Georgia", "serif"]
+      }
+    }
   },
-
-  plugins: [],
+  plugins: []
 };
