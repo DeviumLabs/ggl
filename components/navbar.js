@@ -99,4 +99,3 @@ export default function Navbar({ categories }) {
     </nav>
   );
 }
-\
