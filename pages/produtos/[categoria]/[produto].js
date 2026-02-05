@@ -15,7 +15,7 @@ export async function getServerSideProps(context) {
   try {
     const [resProduct, resCategories] = await Promise.all([
       api.get(`/products?category=${categoria}&product=${produto}`),
-      api.get(`/category?category=${categoria}`)
+      api.get(`/category?category=all`)
     ]);
 
     const productData = resProduct?.data || null;
@@ -27,7 +27,8 @@ export async function getServerSideProps(context) {
     return {
       props: {
         product: productData,
-        categories: categoriesData
+        categories: categoriesData,
+        categoria
       }
     };
   } catch (e) {
@@ -35,8 +36,12 @@ export async function getServerSideProps(context) {
   }
 }
 
-export default function SingleProduct({ product, categories }) {
-  const cat = useMemo(() => categories?.categoryArray?.[0] ?? null, [categories]);
+export default function SingleProduct({ product, categories, categoria }) {
+  const cat = useMemo(() => {
+    const list = categories?.categoryArray || [];
+    return list.find((c) => c?.slug === categoria) || list[0] || null;
+  }, [categories, categoria]);
+
   const images = useMemo(
     () =>
       Array.isArray(product?.images) && product.images.length
@@ -44,6 +49,7 @@ export default function SingleProduct({ product, categories }) {
         : ["/assets/placeholder.png"],
     [product]
   );
+
   const models = useMemo(
     () =>
       Array.isArray(product?.models) && product.models.length
@@ -72,7 +78,7 @@ export default function SingleProduct({ product, categories }) {
       items: [
         {
           item_id: product.slug,
-          item_name: `${cat.singleName} ${product.name}`,
+          item_name: `${cat.singleName || ""} ${product.name}`.trim(),
           item_category: cat.name,
           item_category2: cat.slug,
           item_variant: titlePrincipal
@@ -84,7 +90,7 @@ export default function SingleProduct({ product, categories }) {
 
   const createBudget = () => {
     setContactMessage(
-      `Gostaria de ter mais informações sobre o produto ${cat?.singleName || ""} ${product.name}`
+      `Gostaria de ter mais informações sobre o produto ${cat?.singleName || ""} ${product.name}`.trim()
     );
 
     if (typeof window !== "undefined") {
@@ -92,7 +98,7 @@ export default function SingleProduct({ product, categories }) {
       window.dataLayer.push({
         event: "request_quote_click",
         item_id: product.slug,
-        item_name: `${cat?.singleName} ${product.name}`,
+        item_name: `${cat?.singleName || ""} ${product.name}`.trim(),
         item_category: cat?.name,
         item_category2: cat?.slug,
         item_variant: titlePrincipal,
@@ -103,17 +109,22 @@ export default function SingleProduct({ product, categories }) {
     window.location.assign("#contato");
   };
 
+  const canonical = `https://www.gglmoveis.com.br/produtos/${cat?.slug || categoria}/${product.slug}`;
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
-    name: `${cat?.singleName || ""} ${product.name}`,
+    name: `${cat?.singleName || ""} ${product.name}`.trim(),
     image: images,
-    description: product.description || cat?.description || "Produto em aço de alta durabilidade e resistência.",
+    description:
+      product.description ||
+      cat?.description ||
+      "Produto em aço de alta durabilidade e resistência.",
     sku: product.slug,
     brand: { "@type": "Brand", name: "GGL Móveis de Aço" },
     offers: {
       "@type": "Offer",
-      url: `https://www.gglmoveis.com.br/produtos/${cat?.slug}/${product.slug}`,
+      url: canonical,
       availability: "https://schema.org/InStock",
       itemCondition: "https://schema.org/NewCondition",
       priceCurrency: "BRL",
@@ -136,7 +147,7 @@ export default function SingleProduct({ product, categories }) {
           }
         />
         <meta name="robots" content="index, follow" />
-        <link rel="canonical" href={`https://www.gglmoveis.com.br/produtos/${cat?.slug}/${product.slug}`} />
+        <link rel="canonical" href={canonical} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       </Head>
 
@@ -166,7 +177,7 @@ export default function SingleProduct({ product, categories }) {
                 height={520}
                 zoom={2}
                 item_id={product.slug}
-                item_name={`${cat?.singleName} ${product.name}`}
+                item_name={`${cat?.singleName || ""} ${product.name}`.trim()}
                 item_category={cat?.name}
                 item_category2={cat?.slug}
               />
@@ -197,7 +208,7 @@ export default function SingleProduct({ product, categories }) {
                             items: [
                               {
                                 item_id: product.slug,
-                                item_name: `${cat?.singleName} ${product.name}`,
+                                item_name: `${cat?.singleName || ""} ${product.name}`.trim(),
                                 item_category: cat?.name,
                                 item_category2: cat?.slug,
                                 item_variant: models[i]?.name || `variante_${i + 1}`,
@@ -259,8 +270,6 @@ export default function SingleProduct({ product, categories }) {
 
         <Contact budgetMessage={contactMessage} />
       </main>
-
-      <Footer />
     </div>
   );
 }
