@@ -1,41 +1,54 @@
-import { useEffect, useMemo, useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
+import api from "../../../services/api";
+import Head from "next/head";
 import Image from "next/image";
-import SeoHead from "../../../components/layout/SeoHead";
-import ContactForm from "../../../components/contact/ContactForm";
+import Header from "../../../components/header";
+import Footer from "../../../components/footer";
+import Contact from "../../../components/contact";
 import Navbar from "../../../components/navbar";
 import ZoomLens from "../../../components/zoom-lens";
-import { categories, getAllProductPaths, getCategoryBySlug, getProductBySlugs, getCatalogByCategorySlug } from "../../../lib/catalog";
-import { dlPush } from "../../../lib/analytics/dataLayer";
-import { productJsonLd } from "../../../lib/seo/buildJsonLd";
 
-export async function getStaticPaths() {
-  return { paths: getAllProductPaths(), fallback: "blocking" };
+export async function getServerSideProps(context) {
+  const categoria = String(context.params?.categoria || "");
+  const produto = String(context.params?.produto || "");
+
+  try {
+    const [resProduct, resCategories] = await Promise.all([
+      api.get(`/products?category=${categoria}&product=${produto}`),
+      api.get(`/category?category=${categoria}`)
+    ]);
+
+    const productData = resProduct?.data || null;
+    const categoriesData = resCategories?.data || null;
+
+    if (!productData || productData?.error) return { notFound: true };
+    if (!categoriesData?.categoryArray?.length) return { notFound: true };
+
+    return {
+      props: {
+        product: productData,
+        categories: categoriesData
+      }
+    };
+  } catch (e) {
+    return { notFound: true };
+  }
 }
 
-export async function getStaticProps({ params }) {
-  const categoria = params?.categoria || "";
-  const produto = params?.produto || "";
-
-  const cat = getCategoryBySlug(categoria);
-  const product = getProductBySlugs(categoria, produto);
-  const catalog = getCatalogByCategorySlug(categoria);
-
-  if (!cat || !product || !catalog) return { notFound: true };
-
-  return {
-    props: {
-      product,
-      cat,
-      categories
-    },
-    revalidate: 300
-  };
-}
-
-export default function ProductPage({ product, cat, categories }) {
-  const images = useMemo(() => (Array.isArray(product?.images) && product.images.length ? product.images : ["/assets/placeholder.png"]), [product]);
+export default function SingleProduct({ product, categories }) {
+  const cat = useMemo(() => categories?.categoryArray?.[0] ?? null, [categories]);
+  const images = useMemo(
+    () =>
+      Array.isArray(product?.images) && product.images.length
+        ? product.images
+        : ["/assets/placeholder.png"],
+    [product]
+  );
   const models = useMemo(
-    () => (Array.isArray(product?.models) && product.models.length ? product.models : [{ name: product?.name || "Modelo", scale: { height: "-", width: "-", depth: "-" } }]),
+    () =>
+      Array.isArray(product?.models) && product.models.length
+        ? product.models
+        : [{ name: product?.name || "Modelo", scale: { height: "-", width: "-", depth: "-" } }],
     [product]
   );
 
@@ -51,9 +64,11 @@ export default function ProductPage({ product, cat, categories }) {
   }, [images, models, product?.name]);
 
   useEffect(() => {
-    if (!product?.slug || !cat) return;
+    if (!product?.slug || !cat || typeof window === "undefined") return;
 
-    dlPush("view_item", {
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: "view_item",
       items: [
         {
           item_id: product.slug,
@@ -68,47 +83,79 @@ export default function ProductPage({ product, cat, categories }) {
   }, [product?.slug, product?.name, cat, titlePrincipal]);
 
   const createBudget = () => {
-    setContactMessage(`Gostaria de ter mais informações sobre o produto ${cat?.singleName || ""} ${product.name}`);
+    setContactMessage(
+      `Gostaria de ter mais informações sobre o produto ${cat?.singleName || ""} ${product.name}`
+    );
 
-    dlPush("request_quote_click", {
-      item_id: product.slug,
-      item_name: `${cat?.singleName} ${product.name}`,
-      item_category: cat?.name,
-      item_category2: cat?.slug,
-      item_variant: titlePrincipal,
-      location: "product_page"
-    });
+    if (typeof window !== "undefined") {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: "request_quote_click",
+        item_id: product.slug,
+        item_name: `${cat?.singleName} ${product.name}`,
+        item_category: cat?.name,
+        item_category2: cat?.slug,
+        item_variant: titlePrincipal,
+        location: "product_page"
+      });
+    }
 
-    if (typeof window !== "undefined") window.location.assign("#contato");
+    window.location.assign("#contato");
   };
 
-  const canonical = `https://www.gglmoveis.com.br/produtos/${cat.slug}/${product.slug}`;
-
-  const jsonLd = productJsonLd({
-    name: `${cat.singleName} ${product.name}`,
-    description: product.description || cat.description || "Produto em aço de alta durabilidade e resistência.",
-    images,
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: `${cat?.singleName || ""} ${product.name}`,
+    image: images,
+    description: product.description || cat?.description || "Produto em aço de alta durabilidade e resistência.",
     sku: product.slug,
-    url: canonical,
-    categoryName: cat.name
-  });
+    brand: { "@type": "Brand", name: "GGL Móveis de Aço" },
+    offers: {
+      "@type": "Offer",
+      url: `https://www.gglmoveis.com.br/produtos/${cat?.slug}/${product.slug}`,
+      availability: "https://schema.org/InStock",
+      itemCondition: "https://schema.org/NewCondition",
+      priceCurrency: "BRL",
+      price: "0.00"
+    }
+  };
 
   return (
     <div>
-      <SeoHead
-        title={`GGL Móveis de Aço | ${cat.name} - ${product.name}`}
-        description={product.description || cat.description || "Conheça os móveis de aço da GGL: qualidade, durabilidade e acabamento superior."}
-        canonical={canonical}
-        jsonLd={jsonLd}
-      />
+      <Head>
+        <title>
+          GGL Móveis de Aço | {cat?.name} - {product.name}
+        </title>
+        <meta
+          name="description"
+          content={
+            product.description ||
+            cat?.description ||
+            "Conheça os móveis de aço da GGL: qualidade, durabilidade e acabamento superior."
+          }
+        />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href={`https://www.gglmoveis.com.br/produtos/${cat?.slug}/${product.slug}`} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      </Head>
+
+      <Header />
 
       <main className="tw-mt-[140px] tw-mb-[100px] tw-relative">
-        <Navbar categories={categories} />
+        <Navbar categories={categories?.categoryArray || []} />
 
         <section className="tw-flex tw-mb-[150px] tw-justify-between tw-flex-col lg:tw-flex-row tw-w-full md:tw-w-[85%] md:tw-ml-[15%] tw-px-[20px] tw-pt-[300px] md:tw-py-0 tw-gap-[20px]">
           <div className="tw-flex tw-flex-col tw-items-center tw-gap-5">
             <div className="md:tw-hidden tw-relative tw-w-full tw-max-w-[520px] tw-aspect-[3/4] tw-overflow-hidden tw-mx-auto">
-              <Image src={principalImage} alt={`${product.name} - principal`} fill sizes="100vw" className="tw-object-cover tw-object-center" priority={false} />
+              <Image
+                src={principalImage}
+                alt={`${product.name} - principal`}
+                fill
+                sizes="100vw"
+                className="tw-object-cover tw-object-center"
+                priority={false}
+              />
             </div>
 
             <div className="tw-hidden md:tw-block">
@@ -125,7 +172,7 @@ export default function ProductPage({ product, cat, categories }) {
               />
             </div>
 
-            {images.length > 1 ? (
+            {images.length > 1 && (
               <div className="tw-flex tw-mt-[20px] tw-w-full tw-overflow-x-auto tw-overflow-y-hidden tw-justify-center md:tw-justify-start tw-gap-[10px] tw-mx-auto tw-max-w-[520px] tw-px-[6px]">
                 <div className="tw-flex tw-w-full tw-overflow-x-auto tw-overflow-y-hidden md:tw-w-auto">
                   {images.map((image, i) => (
@@ -142,26 +189,30 @@ export default function ProductPage({ product, cat, categories }) {
                         setTable(i);
                         if (models[i]) setTitlePrincipal(models[i].name);
 
-                        dlPush("select_item", {
-                          item_list_name: "product_thumbnails",
-                          items: [
-                            {
-                              item_id: product.slug,
-                              item_name: `${cat?.singleName} ${product.name}`,
-                              item_category: cat?.name,
-                              item_category2: cat?.slug,
-                              item_variant: models[i]?.name || `variante_${i + 1}`,
-                              index: i + 1
-                            }
-                          ],
-                          location: "product_page"
-                        });
+                        if (typeof window !== "undefined") {
+                          window.dataLayer = window.dataLayer || [];
+                          window.dataLayer.push({
+                            event: "select_item",
+                            item_list_name: "product_thumbnails",
+                            items: [
+                              {
+                                item_id: product.slug,
+                                item_name: `${cat?.singleName} ${product.name}`,
+                                item_category: cat?.name,
+                                item_category2: cat?.slug,
+                                item_variant: models[i]?.name || `variante_${i + 1}`,
+                                index: i + 1
+                              }
+                            ],
+                            location: "product_page"
+                          });
+                        }
                       }}
                     />
                   ))}
                 </div>
               </div>
-            ) : null}
+            )}
           </div>
 
           <div className="tw-w-full lg:tw-w-[50%] tw-mt-[50px] lg:tw-mt-0">
@@ -182,7 +233,10 @@ export default function ProductPage({ product, cat, categories }) {
                 </thead>
                 <tbody>
                   {models.map((model, i) => (
-                    <tr key={`${model.name}-${i}`} className={images.length === 1 || i === table || product?.allBold ? "tw-font-semibold" : "tw-font-light"}>
+                    <tr
+                      key={`${model.name}-${i}`}
+                      className={images.length === 1 || i === table || product?.allBold ? "tw-font-semibold" : "tw-font-light"}
+                    >
                       <td className="tw-border tw-border-black tw-pt-[5px] tw-pb-[5px] tw-pr-[5px] tw-pl-[10px]">{model.name}</td>
                       <td className="tw-border tw-border-black tw-pt-[5px] tw-pb-[5px] tw-pr-[5px] tw-pl-[10px]">{model.scale?.height ?? "-"}</td>
                       <td className="tw-border tw-border-black tw-pt-[5px] tw-pb-[5px] tw-pr-[5px] tw-pl-[10px]">{model.scale?.width ?? "-"}</td>
@@ -203,8 +257,10 @@ export default function ProductPage({ product, cat, categories }) {
           </div>
         </section>
 
-        <ContactForm budgetMessage={contactMessage} />
+        <Contact budgetMessage={contactMessage} />
       </main>
+
+      <Footer />
     </div>
   );
 }
