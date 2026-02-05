@@ -1,11 +1,13 @@
 import "../styles/globals.css";
+import "react-toastify/dist/ReactToastify.css";
 import Script from "next/script";
 import CookieConsent from "react-cookie-consent";
-import { useEffect, useRef } from "react";
 import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import SiteLayout from "../components/layout/SiteLayout";
+import { useRef, useEffect } from "react";
+import dynamic from "next/dynamic";
 import { Plus_Jakarta_Sans, Merriweather, Nanum_Gothic } from "next/font/google";
+
+const Whatsapp = dynamic(() => import("../components/whatsapp"), { ssr: false });
 
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"], weight: ["200", "300", "400", "500", "600", "700"], variable: "--font-jakarta" });
 const merri = Merriweather({ subsets: ["latin"], weight: ["300", "400", "700"], variable: "--font-merri" });
@@ -13,17 +15,6 @@ const nanum = Nanum_Gothic({ subsets: ["latin"], weight: ["700"], variable: "--f
 
 export default function MyApp({ Component, pageProps }) {
   const gtmLoadedRef = useRef(false);
-  const gtmId = process.env.NEXT_PUBLIC_GTM_ID || "GTM-NMZW62HG";
-
-  const setGtag = () => {
-    if (typeof window === "undefined") return;
-    window.dataLayer = window.dataLayer || [];
-    if (typeof window.gtag !== "function") {
-      window.gtag = function gtag() {
-        window.dataLayer.push(arguments);
-      };
-    }
-  };
 
   const loadGTM = () => {
     if (gtmLoadedRef.current) return;
@@ -41,8 +32,18 @@ export default function MyApp({ Component, pageProps }) {
     const s = document.createElement("script");
     s.async = true;
     s.id = "gtm-loader";
-    s.src = `https://www.googletagmanager.com/gtm.js?id=${gtmId}`;
+    s.src = "https://www.googletagmanager.com/gtm.js?id=GTM-NMZW62HG";
     document.head.appendChild(s);
+  };
+
+  const setGtag = () => {
+    if (typeof window === "undefined") return;
+    window.dataLayer = window.dataLayer || [];
+    if (typeof window.gtag !== "function") {
+      window.gtag = function gtag() {
+        window.dataLayer.push(arguments);
+      };
+    }
   };
 
   const handleAccept = () => {
@@ -75,8 +76,6 @@ export default function MyApp({ Component, pageProps }) {
     else if (value === "false") handleDecline();
   }, []);
 
-  const getLayout = Component.getLayout || ((page) => <SiteLayout>{page}</SiteLayout>);
-
   return (
     <div className={`${jakarta.className} ${jakarta.variable} ${merri.variable} ${nanum.variable}`}>
       <Script id="consent-default" strategy="beforeInteractive">
@@ -92,9 +91,20 @@ export default function MyApp({ Component, pageProps }) {
         `}
       </Script>
 
-      {getLayout(<Component {...pageProps} />)}
+      <Component {...pageProps} />
 
-      <ToastContainer position="bottom-right" newestOnTop={false} closeOnClick pauseOnFocusLoss draggable pauseOnHover />
+      <Whatsapp message="Olá! Vim pelo site e gostaria de falar com a GGL Móveis." />
+
+      <ToastContainer
+        position="bottom-left"
+        autoClose={3500}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
 
       <CookieConsent
         location="none"
@@ -133,7 +143,9 @@ export default function MyApp({ Component, pageProps }) {
           marginLeft: "8px"
         }}
       >
-        <p style={{ marginBottom: "10px", fontSize: "14px" }}>Usamos cookies para melhorar sua experiência e medir desempenho.</p>
+        <p style={{ marginBottom: "10px", fontSize: "14px" }}>
+          Usamos cookies para melhorar sua experiência e medir desempenho.
+        </p>
       </CookieConsent>
     </div>
   );

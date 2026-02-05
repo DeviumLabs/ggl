@@ -29,6 +29,7 @@ const parseList = (v = "") => v.split(",").map((s) => s.trim()).filter(Boolean);
 
 const DEFAULT_TO = ["ggl@gglmoveis.com.br", "felipeschandle@gmail.com", "pedro.neto72pn@gmail.com"];
 const TIPO_LABEL = (t) => (t === "empresa" ? "Empresa" : t === "orgao_publico" ? "Órgão Público" : "Pessoa Física");
+const CHANNEL_LABEL = (c) => (c === "whatsapp" ? "WhatsApp" : c === "email" ? "E-mail" : "Não informado");
 
 export default async function handler(req, res) {
   const origin = req.headers.origin || "";
@@ -67,6 +68,8 @@ export default async function handler(req, res) {
   const gclid = asStr(legacy.gclid);
   const gbraid = asStr(legacy.gbraid);
   const wbraid = asStr(legacy.wbraid);
+  const channel = asStr(legacy.channel);
+  const source_url = asStr(legacy.source_url);
 
   if (!name || !email || !phone || !message) return res.status(400).json({ error: "Campos obrigatórios ausentes." });
   if (!isEmail(email)) return res.status(400).json({ error: "E-mail inválido." });
@@ -77,6 +80,7 @@ export default async function handler(req, res) {
 
   let html = "";
   html += "<h3>Novo contato via site GGL Móveis</h3>";
+  html += "<p><strong>Canal escolhido:</strong> " + esc(CHANNEL_LABEL(channel)) + "</p>";
   html += "<p><strong>Tipo:</strong> " + esc(TIPO_LABEL(tipo_pessoa)) + "</p>";
   if (companyFinal) html += "<p><strong>Razão social:</strong> " + esc(companyFinal) + "</p>";
   html += "<p><strong>Nome:</strong> " + esc(name) + "</p>";
@@ -85,6 +89,7 @@ export default async function handler(req, res) {
   html += "<p><strong>Estado:</strong> " + esc(estado) + "</p>";
   html += "<p><strong>Cidade:</strong> " + esc(cidade) + "</p>";
   html += "<p><strong>Mensagem:</strong><br/>" + esc(message).replace(/\n/g, "<br/>") + "</p>";
+  if (source_url) html += "<p><strong>URL de origem:</strong> " + esc(source_url) + "</p>";
   html += "<hr/>";
   html += "<p><em>Códigos do anúncio</em></p>";
   html += "<p>gclid: " + esc(gclid || "-") + "</p>";
