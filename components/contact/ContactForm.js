@@ -20,7 +20,6 @@ export default function ContactForm({ budgetMessage }) {
   const {
     register,
     watch,
-    handleSubmit,
     reset,
     setValue,
     getValues,
@@ -281,6 +280,12 @@ export default function ContactForm({ budgetMessage }) {
     setPendingPayload(null);
   };
 
+  const fieldWrapClass = "tw-flex tw-flex-col tw-w-full tw-mb-[16px]";
+  const fieldLabelClass = "tw-mb-[6px] tw-text-[14px] tw-font-medium tw-text-darkBlue";
+  const fieldInputClass =
+    "tw-w-full tw-rounded-[14px] tw-border tw-border-slate-300 tw-bg-white tw-py-[12px] tw-px-[14px] tw-text-[15px] tw-outline-none tw-transition focus:tw-border-blue focus:tw-ring-2 focus:tw-ring-blue/20";
+  const fieldErrorClass = "tw-mt-[6px] tw-text-[13px] tw-text-red-600";
+
   return (
     <>
       <ContactChannelModal
@@ -301,164 +306,209 @@ export default function ContactForm({ budgetMessage }) {
           if (isSending) return;
           openChoiceModal();
         }}
-        className="tw-px-[20px] tw-mb-[100px] tw-pt-[200px] tw-mt-[-200px] tw-flex tw-flex-col tw-items-center"
+        className="tw-px-[16px] tw-mb-[100px] tw-pt-[200px] tw-mt-[-200px]"
         id="contato"
       >
-        <div className="tw-mb-[30px]">
-          <small className="tw-text-blue tw-font-light">CONTATO</small>
-          <h2 className="tw-text-[30px] tw-leading-[30px]">Entre em contato</h2>
-          <p className="tw-mt-[6px] tw-text-[14px] tw-text-slate-600 tw-text-center">
-            Ao continuar, você poderá escolher entre WhatsApp ou e-mail.
-          </p>
-        </div>
-
-        <div aria-hidden="true" style={{ position: "absolute", left: "-10000px", opacity: 0 }}>
-          <label htmlFor="website">Website</label>
-          <input id="website" type="text" autoComplete="off" {...register("website")} />
-        </div>
-
-        <fieldset className="tw-w-full tw-max-w-[600px] tw-mb-[20px]">
-          <legend className="tw-mb-[8px]">Você é:</legend>
-          <div className="tw-flex tw-gap-[20px]">
-            <label className="tw-flex tw-items-center tw-gap-[6px]">
-              <input type="radio" value="pf" {...register("tipo_pessoa", { onChange: handleFieldChange })} />
-              Pessoa Física
-            </label>
-            <label className="tw-flex tw-items-center tw-gap-[6px]">
-              <input type="radio" value="empresa" {...register("tipo_pessoa", { onChange: handleFieldChange })} />
-              Empresa
-            </label>
-            <label className="tw-flex tw-items-center tw-gap-[6px]">
-              <input type="radio" value="orgao_publico" {...register("tipo_pessoa", { onChange: handleFieldChange })} />
-              Órgão Público
-            </label>
+        <div className="tw-mx-auto tw-w-full tw-max-w-[720px] tw-rounded-[26px] tw-border tw-border-slate-200 tw-bg-gradient-to-b tw-from-white tw-to-slate-50 tw-px-[18px] tw-py-[22px] md:tw-px-[34px] md:tw-py-[34px] tw-shadow-[0_20px_55px_-38px_rgba(15,23,42,0.55)]">
+          <div className="tw-mb-[24px] tw-text-center">
+            <small className="tw-inline-flex tw-items-center tw-rounded-full tw-bg-blue/10 tw-text-blue tw-font-semibold tw-tracking-[0.08em] tw-px-[12px] tw-py-[5px]">
+              CONTATO
+            </small>
+            <h2 className="tw-mt-[10px] tw-text-[30px] tw-leading-[32px] tw-text-darkBlue">Entre em contato</h2>
+            <p className="tw-mt-[8px] tw-text-[14px] tw-text-slate-600">
+              Ao continuar, você poderá escolher entre WhatsApp ou e-mail.
+            </p>
           </div>
-        </fieldset>
 
-        {exigeRazao ? (
-          <div className="tw-flex tw-flex-col tw-w-full tw-max-w-[600px] tw-mb-[20px]">
-            <label htmlFor="razao_social">Razão social:</label>
-            <input
-              id="razao_social"
-              type="text"
-              {...register("razao_social", { required: true, onChange: handleFieldChange })}
-              autoComplete="organization"
-              className="tw-border-blue tw-border-[1px] tw-py-[12px] tw-px-[12px]"
-            />
-            {errors.razao_social ? <span className="tw-text-red-600">*Campo obrigatório</span> : null}
+          <div aria-hidden="true" style={{ position: "absolute", left: "-10000px", opacity: 0 }}>
+            <label htmlFor="website">Website</label>
+            <input id="website" type="text" autoComplete="off" {...register("website")} />
           </div>
-        ) : null}
 
-        <div className="tw-flex tw-flex-col tw-w-full tw-max-w-[600px] tw-mb-[20px]">
-          <label htmlFor="name">Nome:</label>
-          <input
-            id="name"
-            type="text"
-            {...register("name", { required: true, onChange: handleFieldChange })}
-            autoComplete="name"
-            className="tw-border-blue tw-border-[1px] tw-py-[12px] tw-px-[12px]"
-          />
-          {errors.name ? <span className="tw-text-red-600">*Campo obrigatório</span> : null}
-        </div>
+          <fieldset className="tw-w-full tw-mb-[18px]">
+            <legend className={`${fieldLabelClass} tw-text-[15px]`}>Você é:</legend>
+            <div className="tw-grid tw-grid-cols-1 sm:tw-grid-cols-3 tw-gap-[10px]">
+              <label
+                className={[
+                  "tw-flex tw-items-center tw-gap-[8px] tw-rounded-[14px] tw-border tw-bg-white tw-px-[12px] tw-py-[10px] tw-cursor-pointer tw-transition",
+                  tipoPessoa === "pf" ? "tw-border-blue tw-bg-blue/5" : "tw-border-slate-300 hover:tw-border-blue/60"
+                ].join(" ")}
+              >
+                <input className="tw-accent-blue" type="radio" value="pf" {...register("tipo_pessoa", { onChange: handleFieldChange })} />
+                <span className="tw-text-[14px] tw-text-slate-700">Pessoa Física</span>
+              </label>
+              <label
+                className={[
+                  "tw-flex tw-items-center tw-gap-[8px] tw-rounded-[14px] tw-border tw-bg-white tw-px-[12px] tw-py-[10px] tw-cursor-pointer tw-transition",
+                  tipoPessoa === "empresa" ? "tw-border-blue tw-bg-blue/5" : "tw-border-slate-300 hover:tw-border-blue/60"
+                ].join(" ")}
+              >
+                <input
+                  className="tw-accent-blue"
+                  type="radio"
+                  value="empresa"
+                  {...register("tipo_pessoa", { onChange: handleFieldChange })}
+                />
+                <span className="tw-text-[14px] tw-text-slate-700">Empresa</span>
+              </label>
+              <label
+                className={[
+                  "tw-flex tw-items-center tw-gap-[8px] tw-rounded-[14px] tw-border tw-bg-white tw-px-[12px] tw-py-[10px] tw-cursor-pointer tw-transition",
+                  tipoPessoa === "orgao_publico" ? "tw-border-blue tw-bg-blue/5" : "tw-border-slate-300 hover:tw-border-blue/60"
+                ].join(" ")}
+              >
+                <input
+                  className="tw-accent-blue"
+                  type="radio"
+                  value="orgao_publico"
+                  {...register("tipo_pessoa", { onChange: handleFieldChange })}
+                />
+                <span className="tw-text-[14px] tw-text-slate-700">Órgão Público</span>
+              </label>
+            </div>
+          </fieldset>
 
-        <div className="tw-flex tw-flex-col tw-w-full tw-max-w-[600px] tw-mb-[20px]">
-          <label htmlFor="phone">Telefone:</label>
-          <InputMask
-            mask={phoneWatcher && phoneWatcher.replace(/\D/g, "").length > 10 ? "(99) 99999-9999" : "(99) 9999-99999"}
-            maskChar={null}
-            {...register("phone", { required: true, onChange: handleFieldChange })}
-          >
-            {(inputProps) => (
+          {exigeRazao ? (
+            <div className={fieldWrapClass}>
+              <label htmlFor="razao_social" className={fieldLabelClass}>
+                Razão social:
+              </label>
               <input
-                {...inputProps}
-                id="phone"
-                type="tel"
-                autoComplete="tel"
-                inputMode="tel"
-                className="tw-border-blue tw-border-[1px] tw-py-[12px] tw-px-[12px]"
+                id="razao_social"
+                type="text"
+                {...register("razao_social", { required: true, onChange: handleFieldChange })}
+                autoComplete="organization"
+                className={fieldInputClass}
               />
-            )}
-          </InputMask>
-          {errors.phone ? <span className="tw-text-red-600">*Campo obrigatório</span> : null}
-        </div>
+              {errors.razao_social ? <span className={fieldErrorClass}>*Campo obrigatório</span> : null}
+            </div>
+          ) : null}
 
-        <div className="tw-flex tw-flex-col tw-w-full tw-max-w-[600px] tw-mb-[20px]">
-          <label htmlFor="email">E-mail:</label>
-          <input
-            id="email"
-            type="email"
-            {...register("email", { required: true, onChange: handleFieldChange })}
-            autoComplete="email"
-            className="tw-border-blue tw-border-[1px] tw-py-[12px] tw-px-[12px]"
-          />
-          {errors.email ? <span className="tw-text-red-600">*Campo obrigatório</span> : null}
-        </div>
-
-        <div className="tw-flex tw-gap-[20px] tw-w-full tw-max-w-[600px] tw-mb-[20px]">
-          <div className="tw-flex tw-flex-col tw-w-1/2">
-            <label htmlFor="estado">Estado:</label>
-            <select
-              id="estado"
-              {...register("estado", { required: true, onChange: handleFieldChange })}
-              autoComplete="address-level1"
-              className="tw-border-blue tw-border-[1px] tw-py-[12px] tw-px-[12px]"
-            >
-              <option value="">Selecione o estado</option>
-              {estados.map((estado) => (
-                <option key={estado.sigla} value={estado.sigla}>
-                  {estado.nome}
-                </option>
-              ))}
-            </select>
-            {errors.estado ? <span className="tw-text-red-600">*Campo obrigatório</span> : null}
+          <div className={fieldWrapClass}>
+            <label htmlFor="name" className={fieldLabelClass}>
+              Nome:
+            </label>
+            <input
+              id="name"
+              type="text"
+              {...register("name", { required: true, onChange: handleFieldChange })}
+              autoComplete="name"
+              className={fieldInputClass}
+            />
+            {errors.name ? <span className={fieldErrorClass}>*Campo obrigatório</span> : null}
           </div>
 
-          <div className="tw-flex tw-flex-col tw-w-1/2">
-            <label htmlFor="cidade">Cidade:</label>
-            <select
-              id="cidade"
-              {...register("cidade", { required: true, onChange: handleFieldChange })}
-              autoComplete="address-level2"
-              className="tw-border-blue tw-border-[1px] tw-py-[12px] tw-px-[12px]"
-              disabled={cidades.length === 0}
+          <div className={fieldWrapClass}>
+            <label htmlFor="phone" className={fieldLabelClass}>
+              Telefone:
+            </label>
+            <InputMask
+              mask={phoneWatcher && phoneWatcher.replace(/\D/g, "").length > 10 ? "(99) 99999-9999" : "(99) 9999-99999"}
+              maskChar={null}
+              {...register("phone", { required: true, onChange: handleFieldChange })}
             >
-              <option value="">Selecione a cidade</option>
-              {cidades.map((cidade) => (
-                <option key={cidade} value={cidade}>
-                  {cidade}
-                </option>
-              ))}
-            </select>
-            {errors.cidade ? <span className="tw-text-red-600">*Campo obrigatório</span> : null}
+              {(inputProps) => (
+                <input
+                  {...inputProps}
+                  id="phone"
+                  type="tel"
+                  autoComplete="tel"
+                  inputMode="tel"
+                  className={fieldInputClass}
+                />
+              )}
+            </InputMask>
+            {errors.phone ? <span className={fieldErrorClass}>*Campo obrigatório</span> : null}
+          </div>
+
+          <div className={fieldWrapClass}>
+            <label htmlFor="email" className={fieldLabelClass}>
+              E-mail:
+            </label>
+            <input
+              id="email"
+              type="email"
+              {...register("email", { required: true, onChange: handleFieldChange })}
+              autoComplete="email"
+              className={fieldInputClass}
+            />
+            {errors.email ? <span className={fieldErrorClass}>*Campo obrigatório</span> : null}
+          </div>
+
+          <div className="tw-flex tw-flex-col md:tw-flex-row tw-gap-[14px] tw-w-full tw-mb-[16px]">
+            <div className="tw-flex tw-flex-col tw-w-full md:tw-w-1/2">
+              <label htmlFor="estado" className={fieldLabelClass}>
+                Estado:
+              </label>
+              <select
+                id="estado"
+                {...register("estado", { required: true, onChange: handleFieldChange })}
+                autoComplete="address-level1"
+                className={fieldInputClass}
+              >
+                <option value="">Selecione o estado</option>
+                {estados.map((estado) => (
+                  <option key={estado.sigla} value={estado.sigla}>
+                    {estado.nome}
+                  </option>
+                ))}
+              </select>
+              {errors.estado ? <span className={fieldErrorClass}>*Campo obrigatório</span> : null}
+            </div>
+
+            <div className="tw-flex tw-flex-col tw-w-full md:tw-w-1/2">
+              <label htmlFor="cidade" className={fieldLabelClass}>
+                Cidade:
+              </label>
+              <select
+                id="cidade"
+                {...register("cidade", { required: true, onChange: handleFieldChange })}
+                autoComplete="address-level2"
+                className={fieldInputClass}
+                disabled={cidades.length === 0}
+              >
+                <option value="">Selecione a cidade</option>
+                {cidades.map((cidade) => (
+                  <option key={cidade} value={cidade}>
+                    {cidade}
+                  </option>
+                ))}
+              </select>
+              {errors.cidade ? <span className={fieldErrorClass}>*Campo obrigatório</span> : null}
+            </div>
+          </div>
+
+          <div className={fieldWrapClass}>
+            <label htmlFor="message" className={fieldLabelClass}>
+              Mensagem:
+            </label>
+            <textarea
+              id="message"
+              {...register("message", { required: true, onChange: handleFieldChange })}
+              autoComplete="off"
+              className={`${fieldInputClass} tw-min-h-[124px] tw-resize-y`}
+            />
+            {errors.message ? <span className={fieldErrorClass}>*Campo obrigatório</span> : null}
+          </div>
+
+          <input type="hidden" {...register("gclid")} />
+          <input type="hidden" {...register("gbraid")} />
+          <input type="hidden" {...register("wbraid")} />
+          <input type="hidden" {...register("source_url")} />
+
+          <div className="tw-pt-[6px] tw-flex tw-justify-center md:tw-justify-start">
+            <button
+              type="submit"
+              disabled={isSending}
+              aria-busy={isSending}
+              className={`tw-bg-blue tw-text-white tw-w-full md:tw-w-[260px] tw-h-[52px] tw-rounded-full tw-font-semibold tw-tracking-[0.03em] tw-shadow-[0_16px_24px_-18px_rgba(0,88,194,0.9)] tw-transition tw-duration-300 hover:tw-bg-darkBlue ${
+                isSending ? "tw-opacity-60 tw-cursor-not-allowed" : ""
+              }`}
+            >
+              CONTINUAR
+            </button>
           </div>
         </div>
-
-        <div className="tw-flex tw-flex-col tw-w-full tw-max-w-[600px] tw-mb-[20px]">
-          <label htmlFor="message">Mensagem:</label>
-          <textarea
-            id="message"
-            {...register("message", { required: true, onChange: handleFieldChange })}
-            autoComplete="off"
-            className="tw-border-blue tw-border-[1px] tw-py-[12px] tw-px-[12px]"
-          />
-          {errors.message ? <span className="tw-text-red-600">*Campo obrigatório</span> : null}
-        </div>
-
-        <input type="hidden" {...register("gclid")} />
-        <input type="hidden" {...register("gbraid")} />
-        <input type="hidden" {...register("wbraid")} />
-        <input type="hidden" {...register("source_url")} />
-
-        <button
-          type="submit"
-          disabled={isSending}
-          aria-busy={isSending}
-          className={`tw-bg-blue tw-text-white tw-w-[240px] tw-h-[50px] hover:tw-bg-white hover:tw-border-blue hover:tw-border-[1px] hover:tw-text-blue tw-transition tw-duration-300 ${
-            isSending ? "tw-opacity-60 tw-cursor-not-allowed" : ""
-          }`}
-        >
-          CONTINUAR
-        </button>
       </form>
     </>
   );
