@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useId, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { dlPush } from "../lib/analytics/dataLayer";
 
 function getPathParts(asPath = "") {
@@ -17,6 +17,8 @@ function getPathParts(asPath = "") {
 export default function Navbar({ categories }) {
   const router = useRouter();
   const uid = useId();
+  const mobilePanelRef = useRef(null);
+  const previousFocusRef = useRef(null);
 
   const qCategoria = typeof router.query?.categoria === "string" ? router.query.categoria : "";
   const qProduto = typeof router.query?.produto === "string" ? router.query.produto : "";
@@ -58,6 +60,23 @@ export default function Navbar({ categories }) {
     return () => window.removeEventListener("keydown", onKey);
   }, [mobileOpen]);
 
+  useEffect(() => {
+    if (!mobileOpen) return;
+
+    previousFocusRef.current = typeof document !== "undefined" ? document.activeElement : null;
+    const focusTimer = setTimeout(() => {
+      const firstFocusable = mobilePanelRef.current?.querySelector("button, a[href]");
+      if (firstFocusable) firstFocusable.focus();
+    }, 0);
+
+    return () => {
+      clearTimeout(focusTimer);
+      if (previousFocusRef.current && typeof previousFocusRef.current.focus === "function") {
+        previousFocusRef.current.focus();
+      }
+    };
+  }, [mobileOpen]);
+
   const handleProductClick = (category, product) => {
     dlPush("select_item", {
       location: "navbar",
@@ -82,16 +101,16 @@ export default function Navbar({ categories }) {
   const NavContent = ({ isMobile }) => (
     <>
       <div className="tw-flex tw-items-center tw-justify-between tw-gap-[10px]">
-        <h2 className="tw-text-white">
-          LINHA DE PRODUTOS
-          <hr className="tw-h-[1px] tw-w-[80%] tw-bg-white tw-border-white tw-mt-[5px]" />
-        </h2>
+        <div className="tw-flex tw-flex-col tw-gap-[6px]">
+          <h2 className="tw-text-white tw-font-semibold tw-text-[15px] tw-tracking-[0.02em]">LINHA DE PRODUTOS</h2>
+          <span className="tw-h-[1px] tw-w-[80%] tw-bg-white/70" aria-hidden="true" />
+        </div>
 
         {isMobile ? (
           <button
             type="button"
             onClick={() => setMobileOpen(false)}
-            className="tw-text-white tw-w-[36px] tw-h-[36px] tw-rounded-[10px] tw-bg-white/10 tw-flex tw-items-center tw-justify-center"
+            className="tw-text-white tw-w-[36px] tw-h-[36px] tw-rounded-[10px] tw-bg-white/10 tw-flex tw-items-center tw-justify-center focus-visible:tw-outline-none focus-visible:tw-ring-2 focus-visible:tw-ring-white/80"
             aria-label="Fechar menu"
           >
             ✕
@@ -118,7 +137,7 @@ export default function Navbar({ categories }) {
                 onClick={() => setOpenCategory((prev) => (prev === category.slug ? "" : category.slug))}
                 aria-expanded={isOpen}
                 aria-controls={groupId}
-                className="tw-w-full tw-flex tw-items-center tw-justify-between tw-gap-[10px] tw-text-left tw-text-white tw-py-[4px]"
+                className="tw-w-full tw-flex tw-items-center tw-justify-between tw-gap-[10px] tw-text-left tw-text-white tw-py-[4px] focus-visible:tw-outline-none focus-visible:tw-ring-2 focus-visible:tw-ring-white/80 tw-rounded-[8px]"
               >
                 <span className={isActiveCategory ? "tw-font-semibold" : "tw-font-light"}>{category.name}</span>
                 <span
@@ -134,9 +153,10 @@ export default function Navbar({ categories }) {
 
               <div
                 id={groupId}
+                aria-hidden={!isOpen}
                 className={[
                   "tw-overflow-hidden tw-transition-all tw-duration-300 tw-ease-in-out",
-                  isOpen ? "tw-max-h-[900px] tw-opacity-100 tw-mt-[6px]" : "tw-max-h-0 tw-opacity-0 tw-mt-0"
+                  isOpen ? "tw-max-h-[900px] tw-opacity-100 tw-mt-[6px] tw-pointer-events-auto" : "tw-max-h-0 tw-opacity-0 tw-mt-0 tw-pointer-events-none"
                 ].join(" ")}
               >
                 <div className="tw-flex tw-flex-col">
@@ -149,9 +169,10 @@ export default function Navbar({ categories }) {
                         href={`/produtos/${category.slug}/${product.slug}`}
                         onClick={(e) => onProductLinkClick(e, category, product, isActiveProduct)}
                         aria-current={isActiveProduct ? "page" : undefined}
+                        tabIndex={isOpen ? 0 : -1}
                         className={[
                           "tw-pl-[10px] tw-text-[14px] tw-rounded-[10px] tw-py-[7px] tw-pr-[8px] tw-transition",
-                          "hover:tw-bg-white/10 hover:tw-underline",
+                          "hover:tw-bg-white/10 hover:tw-underline focus-visible:tw-outline-none focus-visible:tw-ring-2 focus-visible:tw-ring-white/80",
                           isActiveProduct
                             ? "tw-bg-white tw-text-blue tw-font-semibold hover:tw-no-underline"
                             : "tw-text-white tw-font-light"
@@ -177,7 +198,9 @@ export default function Navbar({ categories }) {
           type="button"
           onClick={() => setMobileOpen(true)}
           aria-expanded={mobileOpen}
-          className="tw-w-full tw-bg-blue tw-text-white tw-px-[12px] tw-py-[14px] tw-rounded-[12px] tw-flex tw-items-center tw-justify-between"
+          aria-controls={`${uid}-mobile-products`}
+          aria-label="Abrir linha de produtos"
+          className="tw-w-full tw-bg-blue tw-text-white tw-px-[12px] tw-py-[14px] tw-rounded-[16px] tw-shadow-[0_14px_28px_-20px_rgba(15,23,42,0.65)] tw-flex tw-items-center tw-justify-between focus-visible:tw-outline-none focus-visible:tw-ring-2 focus-visible:tw-ring-blue focus-visible:tw-ring-offset-2"
         >
           <span className="tw-font-semibold">LINHA DE PRODUTOS</span>
           <span className="tw-inline-flex tw-items-center tw-justify-center tw-w-[36px] tw-h-[36px] tw-rounded-[10px] tw-bg-white/10">
@@ -203,16 +226,24 @@ export default function Navbar({ categories }) {
 
         <div
           className={[
-            "tw-absolute tw-left-0 tw-top-0 tw-h-full tw-w-[86%] tw-max-w-[340px] tw-bg-blue tw-px-[12px] tw-py-[18px] tw-overflow-y-auto tw-transition-transform tw-duration-300",
+            "tw-absolute tw-left-0 tw-top-0 tw-h-full tw-w-[86%] tw-max-w-[340px] tw-bg-blue tw-rounded-r-[24px] tw-border-r tw-border-blue/60 tw-px-[12px] tw-py-[18px] tw-overflow-y-auto tw-shadow-[0_26px_44px_-24px_rgba(15,23,42,0.7)] tw-transition-transform tw-duration-300",
             mobileOpen ? "tw-translate-x-0" : "-tw-translate-x-full"
           ].join(" ")}
+          id={`${uid}-mobile-products`}
+          ref={mobilePanelRef}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Linha de produtos"
           onClick={(e) => e.stopPropagation()}
         >
           <NavContent isMobile />
         </div>
       </div>
 
-      <nav className="tw-hidden md:tw-block tw-absolute tw-left-0 tw-z-[300] tw-w-[15%] tw-min-w-[200px] tw-bg-blue tw-px-[10px] tw-py-[30px]">
+      <nav
+        className="tw-hidden md:tw-block tw-absolute tw-left-0 tw-z-[300] tw-w-[15%] tw-min-w-[200px] tw-bg-blue tw-rounded-r-[24px] tw-border-r tw-border-blue/60 tw-px-[10px] tw-py-[30px] tw-shadow-[0_26px_44px_-24px_rgba(15,23,42,0.65)]"
+        aria-label="Linha de produtos"
+      >
         <NavContent isMobile={false} />
       </nav>
     </>

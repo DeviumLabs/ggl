@@ -2,7 +2,6 @@ import React, { useState, useEffect, useMemo } from "react";
 import api from "../../../services/api";
 import Head from "next/head";
 import Image from "next/image";
-import Header from "../../../components/header";
 import ContactForm from "../../../components/contact/ContactForm";
 import Navbar from "../../../components/navbar";
 import ZoomLens from "../../../components/zoom-lens";
@@ -197,15 +196,13 @@ export default function SingleProduct({ product, categories, categoria }) {
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       </Head>
 
-      <Header />
-
       <main className="tw-mt-[140px] tw-mb-[100px] tw-relative">
         <Navbar categories={categories?.categoryArray || []} />
 
         <section className="tw-flex tw-mb-[130px] tw-justify-between tw-flex-col xl:tw-flex-row tw-w-full md:tw-w-[85%] md:tw-ml-[15%] tw-px-[20px] tw-pt-[20px] md:tw-pt-0 tw-gap-[28px]">
           <div className="tw-flex tw-w-full tw-max-w-[620px] tw-flex-col tw-items-center tw-gap-[14px] [@media(min-width:1280px)_and_(max-height:820px)]:tw-flex-row [@media(min-width:1280px)_and_(max-height:820px)]:tw-items-start [@media(min-width:1280px)_and_(max-height:820px)]:tw-gap-[10px] [@media(min-width:1280px)_and_(max-height:820px)]:tw-max-w-[640px]">
             <div className="tw-w-full tw-max-w-[520px] [@media(min-width:1280px)_and_(max-height:820px)]:tw-flex-1 [@media(min-width:1280px)_and_(max-height:820px)]:tw-min-w-0">
-              <div className="md:tw-hidden tw-relative tw-w-full tw-aspect-[4/3] tw-overflow-hidden tw-rounded-[12px] tw-border tw-border-slate-200 tw-bg-white">
+              <div className="md:tw-hidden tw-relative tw-w-full tw-aspect-[4/3] tw-overflow-hidden tw-rounded-[20px] tw-border tw-border-slate-200/80 tw-bg-white tw-shadow-[0_18px_35px_-28px_rgba(15,23,42,0.45)]">
                 <Image
                   src={activeVariantImage}
                   alt={`${product.name} - principal`}
@@ -216,7 +213,7 @@ export default function SingleProduct({ product, categories, categoria }) {
                 />
               </div>
 
-              <div className="tw-hidden md:tw-block tw-rounded-[12px] tw-border tw-border-slate-200 tw-bg-white tw-p-[8px]">
+              <div className="tw-hidden md:tw-block tw-rounded-[20px] tw-border tw-border-slate-200/80 tw-bg-white tw-p-[10px] tw-shadow-[0_20px_38px_-30px_rgba(15,23,42,0.42)]">
                 <ZoomLens
                   key={activeVariantImage}
                   src={activeVariantImage}
@@ -232,7 +229,7 @@ export default function SingleProduct({ product, categories, categoria }) {
             </div>
 
             {images.length > 1 ? (
-              <div className="tw-w-full tw-max-w-[520px] tw-rounded-[12px] tw-border tw-border-slate-200 tw-bg-white tw-p-[10px] [@media(min-width:1280px)_and_(max-height:820px)]:-tw-order-1 [@media(min-width:1280px)_and_(max-height:820px)]:tw-w-[100px] [@media(min-width:1280px)_and_(max-height:820px)]:tw-min-w-[100px] [@media(min-width:1280px)_and_(max-height:820px)]:tw-max-w-[100px]">
+              <div className="tw-w-full tw-max-w-[520px] tw-rounded-[20px] tw-border tw-border-slate-200/80 tw-bg-white tw-p-[12px] tw-shadow-[0_20px_38px_-30px_rgba(15,23,42,0.4)] [@media(min-width:1280px)_and_(max-height:820px)]:-tw-order-1 [@media(min-width:1280px)_and_(max-height:820px)]:tw-w-[100px] [@media(min-width:1280px)_and_(max-height:820px)]:tw-min-w-[100px] [@media(min-width:1280px)_and_(max-height:820px)]:tw-max-w-[100px]">
                 <div className="tw-mb-[10px] tw-flex tw-items-center tw-justify-between tw-gap-[8px] [@media(min-width:1280px)_and_(max-height:820px)]:tw-flex-col [@media(min-width:1280px)_and_(max-height:820px)]:tw-items-start [@media(min-width:1280px)_and_(max-height:820px)]:tw-gap-[4px]">
                   <p className="tw-text-[13px] tw-font-semibold tw-text-slate-700 [@media(min-width:1280px)_and_(max-height:820px)]:tw-text-[11px] [@media(min-width:1280px)_and_(max-height:820px)]:tw-leading-[1.1] [@media(min-width:1280px)_and_(max-height:820px)]:tw-whitespace-normal">
                     Fotos e variantes
@@ -256,12 +253,12 @@ export default function SingleProduct({ product, categories, categoria }) {
                         aria-label={`Ver imagem ${i + 1} de ${images.length}`}
                         aria-pressed={isActiveThumb}
                         className={[
-                          "tw-relative tw-flex tw-h-[102px] tw-w-[90px] tw-shrink-0 tw-items-center tw-justify-center tw-rounded-[10px] tw-border tw-bg-white tw-transition",
+                          "tw-relative tw-flex tw-h-[102px] tw-w-[90px] tw-shrink-0 tw-items-center tw-justify-center tw-rounded-[16px] tw-border tw-bg-white tw-transition",
                           "[@media(min-width:1280px)_and_(max-height:820px)]:tw-h-[88px] [@media(min-width:1280px)_and_(max-height:820px)]:tw-w-[88px]",
                           "focus-visible:tw-outline-none focus-visible:tw-ring-2 focus-visible:tw-ring-blue focus-visible:tw-ring-offset-2",
                           isActiveThumb
                             ? "tw-overflow-visible tw-z-[5] tw-border-blue tw-shadow-[0_0_0_1px_rgba(0,88,194,0.25)]"
-                            : "tw-overflow-hidden tw-border-slate-200 hover:tw-border-blue/60"
+                            : "tw-overflow-hidden tw-border-slate-200/80 hover:tw-border-blue/60"
                         ].join(" ")}
                       >
                         <Image
@@ -303,8 +300,8 @@ export default function SingleProduct({ product, categories, categoria }) {
                       if (hasLinkedImage) selectThumbnail(index);
                     }}
                     className={[
-                      "tw-rounded-[12px] tw-border tw-bg-white tw-p-[12px]",
-                      isHighlighted ? "tw-border-blue tw-bg-blue/5" : "tw-border-slate-200",
+                      "tw-rounded-[18px] tw-border tw-bg-white tw-p-[14px] tw-shadow-[0_12px_30px_-26px_rgba(15,23,42,0.45)]",
+                      isHighlighted ? "tw-border-blue tw-bg-blue/5" : "tw-border-slate-200/80",
                       hasLinkedImage ? "tw-cursor-pointer hover:tw-bg-slate-50" : ""
                     ].join(" ")}
                   >
@@ -342,7 +339,7 @@ export default function SingleProduct({ product, categories, categoria }) {
               ) : null}
             </div>
 
-            <div className="tw-hidden md:tw-block tw-mt-[14px] tw-w-full tw-rounded-[12px] tw-border tw-border-slate-300">
+            <div className="tw-hidden md:tw-block tw-mt-[14px] tw-w-full tw-rounded-[18px] tw-border tw-border-slate-200 tw-overflow-hidden tw-shadow-[0_20px_36px_-30px_rgba(15,23,42,0.45)]">
               <div className="tw-w-full tw-overflow-x-auto">
                 <table className="tw-w-full tw-table-fixed tw-border-collapse tw-text-[14px] lg:tw-text-[15px]">
                   <colgroup>
@@ -351,12 +348,12 @@ export default function SingleProduct({ product, categories, categoria }) {
                     <col className="tw-w-[22%]" />
                     <col className="tw-w-[22%]" />
                   </colgroup>
-                  <thead className="tw-bg-slate-100">
+                  <thead className="tw-bg-slate-100/90">
                     <tr>
-                      <th className="tw-text-left tw-border tw-border-slate-300 tw-py-[8px] tw-px-[10px] tw-font-semibold tw-whitespace-normal tw-break-words">Modelo</th>
-                      <th className="tw-text-left tw-border tw-border-slate-300 tw-py-[8px] tw-px-[10px] tw-font-semibold tw-whitespace-normal tw-break-words">Altura</th>
-                      <th className="tw-text-left tw-border tw-border-slate-300 tw-py-[8px] tw-px-[10px] tw-font-semibold tw-whitespace-normal tw-break-words">Largura</th>
-                      <th className="tw-text-left tw-border tw-border-slate-300 tw-py-[8px] tw-px-[10px] tw-font-semibold tw-whitespace-normal tw-break-words">Profundidade</th>
+                      <th className="tw-text-left tw-border tw-border-slate-200 tw-py-[8px] tw-px-[10px] tw-font-semibold tw-whitespace-normal tw-break-words">Modelo</th>
+                      <th className="tw-text-left tw-border tw-border-slate-200 tw-py-[8px] tw-px-[10px] tw-font-semibold tw-whitespace-normal tw-break-words">Altura</th>
+                      <th className="tw-text-left tw-border tw-border-slate-200 tw-py-[8px] tw-px-[10px] tw-font-semibold tw-whitespace-normal tw-break-words">Largura</th>
+                      <th className="tw-text-left tw-border tw-border-slate-200 tw-py-[8px] tw-px-[10px] tw-font-semibold tw-whitespace-normal tw-break-words">Profundidade</th>
                     </tr>
                   </thead>
                   <tbody onMouseLeave={() => setHoveredIndex(null)}>
@@ -377,10 +374,10 @@ export default function SingleProduct({ product, categories, categoria }) {
                           hasLinkedImage ? "tw-cursor-pointer hover:tw-bg-slate-50" : ""
                         ].join(" ")}
                       >
-                          <td className="tw-border tw-border-slate-300 tw-py-[8px] tw-px-[10px] tw-whitespace-normal tw-break-words tw-leading-[1.25]">{model.name}</td>
-                          <td className="tw-border tw-border-slate-300 tw-py-[8px] tw-px-[10px] tw-whitespace-normal tw-break-words tw-leading-[1.25]">{model.scale?.height ?? "-"}</td>
-                          <td className="tw-border tw-border-slate-300 tw-py-[8px] tw-px-[10px] tw-whitespace-normal tw-break-words tw-leading-[1.25]">{model.scale?.width ?? "-"}</td>
-                          <td className="tw-border tw-border-slate-300 tw-py-[8px] tw-px-[10px] tw-whitespace-normal tw-break-words tw-leading-[1.25]">{model.scale?.depth ?? "-"}</td>
+                          <td className="tw-border tw-border-slate-200 tw-py-[8px] tw-px-[10px] tw-whitespace-normal tw-break-words tw-leading-[1.25]">{model.name}</td>
+                          <td className="tw-border tw-border-slate-200 tw-py-[8px] tw-px-[10px] tw-whitespace-normal tw-break-words tw-leading-[1.25]">{model.scale?.height ?? "-"}</td>
+                          <td className="tw-border tw-border-slate-200 tw-py-[8px] tw-px-[10px] tw-whitespace-normal tw-break-words tw-leading-[1.25]">{model.scale?.width ?? "-"}</td>
+                          <td className="tw-border tw-border-slate-200 tw-py-[8px] tw-px-[10px] tw-whitespace-normal tw-break-words tw-leading-[1.25]">{model.scale?.depth ?? "-"}</td>
                         </tr>
                       );
                     })}
@@ -391,10 +388,23 @@ export default function SingleProduct({ product, categories, categoria }) {
 
             <button
               type="button"
-              className="tw-bg-blue tw-mt-[30px] tw-text-white tw-w-[240px] tw-h-[50px] hover:tw-bg-white hover:tw-border-blue hover:tw-border-[1px] hover:tw-text-blue tw-transition-300"
+              className={[
+                "tw-group tw-inline-flex tw-items-center tw-justify-center tw-gap-[10px] tw-relative tw-overflow-hidden",
+                "tw-mt-[32px] tw-w-full sm:tw-w-[260px] tw-h-[54px]",
+                "tw-rounded-full tw-bg-gradient-to-r tw-from-blue tw-to-[#1f6ed0] tw-text-white tw-font-semibold tw-tracking-[0.01em]",
+                "tw-shadow-[0_18px_28px_-16px_rgba(0,88,194,0.95)] tw-transition tw-duration-300",
+                "hover:tw-from-darkBlue hover:tw-to-blue hover:tw-shadow-[0_22px_34px_-18px_rgba(15,23,42,0.65)]",
+                "focus-visible:tw-outline-none focus-visible:tw-ring-2 focus-visible:tw-ring-blue focus-visible:tw-ring-offset-2"
+              ].join(" ")}
               onClick={createBudget}
             >
-              Fazer Orçamento
+              <span>Fazer orçamento</span>
+              <span
+                aria-hidden="true"
+                className="tw-inline-flex tw-items-center tw-justify-center tw-w-[26px] tw-h-[26px] tw-rounded-full tw-bg-white/20 tw-transition-transform tw-duration-300 group-hover:tw-translate-x-[2px]"
+              >
+                →
+              </span>
             </button>
           </div>
         </section>

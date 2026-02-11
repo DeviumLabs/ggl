@@ -4,38 +4,37 @@ import ContactForm from "../components/contact/ContactForm";
 import { dlPush } from "../lib/analytics/dataLayer";
 import { videoListJsonLd } from "../lib/seo/buildJsonLd";
 
+const videos = [
+  { name: "Montagem de Gondola Central", id: "nPwJHr-P7ek" },
+  { name: "Montagem de Estante de Armazenamento", id: "Wr1YHpplRbE" },
+  { name: "Montagem da Estante Biblioteca", id: "r7wG3CCayP0" },
+  { name: "Estante Biblioteca com Sistema de Encaixe", id: "_l0TqQY2HPk" }
+];
+
 export default function Videos() {
-  const [isClient, setIsClient] = useState(false);
   const impressionSent = useRef(new Set());
 
-  const videos = [
-    { name: "Montagem de Gondola Central", id: "nPwJHr-P7ek" },
-    { name: "Montagem de Estante de Armazenamento", id: "Wr1YHpplRbE" },
-    { name: "Montagem da Estante Biblioteca", id: "r7wG3CCayP0" },
-    { name: "Estante Biblioteca com Sistema de Encaixe", id: "_l0TqQY2HPk" }
-  ];
-
   useEffect(() => {
-    setIsClient(true);
-    if (typeof window !== "undefined") {
-      const hash = window.location.hash;
-      if (hash) {
-        const el = document.getElementById(hash.replace("#", ""));
-        if (el) el.scrollIntoView({ behavior: "smooth" });
-      }
+    const hash = window.location.hash;
+    if (hash) {
+      const el = document.getElementById(hash.replace("#", ""));
+      if (el) el.scrollIntoView({ behavior: "smooth" });
     }
   }, []);
 
   useEffect(() => {
-    if (!isClient) return;
-
     dlPush("view_video_list", {
+      location: "videos_page",
+      item_list_name: "Videos",
       items: videos.map((v, i) => ({
         item_id: v.id,
         item_name: v.name,
         index: i + 1
       }))
     });
+
+    const cards = document.querySelectorAll(".js-video-card");
+    if (!cards.length) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -47,14 +46,15 @@ export default function Videos() {
 
           impressionSent.current.add(id);
           dlPush("video_impression", { video_id: id, video_name: name, visibility_threshold: 0.5 });
+          observer.unobserve(en.target);
         });
       },
       { threshold: 0.5 }
     );
 
-    document.querySelectorAll(".js-video-card").forEach((el) => observer.observe(el));
+    cards.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
-  }, [isClient]);
+  }, []);
 
   const handleVideoClick = (v) => dlPush("video_click", { video_id: v.id, video_name: v.name, location: "videos_page" });
 
@@ -123,22 +123,21 @@ export default function Videos() {
         title="GGL Móveis de Aço | Vídeos"
         description="Assista aos vídeos de montagem dos móveis GGL, como estantes, bibliotecas e gôndolas."
         canonical="https://www.gglmoveis.com.br/videos"
+        image="https://www.gglmoveis.com.br/assets/banners/uepg-banner1.png"
         jsonLd={jsonLd}
       />
 
-      {isClient ? (
-        <main className="tw-mt-[110px] tw-mb-[130px] tw-max-w-[1920px] tw-mx-auto tw-pt-[30px]">
-          <h1 className="tw-text-[30px] tw-text-center">Vídeos</h1>
+      <main className="tw-mt-[110px] tw-mb-[130px] tw-max-w-[1920px] tw-mx-auto tw-pt-[30px]">
+        <h1 className="tw-text-[30px] tw-text-center">Vídeos de montagem de móveis de aço</h1>
 
-          <section className="tw-px-[20px] tw-pt-[30px] tw-flex tw-justify-center tw-items-center tw-flex-wrap tw-gap-[40px] tw-mb-[120px] tw-max-w-[1280px] tw-w-full tw-mx-auto">
-            {videos.map((v) => (
-              <VideoCard key={v.id} v={v} />
-            ))}
-          </section>
+        <section className="tw-px-[20px] tw-pt-[30px] tw-flex tw-justify-center tw-items-center tw-flex-wrap tw-gap-[40px] tw-mb-[120px] tw-max-w-[1280px] tw-w-full tw-mx-auto">
+          {videos.map((v) => (
+            <VideoCard key={v.id} v={v} />
+          ))}
+        </section>
 
-          <ContactForm />
-        </main>
-      ) : null}
+        <ContactForm />
+      </main>
     </div>
   );
 }

@@ -1,14 +1,48 @@
 import Link from "next/link";
 import { Squash as Hamburger } from "hamburger-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { dlPush } from "../lib/analytics/dataLayer";
 
 export default function Header() {
   const [isOpen, setOpen] = useState(false);
+  const navRef = useRef(null);
 
   const sendNavEvent = (label, url) => dlPush("navigation_click", { location: "header", link_text: label, link_url: url });
   const sendLogoEvent = () => dlPush("logo_click", { location: "header" });
   const sendCallEvent = (number) => dlPush("click_to_call", { location: "header", phone_number: number });
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+
+    const focusTimer = setTimeout(() => {
+      const firstLink = navRef.current?.querySelector("a");
+      if (firstLink) firstLink.focus();
+    }, 0);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener("keydown", onKeyDown);
+      clearTimeout(focusTimer);
+    };
+  }, [isOpen]);
+
+  useEffect(() => {
+    const onResize = () => {
+      if (window.innerWidth >= 768) setOpen(false);
+    };
+
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
 
   return (
     <header className="tw-flex tw-items-center tw-z-[400] tw-bg-white tw-w-[100%] tw-px-[20px] tw-fixed tw-top-0 tw-left-0 tw-justify-center tw-border-black tw-border-b-[1px] tw-h-[110px]">
@@ -32,7 +66,18 @@ export default function Header() {
           />
         </Link>
 
+        {isOpen ? (
+          <button
+            type="button"
+            className="md:tw-hidden tw-fixed tw-top-[110px] tw-left-0 tw-right-0 tw-bottom-0 tw-bg-black/45"
+            onClick={() => setOpen(false)}
+            aria-label="Fechar menu"
+          />
+        ) : null}
+
         <nav
+          ref={navRef}
+          id="primary-navigation"
           className="tw-fixed md:tw-static tw-top-[110px] tw-left-0 tw-w-full tw-h-full tw-flex tw-items-center tw-justify-center md:tw-justify-end tw-flex-col md:tw-flex-row tw-gap-[30px] md:tw-bg-transparent tw-bg-blue tw-text-white md:tw-text-black tw-duration-200 tw-ease-out md:!tw-translate-x-0"
           style={{ transform: !isOpen ? "translateX(100%)" : "translateX(0)" }}
           aria-label="Menu de navegação principal"
@@ -115,7 +160,7 @@ export default function Header() {
         </nav>
 
         <div className="md:tw-hidden tw-block">
-          <Hamburger toggled={isOpen} toggle={setOpen} label="Abrir menu" />
+          <Hamburger toggled={isOpen} toggle={setOpen} label={isOpen ? "Fechar menu" : "Abrir menu"} aria-controls="primary-navigation" />
         </div>
       </div>
     </header>

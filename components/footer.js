@@ -1,5 +1,6 @@
 import { Fragment, useCallback, useMemo } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { dlPush } from "../lib/analytics/dataLayer";
 
 export default function Footer() {
@@ -51,9 +52,9 @@ export default function Footer() {
             <ul className="tw-flex tw-flex-col tw-gap-[4px]">
               {navItems.map((item) => (
                 <li key={item.label}>
-                  <a href={item.url} className="tw-text-white hover:tw-underline" onClick={() => sendFooterNavEvent(item.label, item.url)}>
+                  <Link href={item.url} className="tw-text-white hover:tw-underline" onClick={() => sendFooterNavEvent(item.label, item.url)}>
                     {item.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -67,7 +68,7 @@ export default function Footer() {
               <p className="tw-text-white tw-text-sm">Finais de semana: fechado</p>
             </div>
 
-            <div className="tw-mb-[10px]">
+            <address className="tw-mb-[10px] tw-not-italic">
               <h3 className="tw-text-white tw-font-medium">Endereço:</h3>
               <p className="tw-text-white tw-text-sm">
                 R. Dr. Eugênio José Bocchi, 645
@@ -76,9 +77,9 @@ export default function Footer() {
                 <br />
                 84070-430
               </p>
-            </div>
+            </address>
 
-            <div className="tw-mb-[10px]">
+            <address className="tw-mb-[10px] tw-not-italic">
               <h3 className="tw-text-white tw-font-medium">Contato:</h3>
               <p className="tw-text-white tw-text-sm tw-flex tw-flex-col">
                 <a href="tel:+554230252200" className="hover:tw-underline" onClick={() => sendFooterCallEvent("+554230252200")}>
@@ -88,7 +89,7 @@ export default function Footer() {
                   (42) 3025 5045
                 </a>
               </p>
-            </div>
+            </address>
 
             <div className="tw-flex tw-gap-[10px] tw-mt-[10px]">
               <a
