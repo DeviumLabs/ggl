@@ -1,0 +1,35 @@
+prefix_rule(
+  pattern = ["npm", "i"],
+  decision = "prompt",
+  justification = "Dependency changes should be deliberate for this repo."
+)
+
+prefix_rule(
+  pattern = ["npm", "install"],
+  decision = "prompt",
+  justification = "Dependency changes should be deliberate for this repo."
+)
+
+prefix_rule(
+  pattern = ["npm", "uninstall"],
+  decision = "prompt",
+  justification = "Dependency removals can break production."
+)
+
+prefix_rule(
+  pattern = ["npx"],
+  decision = "prompt",
+  justification = "npx can execute arbitrary packages."
+)
+
+prefix_rule(
+  pattern = ["npm", "run", "build"],
+  decision = "allow",
+  justification = "Build is safe and encouraged."
+)
+
+prefix_rule(
+  pattern = ["npm", "run", "lint"],
+  decision = "allow",
+  justification = "Lint is safe and encouraged."
+)
