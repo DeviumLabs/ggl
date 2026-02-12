@@ -2,9 +2,11 @@ import React, { useState, useEffect, useMemo } from "react";
 import api from "../../../services/api";
 import Head from "next/head";
 import Image from "next/image";
+import Link from "next/link";
 import ContactForm from "../../../components/contact/ContactForm";
 import Navbar from "../../../components/navbar";
 import ZoomLens from "../../../components/zoom-lens";
+import { trackProductView, trackRequestQuoteClick, trackProductVariantSelect } from "../../../lib/analytics/events";
 
 export async function getServerSideProps(context) {
   const categoria = String(context.params?.categoria || "");
@@ -87,19 +89,12 @@ export default function SingleProduct({ product, categories, categoria }) {
 
   useEffect(() => {
     if (!product?.slug || !cat || typeof window === "undefined") return;
-
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({
-      event: "view_item",
-      items: [
-        {
-          item_id: product.slug,
-          item_name: `${cat.singleName || ""} ${product.name}`.trim(),
-          item_category: cat.name,
-          item_category2: cat.slug,
-          item_variant: titlePrincipal
-        }
-      ],
+    trackProductView({
+      item_id: product.slug,
+      item_name: `${cat.singleName || ""} ${product.name}`.trim(),
+      item_category: cat.name,
+      item_category2: cat.slug,
+      item_variant: titlePrincipal,
       location: "product_page"
     });
   }, [product?.slug, product?.name, cat, titlePrincipal]);
@@ -109,20 +104,24 @@ export default function SingleProduct({ product, categories, categoria }) {
       `Gostaria de ter mais informações sobre o produto ${cat?.singleName || ""} ${product.name}`.trim()
     );
 
-    if (typeof window !== "undefined") {
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({
-        event: "request_quote_click",
-        item_id: product.slug,
-        item_name: `${cat?.singleName || ""} ${product.name}`.trim(),
-        item_category: cat?.name,
-        item_category2: cat?.slug,
-        item_variant: titlePrincipal,
-        location: "product_page"
-      });
-    }
+    trackRequestQuoteClick({
+      item_id: product.slug,
+      item_name: `${cat?.singleName || ""} ${product.name}`.trim(),
+      item_category: cat?.name,
+      item_category2: cat?.slug,
+      item_variant: titlePrincipal,
+      location: "product_page"
+    });
 
-    window.location.assign("#contato");
+    if (typeof window !== "undefined") {
+      const contactElement = document.getElementById("contato");
+      if (contactElement) {
+        contactElement.scrollIntoView({ behavior: "smooth", block: "start" });
+        window.history.replaceState(null, "", "#contato");
+        return;
+      }
+      window.location.assign("#contato");
+    }
   };
 
   const selectThumbnail = (index) => {
@@ -134,33 +133,48 @@ export default function SingleProduct({ product, categories, categoria }) {
     setHoveredIndex(null);
     if (models[index]) setTitlePrincipal(models[index].name);
 
-    if (typeof window !== "undefined") {
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({
-        event: "select_item",
-        item_list_name: "product_thumbnails",
-        items: [
-          {
-            item_id: product.slug,
-            item_name: `${cat?.singleName || ""} ${product.name}`.trim(),
-            item_category: cat?.name,
-            item_category2: cat?.slug,
-            item_variant: models[index]?.name || `variante_${index + 1}`,
-            index: index + 1
-          }
-        ],
-        location: "product_page"
-      });
-    }
+    trackProductVariantSelect({
+      item_id: product.slug,
+      item_name: `${cat?.singleName || ""} ${product.name}`.trim(),
+      item_category: cat?.name,
+      item_category2: cat?.slug,
+      item_variant: models[index]?.name || `variante_${index + 1}`,
+      index: index + 1,
+      item_list_name: "product_thumbnails",
+      location: "product_page"
+    });
   };
 
-  const canonical = `https://www.gglmoveis.com.br/produtos/${cat?.slug || categoria}/${product.slug}`;
+  const canonical = `https://www.gglmoveis.com.br/produtos/${categoria}/${product.slug}`;
+  const absoluteImages = images.map((img) =>
+    typeof img === "string" && img.startsWith("http") ? img : `https://www.gglmoveis.com.br${img}`
+  );
+  const ogImage = absoluteImages[0] || "https://www.gglmoveis.com.br/assets/placeholder.png";
+  const metaDescription =
+    product.description ||
+    cat?.description ||
+    "Conheça os móveis de aço da GGL: qualidade, durabilidade e acabamento superior.";
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://www.gglmoveis.com.br/" },
+      { "@type": "ListItem", position: 2, name: "Produtos", item: "https://www.gglmoveis.com.br/produtos" },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: cat?.name || categoria,
+        item: `https://www.gglmoveis.com.br/produtos/${categoria}`
+      },
+      { "@type": "ListItem", position: 4, name: `${cat?.singleName || ""} ${product.name}`.trim(), item: canonical }
+    ]
+  };
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
     name: `${cat?.singleName || ""} ${product.name}`.trim(),
-    image: images,
+    image: absoluteImages,
     description:
       product.description ||
       cat?.description ||
@@ -183,17 +197,20 @@ export default function SingleProduct({ product, categories, categoria }) {
         <title>
           GGL Móveis de Aço | {cat?.name} - {product.name}
         </title>
-        <meta
-          name="description"
-          content={
-            product.description ||
-            cat?.description ||
-            "Conheça os móveis de aço da GGL: qualidade, durabilidade e acabamento superior."
-          }
-        />
+        <meta name="description" content={metaDescription} />
         <meta name="robots" content="index, follow" />
+        <meta property="og:type" content="product" />
+        <meta property="og:title" content={`GGL Móveis de Aço | ${cat?.name} - ${product.name}`} />
+        <meta property="og:description" content={metaDescription} />
+        <meta property="og:url" content={canonical} />
+        <meta property="og:image" content={ogImage} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`GGL Móveis de Aço | ${cat?.name} - ${product.name}`} />
+        <meta name="twitter:description" content={metaDescription} />
+        <meta name="twitter:image" content={ogImage} />
         <link rel="canonical" href={canonical} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
       </Head>
 
       <main className="tw-mt-[140px] tw-mb-[100px] tw-relative">
@@ -284,6 +301,15 @@ export default function SingleProduct({ product, categories, categoria }) {
           </div>
 
           <div className="tw-w-full xl:tw-flex-1 xl:tw-max-w-[560px] tw-mt-[14px] xl:tw-mt-0">
+            <nav aria-label="Breadcrumb" className="tw-flex tw-items-center tw-gap-[7px] tw-text-[13px] tw-text-slate-500 tw-mb-[10px]">
+              <Link href="/produtos" className="hover:tw-text-blue hover:tw-underline">
+                Produtos
+              </Link>
+              <span aria-hidden="true">/</span>
+              <Link href={`/produtos/${categoria}`} className="hover:tw-text-blue hover:tw-underline">
+                {cat?.name || categoria}
+              </Link>
+            </nav>
             <h1 className="tw-text-[38px]">{activeVariantTitle}</h1>
             <p>{product.description}</p>
 

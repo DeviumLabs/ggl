@@ -3,8 +3,18 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import InputMask from "react-input-mask";
-import { dlPush } from "../../lib/analytics/dataLayer";
 import ContactChannelModal from "./ContactChannelModal";
+import {
+  trackContactChannelModalOpen,
+  trackContactChannelSelect,
+  trackContactFormProgress,
+  trackContactFormStart,
+  trackContactFormSubmit,
+  trackContactFormSubmitError,
+  trackContactFormSubmitSuccess,
+  trackContactFormView,
+  trackGenerateLead
+} from "../../lib/analytics/events";
 
 const norm = (s) => (s || "").toString().trim().toLowerCase();
 const onlyDigits = (s) => (s || "").toString().replace(/\D/g, "");
@@ -97,7 +107,7 @@ export default function ContactForm({ budgetMessage }) {
   }, [setValue]);
 
   useEffect(() => {
-    dlPush("view_contact_form", { form_id: "contact_form" });
+    trackContactFormView({ form_id: "contact_form" });
   }, []);
 
   useEffect(() => {
@@ -110,14 +120,14 @@ export default function ContactForm({ budgetMessage }) {
   const checkFormProgress = () => {
     const filled = [watch("name"), watch("phone"), watch("email"), watch("estado"), watch("cidade")].filter(Boolean).length;
     if (!progressSentRef.current && filled >= 3) {
-      dlPush("form_progress", { form_id: "contact_form", progress: "50%" });
+      trackContactFormProgress({ form_id: "contact_form", progress: "50%" });
       progressSentRef.current = true;
     }
   };
 
   const handleFieldChange = () => {
     if (!formStartedRef.current) {
-      dlPush("start_form", { form_id: "contact_form" });
+      trackContactFormStart({ form_id: "contact_form" });
       formStartedRef.current = true;
     }
     checkFormProgress();
@@ -158,7 +168,7 @@ export default function ContactForm({ budgetMessage }) {
     const payload = buildPayloadFromValues(vals);
     setPendingPayload(payload);
     setModalOpen(true);
-    dlPush("contact_channel_modal_open", {
+    trackContactChannelModalOpen({
       form_id: "contact_form",
       source_url: payload.source_url || ""
     });
@@ -169,7 +179,7 @@ export default function ContactForm({ budgetMessage }) {
     try {
       setIsSending(true);
 
-      dlPush("contact_channel_select", {
+      trackContactChannelSelect({
         form_id: "contact_form",
         channel: "email",
         lead_type: pendingPayload.tipo_pessoa,
@@ -178,7 +188,7 @@ export default function ContactForm({ budgetMessage }) {
         source_url: pendingPayload.source_url || ""
       });
 
-      dlPush("form_submit", { form_id: "contact_form", channel: "email" });
+      trackContactFormSubmit({ form_id: "contact_form", channel: "email" });
 
       await axios.post("/api/mail", {
         ...pendingPayload,
@@ -192,7 +202,7 @@ export default function ContactForm({ budgetMessage }) {
       const cleanedEmail = norm(pendingPayload.email);
       const cleanedPhone = withDDI55(onlyDigits(pendingPayload.phone));
 
-      dlPush("form_submit_success", {
+      trackContactFormSubmitSuccess({
         form_id: "contact_form",
         channel: "email",
         company: cleanedCompany,
@@ -202,7 +212,7 @@ export default function ContactForm({ budgetMessage }) {
         source_url: pendingPayload.source_url || ""
       });
 
-      dlPush("generate_lead", {
+      trackGenerateLead({
         value: 1.0,
         currency: "BRL",
         company: cleanedCompany,
@@ -225,7 +235,7 @@ export default function ContactForm({ budgetMessage }) {
       setPendingPayload(null);
       reset({ tipo_pessoa: "pf", razao_social: "", message: "", source_url: getValues("source_url") || "" });
     } catch {
-      dlPush("form_submit_error", { form_id: "contact_form", channel: "email" });
+      trackContactFormSubmitError({ form_id: "contact_form", channel: "email" });
       toast.error("Houve um erro ao enviar. Tente novamente mais tarde.");
     } finally {
       setIsSending(false);
@@ -261,7 +271,7 @@ export default function ContactForm({ budgetMessage }) {
     const text = encodeURIComponent(lines.join("\n"));
     const href = `https://wa.me/${whatsappNumber}?text=${text}`;
 
-    dlPush("contact_channel_select", {
+    trackContactChannelSelect({
       form_id: "contact_form",
       channel: "whatsapp",
       lead_type: pendingPayload.tipo_pessoa,
@@ -270,7 +280,7 @@ export default function ContactForm({ budgetMessage }) {
       source_url: pendingPayload.source_url || ""
     });
 
-    dlPush("form_submit", { form_id: "contact_form", channel: "whatsapp" });
+    trackContactFormSubmit({ form_id: "contact_form", channel: "whatsapp" });
 
     const win = typeof window !== "undefined" ? window.open(href, "_blank", "noopener,noreferrer") : null;
     if (!win && typeof window !== "undefined") window.location.href = href;
@@ -306,7 +316,7 @@ export default function ContactForm({ budgetMessage }) {
           if (isSending) return;
           openChoiceModal();
         }}
-        className="tw-px-[16px] tw-mb-[100px] tw-pt-[200px] tw-mt-[-200px]"
+        className="tw-px-[16px] tw-scroll-mt-[130px] tw-pb-[18px]"
         id="contato"
       >
         <div className="tw-mx-auto tw-w-full tw-max-w-[720px] tw-rounded-[26px] tw-border tw-border-slate-200 tw-bg-gradient-to-b tw-from-white tw-to-slate-50 tw-px-[18px] tw-py-[22px] md:tw-px-[34px] md:tw-py-[34px] tw-shadow-[0_20px_55px_-38px_rgba(15,23,42,0.55)]">

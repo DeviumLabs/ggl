@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
-import { dlPush } from "../lib/analytics/dataLayer";
+import { trackSelectItem } from "../lib/analytics/events";
 
 function getPathParts(asPath = "") {
   const clean = (asPath || "").split("?")[0].split("#")[0];
@@ -78,7 +78,7 @@ export default function Navbar({ categories }) {
   }, [mobileOpen]);
 
   const handleProductClick = (category, product) => {
-    dlPush("select_item", {
+    trackSelectItem({
       location: "navbar",
       item_list_name: "Navbar categorias",
       items: [

@@ -1,8 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
 import { useEffect } from "react";
-import Header from "../components/header";
-import Footer from "../components/footer";
 import { dlPush } from "../lib/analytics/dataLayer";
 
 export default function NotFoundPage() {
@@ -23,8 +21,6 @@ export default function NotFoundPage() {
         <meta name="robots" content="noindex, follow" />
         <link rel="canonical" href="https://www.gglmoveis.com.br/404" />
       </Head>
-
-      <Header />
 
       <main className="tw-mt-[120px] tw-mb-[130px] tw-max-w-[1024px] tw-mx-auto tw-px-[20px] tw-min-h-[55vh] tw-flex tw-items-center">
         <div className="tw-w-full tw-text-center">
