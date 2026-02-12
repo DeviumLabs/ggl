@@ -53,6 +53,12 @@ export default function ContactForm({ budgetMessage }) {
   const [cidades, setCidades] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [pendingPayload, setPendingPayload] = useState(null);
+  const [feedbackModal, setFeedbackModal] = useState({
+    open: false,
+    title: "",
+    description: "",
+    email: ""
+  });
 
   const whatsappRaw = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "";
   const whatsappNumber = useMemo(() => {
@@ -64,6 +70,8 @@ export default function ContactForm({ budgetMessage }) {
 
   const formStartedRef = useRef(false);
   const progressSentRef = useRef(false);
+  const feedbackPrimaryBtnRef = useRef(null);
+  const feedbackPrevFocusRef = useRef(null);
 
   useEffect(() => {
     const fetchEstados = async () => {
@@ -77,6 +85,29 @@ export default function ContactForm({ budgetMessage }) {
     };
     fetchEstados();
   }, []);
+
+  useEffect(() => {
+    if (!feedbackModal.open) return;
+    feedbackPrevFocusRef.current = typeof document !== "undefined" ? document.activeElement : null;
+
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setFeedbackModal((prev) => ({ ...prev, open: false }));
+      }
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    setTimeout(() => {
+      if (feedbackPrimaryBtnRef.current) feedbackPrimaryBtnRef.current.focus();
+    }, 0);
+
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      if (feedbackPrevFocusRef.current && typeof feedbackPrevFocusRef.current.focus === "function") {
+        feedbackPrevFocusRef.current.focus();
+      }
+    };
+  }, [feedbackModal.open]);
 
   const estadoSelecionado = watch("estado");
   useEffect(() => {
@@ -150,6 +181,14 @@ export default function ContactForm({ budgetMessage }) {
       wbraid: vals.wbraid || "",
       source_url: vals.source_url || ""
     };
+  };
+
+  const openFeedbackModal = (title, description, email = "") => {
+    setFeedbackModal({ open: true, title, description, email });
+  };
+
+  const closeFeedbackModal = () => {
+    setFeedbackModal((prev) => ({ ...prev, open: false }));
   };
 
   const openChoiceModal = async () => {
@@ -230,7 +269,12 @@ export default function ContactForm({ budgetMessage }) {
         }
       });
 
-      toast.success("Mensagem enviada! Retornaremos por e-mail em breve.");
+      const replyEmail = (pendingPayload.email || "").toString().trim();
+      openFeedbackModal(
+        "Mensagem enviada com sucesso",
+        "Recebemos sua solicitação. Nossa equipe responderá em breve.",
+        replyEmail
+      );
       setModalOpen(false);
       setPendingPayload(null);
       reset({ tipo_pessoa: "pf", razao_social: "", message: "", source_url: getValues("source_url") || "" });
@@ -285,7 +329,7 @@ export default function ContactForm({ budgetMessage }) {
     const win = typeof window !== "undefined" ? window.open(href, "_blank", "noopener,noreferrer") : null;
     if (!win && typeof window !== "undefined") window.location.href = href;
 
-    toast.success("Abrindo WhatsApp com sua mensagem pronta. Retornaremos por lá em breve.");
+    openFeedbackModal("WhatsApp preparado", "Abrimos o WhatsApp com sua mensagem pronta. Envie e retornaremos por lá em breve.");
     setModalOpen(false);
     setPendingPayload(null);
   };
@@ -298,6 +342,75 @@ export default function ContactForm({ budgetMessage }) {
 
   return (
     <>
+      {feedbackModal.open ? (
+        <div
+          className="tw-fixed tw-inset-0 tw-z-[10000] tw-flex tw-items-center tw-justify-center tw-px-[16px]"
+          role="alertdialog"
+          aria-modal="true"
+          aria-labelledby="contact-feedback-title"
+          aria-describedby="contact-feedback-desc"
+          onMouseDown={(e) => {
+            if (e.target === e.currentTarget) closeFeedbackModal();
+          }}
+        >
+          <div className="tw-absolute tw-inset-0 tw-bg-slate-900/55" />
+
+          <div className="tw-relative tw-w-full tw-max-w-[500px] tw-rounded-[24px] tw-border tw-border-slate-200 tw-bg-white tw-p-[20px] md:tw-p-[24px] tw-shadow-[0_28px_55px_-30px_rgba(15,23,42,0.75)]">
+            <div className="tw-flex tw-items-start tw-justify-between tw-gap-[14px]">
+              <div className="tw-flex tw-items-start tw-gap-[10px]">
+                <span
+                  aria-hidden="true"
+                  className="tw-inline-flex tw-items-center tw-justify-center tw-h-[30px] tw-w-[30px] tw-rounded-full tw-bg-blue/10 tw-text-blue tw-font-semibold"
+                >
+                  ✓
+                </span>
+                <div>
+                  <h3 id="contact-feedback-title" className="tw-text-[20px] tw-leading-[1.2] tw-font-semibold tw-text-darkBlue">
+                    {feedbackModal.title}
+                  </h3>
+                  <p id="contact-feedback-desc" className="tw-mt-[8px] tw-text-[15px] tw-leading-[1.45] tw-text-slate-600">
+                    {feedbackModal.description}
+                  </p>
+                  {feedbackModal.email ? (
+                    <div className="tw-mt-[12px] tw-rounded-[12px] tw-border tw-border-slate-200 tw-bg-slate-50 tw-px-[12px] tw-py-[10px]">
+                      <p className="tw-text-[12px] tw-font-medium tw-text-slate-500">Responderemos no e-mail:</p>
+                      <p className="tw-text-[14px] tw-font-semibold tw-text-darkBlue tw-break-all">{feedbackModal.email}</p>
+                    </div>
+                  ) : null}
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={closeFeedbackModal}
+                className="tw-inline-flex tw-h-[34px] tw-w-[34px] tw-items-center tw-justify-center tw-rounded-[10px] tw-bg-slate-100 tw-text-slate-600 tw-transition hover:tw-bg-slate-200"
+                aria-label="Fechar"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="tw-mt-[20px] tw-flex tw-items-center tw-justify-end tw-gap-[10px]">
+              <button
+                type="button"
+                onClick={closeFeedbackModal}
+                className="tw-rounded-[12px] tw-border tw-border-slate-200 tw-bg-white tw-px-[14px] tw-py-[9px] tw-text-[14px] tw-font-medium tw-text-slate-700 tw-transition hover:tw-bg-slate-50"
+              >
+                Fechar
+              </button>
+              <button
+                ref={feedbackPrimaryBtnRef}
+                type="button"
+                onClick={closeFeedbackModal}
+                className="tw-rounded-[12px] tw-bg-blue tw-px-[16px] tw-py-[9px] tw-text-[14px] tw-font-semibold tw-text-white tw-transition hover:tw-bg-darkBlue"
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
       <ContactChannelModal
         open={modalOpen}
         onClose={() => {
