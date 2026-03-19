@@ -1,9 +1,10 @@
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import InputMask from "react-input-mask";
 import ContactChannelModal from "./ContactChannelModal";
+import CustomSelect from "../custom-select";
 import {
   trackContactChannelModalOpen,
   trackContactChannelSelect,
@@ -28,6 +29,7 @@ const tipoLabel = (t) => (t === "empresa" ? "Empresa" : t === "orgao_publico" ? 
 
 export default function ContactForm({ budgetMessage }) {
   const {
+    control,
     register,
     watch,
     reset,
@@ -110,10 +112,16 @@ export default function ContactForm({ budgetMessage }) {
   }, [feedbackModal.open]);
 
   const estadoSelecionado = watch("estado");
+  const cidadeSelecionada = watch("cidade");
   useEffect(() => {
     const estado = estados.find((e) => e.sigla === estadoSelecionado);
-    setCidades(estado ? estado.cidades : []);
-  }, [estadoSelecionado, estados]);
+    const nextCities = estado ? estado.cidades : [];
+    setCidades(nextCities);
+
+    if (cidadeSelecionada && !nextCities.includes(cidadeSelecionada)) {
+      setValue("cidade", "", { shouldDirty: true, shouldValidate: true });
+    }
+  }, [cidadeSelecionada, estadoSelecionado, estados, setValue]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -339,6 +347,15 @@ export default function ContactForm({ budgetMessage }) {
   const fieldInputClass =
     "tw-w-full tw-rounded-[14px] tw-border tw-border-slate-300 tw-bg-white tw-py-[12px] tw-px-[14px] tw-text-[15px] tw-outline-none tw-transition focus:tw-border-blue focus:tw-ring-2 focus:tw-ring-blue/20";
   const fieldErrorClass = "tw-mt-[6px] tw-text-[13px] tw-text-red-600";
+  const selectInputClass = `${fieldInputClass} tw-pr-[48px]`;
+  const stateOptions = useMemo(
+    () => estados.map((estado) => ({ value: estado.sigla, label: estado.nome })),
+    [estados]
+  );
+  const cityOptions = useMemo(
+    () => cidades.map((cidade) => ({ value: cidade, label: cidade })),
+    [cidades]
+  );
 
   return (
     <>
@@ -563,19 +580,26 @@ export default function ContactForm({ budgetMessage }) {
               <label htmlFor="estado" className={fieldLabelClass}>
                 Estado:
               </label>
-              <select
-                id="estado"
-                {...register("estado", { required: true, onChange: handleFieldChange })}
-                autoComplete="address-level1"
-                className={fieldInputClass}
-              >
-                <option value="">Selecione o estado</option>
-                {estados.map((estado) => (
-                  <option key={estado.sigla} value={estado.sigla}>
-                    {estado.nome}
-                  </option>
-                ))}
-              </select>
+              <Controller
+                name="estado"
+                control={control}
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <CustomSelect
+                    id="estado"
+                    name={field.name}
+                    value={field.value}
+                    onChange={(nextValue) => {
+                      field.onChange(nextValue);
+                      handleFieldChange();
+                    }}
+                    onBlur={field.onBlur}
+                    options={stateOptions}
+                    placeholder="Digite para buscar o estado"
+                    inputClassName={selectInputClass}
+                  />
+                )}
+              />
               {errors.estado ? <span className={fieldErrorClass}>*Campo obrigatório</span> : null}
             </div>
 
@@ -583,20 +607,27 @@ export default function ContactForm({ budgetMessage }) {
               <label htmlFor="cidade" className={fieldLabelClass}>
                 Cidade:
               </label>
-              <select
-                id="cidade"
-                {...register("cidade", { required: true, onChange: handleFieldChange })}
-                autoComplete="address-level2"
-                className={fieldInputClass}
-                disabled={cidades.length === 0}
-              >
-                <option value="">Selecione a cidade</option>
-                {cidades.map((cidade) => (
-                  <option key={cidade} value={cidade}>
-                    {cidade}
-                  </option>
-                ))}
-              </select>
+              <Controller
+                name="cidade"
+                control={control}
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <CustomSelect
+                    id="cidade"
+                    name={field.name}
+                    value={field.value}
+                    onChange={(nextValue) => {
+                      field.onChange(nextValue);
+                      handleFieldChange();
+                    }}
+                    onBlur={field.onBlur}
+                    options={cityOptions}
+                    placeholder={cidades.length ? "Digite para buscar a cidade" : "Selecione primeiro o estado"}
+                    inputClassName={selectInputClass}
+                    disabled={cidades.length === 0}
+                  />
+                )}
+              />
               {errors.cidade ? <span className={fieldErrorClass}>*Campo obrigatório</span> : null}
             </div>
           </div>
