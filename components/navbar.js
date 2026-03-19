@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { AnimatePresence, useReducedMotion } from "motion/react";
+import * as m from "motion/react-m";
+import SmoothExpand from "./animations/SmoothExpand";
 import { trackSelectItem } from "../lib/analytics/events";
 
 function getPathParts(asPath = "") {
@@ -19,6 +22,7 @@ export default function Navbar({ categories }) {
   const uid = useId();
   const mobilePanelRef = useRef(null);
   const previousFocusRef = useRef(null);
+  const shouldReduceMotion = useReducedMotion();
 
   const qCategoria = typeof router.query?.categoria === "string" ? router.query.categoria : "";
   const qProduto = typeof router.query?.produto === "string" ? router.query.produto : "";
@@ -31,6 +35,10 @@ export default function Navbar({ categories }) {
 
   const [openCategory, setOpenCategory] = useState(activeCategory || "");
   const [mobileOpen, setMobileOpen] = useState(false);
+  const drawerTransition = shouldReduceMotion
+    ? { duration: 0.16 }
+    : { duration: 0.28, ease: [0.22, 1, 0.36, 1] };
+  const drawerOffset = shouldReduceMotion ? 0 : -32;
 
   useEffect(() => {
     if (activeCategory) setOpenCategory(activeCategory);
@@ -151,39 +159,30 @@ export default function Navbar({ categories }) {
                 </span>
               </button>
 
-              <div
-                id={groupId}
-                aria-hidden={!isOpen}
-                className={[
-                  "tw-overflow-hidden tw-transition-all tw-duration-300 tw-ease-in-out",
-                  isOpen ? "tw-max-h-[900px] tw-opacity-100 tw-mt-[6px] tw-pointer-events-auto" : "tw-max-h-0 tw-opacity-0 tw-mt-0 tw-pointer-events-none"
-                ].join(" ")}
-              >
-                <div className="tw-flex tw-flex-col">
-                  {(category.products || []).map((product) => {
-                    const isActiveProduct = isActiveCategory && product.slug === activeProduct;
+              <SmoothExpand open={isOpen} id={groupId} contentClassName="tw-flex tw-flex-col">
+                {(category.products || []).map((product) => {
+                  const isActiveProduct = isActiveCategory && product.slug === activeProduct;
 
-                    return (
-                      <Link
-                        key={product.slug}
-                        href={`/produtos/${category.slug}/${product.slug}`}
-                        onClick={(e) => onProductLinkClick(e, category, product, isActiveProduct)}
-                        aria-current={isActiveProduct ? "page" : undefined}
-                        tabIndex={isOpen ? 0 : -1}
-                        className={[
-                          "tw-pl-[10px] tw-text-[14px] tw-rounded-[10px] tw-py-[7px] tw-pr-[8px] tw-transition",
-                          "hover:tw-bg-white/10 hover:tw-underline focus-visible:tw-outline-none focus-visible:tw-ring-2 focus-visible:tw-ring-white/80",
-                          isActiveProduct
-                            ? "tw-bg-white tw-text-blue tw-font-semibold hover:tw-no-underline"
-                            : "tw-text-white tw-font-light"
-                        ].join(" ")}
-                      >
-                        ● {product.name}
-                      </Link>
-                    );
-                  })}
-                </div>
-              </div>
+                  return (
+                    <Link
+                      key={product.slug}
+                      href={`/produtos/${category.slug}/${product.slug}`}
+                      onClick={(e) => onProductLinkClick(e, category, product, isActiveProduct)}
+                      aria-current={isActiveProduct ? "page" : undefined}
+                      tabIndex={isOpen ? 0 : -1}
+                      className={[
+                        "tw-pl-[10px] tw-text-[14px] tw-rounded-[10px] tw-py-[7px] tw-pr-[8px] tw-transition",
+                        "hover:tw-bg-white/10 hover:tw-underline focus-visible:tw-outline-none focus-visible:tw-ring-2 focus-visible:tw-ring-white/80",
+                        isActiveProduct
+                          ? "tw-bg-white tw-text-blue tw-font-semibold hover:tw-no-underline"
+                          : "tw-text-white tw-font-light"
+                      ].join(" ")}
+                    >
+                      ● {product.name}
+                    </Link>
+                  );
+                })}
+              </SmoothExpand>
             </div>
           );
         })}
@@ -209,36 +208,36 @@ export default function Navbar({ categories }) {
         </button>
       </div>
 
-      <div
-        className={[
-          "md:tw-hidden tw-fixed tw-inset-0 tw-z-[700] tw-transition",
-          mobileOpen ? "tw-pointer-events-auto" : "tw-pointer-events-none"
-        ].join(" ")}
-        aria-hidden={!mobileOpen}
-      >
-        <div
-          className={[
-            "tw-absolute tw-inset-0 tw-bg-black/50 tw-transition-opacity",
-            mobileOpen ? "tw-opacity-100" : "tw-opacity-0"
-          ].join(" ")}
-          onClick={() => setMobileOpen(false)}
-        />
+      <AnimatePresence initial={false}>
+        {mobileOpen ? (
+          <div className="md:tw-hidden tw-fixed tw-inset-0 tw-z-[700]">
+            <m.div
+              className="tw-absolute tw-inset-0 tw-bg-black/50"
+              onClick={() => setMobileOpen(false)}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={drawerTransition}
+            />
 
-        <div
-          className={[
-            "tw-absolute tw-left-0 tw-top-0 tw-h-full tw-w-[86%] tw-max-w-[340px] tw-bg-blue tw-rounded-r-[24px] tw-border-r tw-border-blue/60 tw-px-[12px] tw-py-[18px] tw-overflow-y-auto tw-shadow-[0_26px_44px_-24px_rgba(15,23,42,0.7)] tw-transition-transform tw-duration-300",
-            mobileOpen ? "tw-translate-x-0" : "-tw-translate-x-full"
-          ].join(" ")}
-          id={`${uid}-mobile-products`}
-          ref={mobilePanelRef}
-          role="dialog"
-          aria-modal="true"
-          aria-label="Linha de produtos"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <NavContent isMobile />
-        </div>
-      </div>
+            <m.div
+              className="tw-absolute tw-left-0 tw-top-0 tw-h-full tw-w-[86%] tw-max-w-[340px] tw-bg-blue tw-rounded-r-[24px] tw-border-r tw-border-blue/60 tw-px-[12px] tw-py-[18px] tw-overflow-y-auto tw-shadow-[0_26px_44px_-24px_rgba(15,23,42,0.7)]"
+              id={`${uid}-mobile-products`}
+              ref={mobilePanelRef}
+              role="dialog"
+              aria-modal="true"
+              aria-label="Linha de produtos"
+              onClick={(e) => e.stopPropagation()}
+              initial={{ opacity: 0, x: drawerOffset }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: drawerOffset }}
+              transition={drawerTransition}
+            >
+              <NavContent isMobile />
+            </m.div>
+          </div>
+        ) : null}
+      </AnimatePresence>
 
       <nav
         className="tw-hidden md:tw-block tw-absolute tw-left-0 tw-z-[300] tw-w-[15%] tw-min-w-[200px] tw-bg-blue tw-rounded-r-[24px] tw-border-r tw-border-blue/60 tw-px-[10px] tw-py-[30px] tw-shadow-[0_26px_44px_-24px_rgba(15,23,42,0.65)]"

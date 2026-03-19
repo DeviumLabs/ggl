@@ -2,16 +2,23 @@ import Link from "next/link";
 import { Squash as Hamburger } from "hamburger-react";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
+import { AnimatePresence, useReducedMotion } from "motion/react";
+import * as m from "motion/react-m";
 import { trackClickToCall, trackLogoClick, trackNavigationClick } from "../lib/analytics/events";
 
 export default function Header() {
   const router = useRouter();
   const [isOpen, setOpen] = useState(false);
   const navRef = useRef(null);
+  const shouldReduceMotion = useReducedMotion();
 
   const sendNavEvent = (label, url) => trackNavigationClick({ location: "header", link_text: label, link_url: url });
   const sendLogoEvent = () => trackLogoClick({ location: "header" });
   const sendCallEvent = (number) => trackClickToCall({ location: "header", phone_number: number });
+  const menuTransition = shouldReduceMotion
+    ? { duration: 0.16 }
+    : { duration: 0.26, ease: [0.22, 1, 0.36, 1] };
+  const menuOffset = shouldReduceMotion ? 0 : -10;
 
   useEffect(() => {
     if (!isOpen) return;
@@ -84,73 +91,79 @@ export default function Header() {
           />
         </Link>
 
-        {isOpen ? (
-          <button
-            type="button"
-            className="md:tw-hidden tw-fixed tw-inset-0 tw-z-[405] tw-bg-slate-900/45 tw-backdrop-blur-[1px]"
-            onClick={() => setOpen(false)}
-            aria-label="Fechar menu"
-          />
-        ) : null}
+        <AnimatePresence initial={false}>
+          {isOpen ? (
+            <div className="md:tw-hidden tw-fixed tw-inset-0 tw-z-[405]">
+              <m.button
+                type="button"
+                className="tw-absolute tw-inset-0 tw-bg-slate-900/45 tw-backdrop-blur-[1px]"
+                onClick={() => setOpen(false)}
+                aria-label="Fechar menu"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={menuTransition}
+              />
 
-        <div
-          ref={navRef}
-          id="primary-navigation"
-          className={[
-            "md:tw-hidden tw-fixed tw-z-[410] tw-inset-x-[12px] tw-top-[108px] tw-max-h-[calc(100vh-120px)] tw-overflow-y-auto",
-            "tw-rounded-[24px] tw-border tw-border-white/20 tw-bg-[linear-gradient(160deg,#0f172a_0%,#0058c2_58%,#0369a1_100%)] tw-text-white",
-            "tw-px-[16px] tw-py-[16px] tw-shadow-[0_24px_42px_-26px_rgba(15,23,42,0.78)] tw-transition-all tw-duration-300",
-            isOpen ? "tw-opacity-100 tw-translate-y-0 tw-pointer-events-auto" : "tw-opacity-0 -tw-translate-y-[8px] tw-pointer-events-none"
-          ].join(" ")}
-          role="dialog"
-          aria-modal="true"
-          aria-label="Menu principal"
-          aria-hidden={!isOpen}
-        >
-          <div className="tw-flex tw-items-center tw-justify-between tw-gap-[8px]">
-            <span className="tw-text-[13px] tw-font-semibold tw-tracking-[0.08em] tw-text-white/85">NAVEGAÇÃO</span>
-            <button
-              type="button"
-              onClick={() => setOpen(false)}
-              className="tw-inline-flex tw-items-center tw-justify-center tw-w-[34px] tw-h-[34px] tw-rounded-[10px] tw-bg-white/12 focus-visible:tw-outline-none focus-visible:tw-ring-2 focus-visible:tw-ring-white/80"
-              aria-label="Fechar menu"
-            >
-              ✕
-            </button>
-          </div>
+              <m.div
+                ref={navRef}
+                id="primary-navigation"
+                className="tw-fixed tw-inset-x-[12px] tw-top-[108px] tw-max-h-[calc(100vh-120px)] tw-overflow-y-auto tw-rounded-[24px] tw-border tw-border-white/20 tw-bg-[linear-gradient(160deg,#0f172a_0%,#0058c2_58%,#0369a1_100%)] tw-text-white tw-px-[16px] tw-py-[16px] tw-shadow-[0_24px_42px_-26px_rgba(15,23,42,0.78)]"
+                role="dialog"
+                aria-modal="true"
+                aria-label="Menu principal"
+                initial={{ opacity: 0, y: menuOffset }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: menuOffset }}
+                transition={menuTransition}
+              >
+                <div className="tw-flex tw-items-center tw-justify-between tw-gap-[8px]">
+                  <span className="tw-text-[13px] tw-font-semibold tw-tracking-[0.08em] tw-text-white/85">NAVEGAÇÃO</span>
+                  <button
+                    type="button"
+                    onClick={() => setOpen(false)}
+                    className="tw-inline-flex tw-items-center tw-justify-center tw-w-[34px] tw-h-[34px] tw-rounded-[10px] tw-bg-white/12 focus-visible:tw-outline-none focus-visible:tw-ring-2 focus-visible:tw-ring-white/80"
+                    aria-label="Fechar menu"
+                  >
+                    ✕
+                  </button>
+                </div>
 
-          <div className="tw-mt-[10px] tw-grid tw-grid-cols-1 tw-gap-[8px]">
-            {navItems.map((item) => {
-              const isActive = isActiveRoute(item.href);
-              return (
-                <Link
-                  key={item.label}
-                  href={item.href}
-                  className={[
-                    "tw-inline-flex tw-w-full tw-items-center tw-justify-center tw-text-center tw-min-h-[44px] tw-rounded-full tw-px-[12px] tw-py-[9px] tw-text-[15px] tw-font-medium tw-leading-none tw-tracking-[0.01em] tw-transition",
-                    "hover:tw-bg-white/16",
-                    isActive ? "tw-bg-white/18 tw-font-semibold tw-shadow-[0_10px_18px_-14px_rgba(0,88,194,0.9)]" : ""
-                  ].join(" ")}
-                  onClick={() => {
-                    sendNavEvent(item.label, item.href);
-                    setOpen(false);
-                  }}
-                >
-                  {item.label}
-                </Link>
-              );
-            })}
-          </div>
+                <div className="tw-mt-[10px] tw-grid tw-grid-cols-1 tw-gap-[8px]">
+                  {navItems.map((item) => {
+                    const isActive = isActiveRoute(item.href);
+                    return (
+                      <Link
+                        key={item.label}
+                        href={item.href}
+                        className={[
+                          "tw-inline-flex tw-w-full tw-items-center tw-justify-center tw-text-center tw-min-h-[44px] tw-rounded-full tw-px-[12px] tw-py-[9px] tw-text-[15px] tw-font-medium tw-leading-none tw-tracking-[0.01em] tw-transition",
+                          "hover:tw-bg-white/16",
+                          isActive ? "tw-bg-white/18 tw-font-semibold tw-shadow-[0_10px_18px_-14px_rgba(0,88,194,0.9)]" : ""
+                        ].join(" ")}
+                        onClick={() => {
+                          sendNavEvent(item.label, item.href);
+                          setOpen(false);
+                        }}
+                      >
+                        {item.label}
+                      </Link>
+                    );
+                  })}
+                </div>
 
-          <div className="tw-mt-[10px] tw-border-t tw-border-white/30 tw-pt-[10px] tw-flex tw-flex-col tw-gap-[2px]">
-            <a href="tel:+554230252200" className="tw-font-[500] tw-text-[15px] tw-text-white md:tw-text-slate-700 md:tw-text-[14px] hover:tw-underline" onClick={() => sendCallEvent("+554230252200")}>
-              (42) 3025 2200
-            </a>
-            <a href="tel:+554230255045" className="tw-font-[500] tw-text-[15px] tw-text-white md:tw-text-slate-700 md:tw-text-[14px] hover:tw-underline" onClick={() => sendCallEvent("+554230255045")}>
-              (42) 3025 5045
-            </a>
-          </div>
-        </div>
+                <div className="tw-mt-[10px] tw-border-t tw-border-white/30 tw-pt-[10px] tw-flex tw-flex-col tw-gap-[2px]">
+                  <a href="tel:+554230252200" className="tw-font-[500] tw-text-[15px] tw-text-white md:tw-text-slate-700 md:tw-text-[14px] hover:tw-underline" onClick={() => sendCallEvent("+554230252200")}>
+                    (42) 3025 2200
+                  </a>
+                  <a href="tel:+554230255045" className="tw-font-[500] tw-text-[15px] tw-text-white md:tw-text-slate-700 md:tw-text-[14px] hover:tw-underline" onClick={() => sendCallEvent("+554230255045")}>
+                    (42) 3025 5045
+                  </a>
+                </div>
+              </m.div>
+            </div>
+          ) : null}
+        </AnimatePresence>
 
         <nav
           className="tw-hidden md:tw-flex md:tw-items-center md:tw-gap-[6px]"

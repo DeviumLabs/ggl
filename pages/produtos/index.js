@@ -90,7 +90,8 @@ export default function Produtos({ categories }) {
           <div className="tw-max-w-[1240px] tw-mx-auto tw-grid tw-grid-cols-1 sm:tw-grid-cols-2 lg:tw-grid-cols-3 tw-gap-[18px]">
             {(categories || []).map((category, idx) => {
               const firstProductSlug = category?.products?.[0]?.slug;
-              const href = firstProductSlug
+              const hasSingleProduct = (category?.products?.length || 0) === 1;
+              const href = hasSingleProduct && firstProductSlug
                 ? `/produtos/${category.slug}/${firstProductSlug}`
                 : `/produtos/${category.slug}`;
               const img = category.image;

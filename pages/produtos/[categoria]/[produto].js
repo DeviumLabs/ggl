@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import ContactForm from "../../../components/contact/ContactForm";
 import Navbar from "../../../components/navbar";
+import ProductBadge from "../../../components/product-badge";
 import ZoomLens from "../../../components/zoom-lens";
 import { trackProductView, trackRequestQuoteClick, trackProductVariantSelect } from "../../../lib/analytics/events";
 
@@ -146,6 +147,7 @@ export default function SingleProduct({ product, categories, categoria }) {
   };
 
   const canonical = `https://www.gglmoveis.com.br/produtos/${categoria}/${product.slug}`;
+  const badgeLabel = product?.badge || cat?.badge || "";
   const absoluteImages = images.map((img) =>
     typeof img === "string" && img.startsWith("http") ? img : `https://www.gglmoveis.com.br${img}`
   );
@@ -310,7 +312,8 @@ export default function SingleProduct({ product, categories, categoria }) {
                 {cat?.name || categoria}
               </Link>
             </nav>
-            <h1 className="tw-text-[38px]">{activeVariantTitle}</h1>
+            {badgeLabel ? <ProductBadge label={badgeLabel} className="tw-mb-[12px]" /> : null}
+            <h1 className="tw-text-[38px] tw-leading-[1.05] tw-text-darkBlue">{activeVariantTitle}</h1>
             <p>{product.description}</p>
 
             <h2 className="tw-text-[32px] tw-mt-[44px]">Medidas</h2>

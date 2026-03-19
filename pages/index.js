@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import SeoHead from "../components/layout/SeoHead";
 import ContactForm from "../components/contact/ContactForm";
 import Reveal from "../components/animations/Reveal";
+import ProductBadge from "../components/product-badge";
 import { categories } from "../lib/catalog";
 import { organizationJsonLd } from "../lib/seo/buildJsonLd";
 import { AiOutlineCheckCircle, AiOutlineCloudDownload } from "react-icons/ai";
@@ -219,7 +220,8 @@ export default function Home({ categories }) {
               const img = category.image;
               const accent = categoryAccents[index % categoryAccents.length];
               const firstProductSlug = category?.products?.[0]?.slug;
-              const categoryHref = firstProductSlug
+              const hasSingleProduct = (category?.products?.length || 0) === 1;
+              const categoryHref = hasSingleProduct && firstProductSlug
                 ? `/produtos/${category.slug}/${firstProductSlug}`
                 : `/produtos/${category.slug}`;
 
@@ -262,7 +264,10 @@ export default function Home({ categories }) {
                       </div>
 
                       <div className="tw-mt-[14px] tw-flex tw-items-center tw-justify-between tw-gap-[10px]">
-                        <h3 className="tw-text-[16px] tw-font-semibold tw-text-darkBlue tw-leading-[1.2]">{category.name}</h3>
+                        <div className="tw-min-w-0">
+                          {category.badge ? <ProductBadge label={category.badge} className="tw-mb-[8px]" /> : null}
+                          <h3 className="tw-text-[16px] tw-font-semibold tw-text-darkBlue tw-leading-[1.2]">{category.name}</h3>
+                        </div>
                         <span
                           aria-hidden="true"
                           className="tw-inline-flex tw-items-center tw-justify-center tw-rounded-full tw-w-[28px] tw-h-[28px] tw-bg-white/90 tw-text-blue tw-transition-transform group-hover:tw-translate-x-[2px]"

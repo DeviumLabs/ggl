@@ -5,6 +5,7 @@ import CookieConsent from "react-cookie-consent";
 import { ToastContainer } from "react-toastify";
 import { useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
+import MotionProvider from "../components/animations/MotionProvider";
 import SiteLayout from "../components/layout/SiteLayout";
 import { Plus_Jakarta_Sans, Merriweather, Nanum_Gothic } from "next/font/google";
 
@@ -107,53 +108,55 @@ export default function MyApp({ Component, pageProps }) {
         `}
       </Script>
 
-      {getLayout(<Component {...pageProps} />)}
+      <MotionProvider>
+        {getLayout(<Component {...pageProps} />)}
 
-      <ToastContainer position="bottom-left" autoClose={3500} newestOnTop closeOnClick pauseOnFocusLoss draggable pauseOnHover />
+        <ToastContainer position="bottom-left" autoClose={3500} newestOnTop closeOnClick pauseOnFocusLoss draggable pauseOnHover />
 
-      <Whatsapp message="Olá! Vim pelo site e gostaria de falar com a GGL Móveis." />
+        <Whatsapp message="Olá! Vim pelo site e gostaria de falar com a GGL Móveis." />
 
-      <CookieConsent
-        location="none"
-        buttonText="Aceitar"
-        declineButtonText="Recusar"
-        enableDeclineButton
-        cookieName="ggl-consent"
-        onAccept={handleAccept}
-        onDecline={handleDecline}
-        style={{
-          background: "#ffffff",
-          color: "#0F172A",
-          position: "fixed",
-          bottom: "20px",
-          left: "20px",
-          width: "300px",
-          borderRadius: "8px",
-          boxShadow: "0 4px 10px rgba(0,0,0,0.15)",
-          padding: "16px",
-          textAlign: "left",
-          zIndex: 9999
-        }}
-        buttonStyle={{
-          background: "#0058C2",
-          color: "#fff",
-          fontSize: "14px",
-          borderRadius: "6px",
-          padding: "6px 12px"
-        }}
-        declineButtonStyle={{
-          background: "#e5e7eb",
-          color: "#111",
-          fontSize: "14px",
-          borderRadius: "6px",
-          padding: "6px 12px",
-          marginLeft: "8px"
-        }}
-      >
-        <p style={{ marginBottom: "10px", fontSize: "14px" }}>
-          Usamos cookies para melhorar sua experiência e medir desempenho.
-        </p>
-      </CookieConsent>
+        <CookieConsent
+          location="none"
+          buttonText="Aceitar"
+          declineButtonText="Recusar"
+          enableDeclineButton
+          cookieName="ggl-consent"
+          onAccept={handleAccept}
+          onDecline={handleDecline}
+          style={{
+            background: "#ffffff",
+            color: "#0F172A",
+            position: "fixed",
+            bottom: "20px",
+            left: "20px",
+            width: "300px",
+            borderRadius: "8px",
+            boxShadow: "0 4px 10px rgba(0,0,0,0.15)",
+            padding: "16px",
+            textAlign: "left",
+            zIndex: 9999
+          }}
+          buttonStyle={{
+            background: "#0058C2",
+            color: "#fff",
+            fontSize: "14px",
+            borderRadius: "6px",
+            padding: "6px 12px"
+          }}
+          declineButtonStyle={{
+            background: "#e5e7eb",
+            color: "#111",
+            fontSize: "14px",
+            borderRadius: "6px",
+            padding: "6px 12px",
+            marginLeft: "8px"
+          }}
+        >
+          <p style={{ marginBottom: "10px", fontSize: "14px" }}>
+            Usamos cookies para melhorar sua experiência e medir desempenho.
+          </p>
+        </CookieConsent>
+      </MotionProvider>
     </div>
   );
 }
