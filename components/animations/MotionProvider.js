@@ -1,5 +1,6 @@
 import { LazyMotion, MotionConfig, useReducedMotion, useScroll, useSpring } from "motion/react";
 import * as m from "motion/react-m";
+import { defaultMotionTransition } from "./motionTokens";
 
 const loadFeatures = () => import("./motionFeatures").then((res) => res.default);
 
@@ -28,10 +29,7 @@ export default function MotionProvider({ children }) {
     <LazyMotion features={loadFeatures}>
       <MotionConfig
         reducedMotion="user"
-        transition={{
-          duration: 0.48,
-          ease: [0.22, 1, 0.36, 1]
-        }}
+        transition={defaultMotionTransition}
       >
         <ScrollProgressBar />
         {children}

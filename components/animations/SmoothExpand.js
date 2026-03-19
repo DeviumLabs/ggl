@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useAnimate, useReducedMotion } from "motion/react";
+import { motionDuration, motionEase, motionOffset } from "./motionTokens";
 
 export default function SmoothExpand({
   open,
@@ -8,7 +9,7 @@ export default function SmoothExpand({
   className = "",
   contentClassName = "",
   expandedMarginTop = 6,
-  collapsedOffset = -8
+  collapsedOffset = -motionOffset.collapse
 }) {
   const shouldReduceMotion = useReducedMotion();
   const [scope, animate] = useAnimate();
@@ -49,8 +50,8 @@ export default function SmoothExpand({
               marginTop: [0, expandedMarginTop]
             },
             {
-              duration: 0.32,
-              ease: [0.22, 1, 0.36, 1]
+              duration: motionDuration.expand,
+              ease: motionEase.standard
             }
           ),
           animate(
@@ -60,8 +61,8 @@ export default function SmoothExpand({
               y: [collapsedOffset, 0]
             },
             {
-              duration: 0.24,
-              ease: [0.22, 1, 0.36, 1]
+              duration: motionDuration.modal,
+              ease: motionEase.standard
             }
           )
         ]);
@@ -89,8 +90,8 @@ export default function SmoothExpand({
             y: [0, collapsedOffset]
           },
           {
-            duration: 0.18,
-            ease: [0.4, 0, 0.2, 1]
+            duration: motionDuration.quick,
+            ease: motionEase.exit
           }
         ),
         animate(
@@ -101,8 +102,8 @@ export default function SmoothExpand({
             marginTop: [expandedMarginTop, 0]
           },
           {
-            duration: 0.3,
-            ease: [0.4, 0, 0.2, 1]
+            duration: motionDuration.collapse,
+            ease: motionEase.exit
           }
         )
       ]);

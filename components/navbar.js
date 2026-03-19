@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { memo, useEffect, useId, useMemo, useRef, useState } from "react";
 import { AnimatePresence, useReducedMotion } from "motion/react";
 import * as m from "motion/react-m";
 import SmoothExpand from "./animations/SmoothExpand";
+import { getOverlayMotion, getSurfaceMotion, motionDuration, motionEase } from "./animations/motionTokens";
 import { trackSelectItem } from "../lib/analytics/events";
 
 function getPathParts(asPath = "") {
@@ -17,12 +18,14 @@ function getPathParts(asPath = "") {
   };
 }
 
-export default function Navbar({ categories }) {
+function Navbar({ categories }) {
   const router = useRouter();
   const uid = useId();
   const mobilePanelRef = useRef(null);
   const previousFocusRef = useRef(null);
   const shouldReduceMotion = useReducedMotion();
+  const overlayMotion = getOverlayMotion(shouldReduceMotion);
+  const drawerMotion = getSurfaceMotion("drawer", shouldReduceMotion);
 
   const qCategoria = typeof router.query?.categoria === "string" ? router.query.categoria : "";
   const qProduto = typeof router.query?.produto === "string" ? router.query.produto : "";
@@ -35,10 +38,6 @@ export default function Navbar({ categories }) {
 
   const [openCategory, setOpenCategory] = useState(activeCategory || "");
   const [mobileOpen, setMobileOpen] = useState(false);
-  const drawerTransition = shouldReduceMotion
-    ? { duration: 0.16 }
-    : { duration: 0.28, ease: [0.22, 1, 0.36, 1] };
-  const drawerOffset = shouldReduceMotion ? 0 : -32;
 
   useEffect(() => {
     if (activeCategory) setOpenCategory(activeCategory);
@@ -148,15 +147,18 @@ export default function Navbar({ categories }) {
                 className="tw-w-full tw-flex tw-items-center tw-justify-between tw-gap-[10px] tw-text-left tw-text-white tw-py-[4px] focus-visible:tw-outline-none focus-visible:tw-ring-2 focus-visible:tw-ring-white/80 tw-rounded-[8px]"
               >
                 <span className={isActiveCategory ? "tw-font-semibold" : "tw-font-light"}>{category.name}</span>
-                <span
-                  className={[
-                    "tw-inline-flex tw-items-center tw-justify-center tw-w-[26px] tw-h-[26px] tw-rounded-[8px] tw-bg-white/10 tw-transition tw-duration-300",
-                    isOpen ? "tw-rotate-180" : "tw-rotate-0"
-                  ].join(" ")}
+                <m.span
+                  className="tw-inline-flex tw-items-center tw-justify-center tw-w-[26px] tw-h-[26px] tw-rounded-[8px] tw-bg-white/10"
+                  animate={{ rotate: isOpen ? 180 : 0 }}
+                  transition={
+                    shouldReduceMotion
+                      ? { duration: 0.16 }
+                      : { duration: motionDuration.collapse, ease: motionEase.standard }
+                  }
                   aria-hidden="true"
                 >
                   ▾
-                </span>
+                </m.span>
               </button>
 
               <SmoothExpand open={isOpen} id={groupId} contentClassName="tw-flex tw-flex-col">
@@ -214,10 +216,10 @@ export default function Navbar({ categories }) {
             <m.div
               className="tw-absolute tw-inset-0 tw-bg-black/50"
               onClick={() => setMobileOpen(false)}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={drawerTransition}
+              initial={overlayMotion.initial}
+              animate={overlayMotion.animate}
+              exit={overlayMotion.exit}
+              transition={overlayMotion.transition}
             />
 
             <m.div
@@ -228,10 +230,10 @@ export default function Navbar({ categories }) {
               aria-modal="true"
               aria-label="Linha de produtos"
               onClick={(e) => e.stopPropagation()}
-              initial={{ opacity: 0, x: drawerOffset }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: drawerOffset }}
-              transition={drawerTransition}
+              initial={drawerMotion.initial}
+              animate={drawerMotion.animate}
+              exit={drawerMotion.exit}
+              transition={drawerMotion.transition}
             >
               <NavContent isMobile />
             </m.div>
@@ -248,3 +250,5 @@ export default function Navbar({ categories }) {
     </>
   );
 }
+
+export default memo(Navbar);

@@ -1,52 +1,63 @@
+import { useContext } from "react";
 import { useReducedMotion } from "motion/react";
 import * as m from "motion/react-m";
+import RevealGroupContext from "./revealContext";
+import { getDirectionalOffset, getRevealPreset, getRevealTransition, getRevealViewport } from "./motionTokens";
 
-const offsets = {
-  up: { y: 16 },
-  down: { y: -16 },
-  left: { x: -16 },
-  right: { x: 16 },
-  none: {}
-};
+function getMotionTag(as = "div") {
+  return m[as] || m.div;
+}
 
 export default function Reveal({
   children,
   className = "",
-  direction = "up",
+  as = "div",
+  variant = "section",
+  direction,
   delay = 0,
-  duration = 550,
+  duration,
   once = true,
-  threshold = 0.12
+  threshold,
+  viewportMargin
 }) {
   const shouldReduceMotion = useReducedMotion();
-  const hiddenState = offsets[direction] || offsets.up;
+  const isGrouped = useContext(RevealGroupContext);
+  const MotionTag = getMotionTag(as);
+  const preset = getRevealPreset(variant);
+  const resolvedDirection = direction || "up";
+  const hiddenState = getDirectionalOffset(resolvedDirection, preset.distance);
+  const transition = getRevealTransition({ variant, delay, duration });
+  const viewport = getRevealViewport(variant, threshold, viewportMargin);
+
+  if (shouldReduceMotion) {
+    return <MotionTag className={className}>{children}</MotionTag>;
+  }
 
   return (
-    <m.div
+    <MotionTag
       className={className}
-      initial={shouldReduceMotion ? false : { opacity: 0, ...hiddenState }}
-      whileInView={shouldReduceMotion ? undefined : { opacity: 1, x: 0, y: 0 }}
-      viewport={
-        shouldReduceMotion
-          ? undefined
-          : {
+      variants={{
+        hidden: { opacity: 0, ...hiddenState },
+        show: {
+          opacity: 1,
+          x: 0,
+          y: 0,
+          transition
+        }
+      }}
+      {...(!isGrouped
+        ? {
+            initial: "hidden",
+            whileInView: "show",
+            viewport: {
               once,
-              amount: threshold,
-              margin: "0px 0px -15% 0px"
+              amount: viewport.amount,
+              margin: viewport.margin
             }
-      }
-      transition={
-        shouldReduceMotion
-          ? undefined
-          : {
-              duration: duration / 1000,
-              delay: delay / 1000,
-              ease: [0.22, 1, 0.36, 1]
-            }
-      }
-      style={shouldReduceMotion ? undefined : { willChange: "transform, opacity" }}
+          }
+        : {})}
     >
       {children}
-    </m.div>
+    </MotionTag>
   );
 }

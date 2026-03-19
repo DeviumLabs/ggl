@@ -3,6 +3,7 @@ import Image from "next/image";
 import SeoHead from "../../../components/layout/SeoHead";
 import ContactForm from "../../../components/contact/ContactForm";
 import Reveal from "../../../components/animations/Reveal";
+import RevealGroup from "../../../components/animations/RevealGroup";
 import { getAllCategorySlugs, getCategoryBySlug, getCatalogByCategorySlug } from "../../../lib/catalog";
 import { breadcrumbJsonLd, itemListJsonLd } from "../../../lib/seo/buildJsonLd";
 import { useEffect } from "react";
@@ -95,7 +96,7 @@ export default function CategoryPage({ category, products }) {
 
       <main className="tw-pt-[110px] tw-relative tw-max-w-[1920px] tw-mx-auto tw-overflow-hidden tw-bg-[radial-gradient(circle_at_18%_20%,rgba(191,219,254,0.40),transparent_46%),radial-gradient(circle_at_82%_12%,rgba(14,165,233,0.15),transparent_42%),linear-gradient(180deg,#f8fafc_0%,#ffffff_56%,#f8fafc_100%)]">
         <section className="tw-px-[20px] tw-pt-[36px] tw-pb-[20px]">
-          <Reveal direction="up">
+          <Reveal variant="section">
             <div className="tw-max-w-[1240px] tw-mx-auto tw-rounded-[32px] tw-border tw-border-slate-200/70 tw-bg-white/80 tw-backdrop-blur-sm tw-p-[22px] md:tw-p-[30px] tw-shadow-[0_22px_38px_-30px_rgba(15,23,42,0.65)]">
               <nav aria-label="Breadcrumb" className="tw-flex tw-items-center tw-gap-[7px] tw-text-[13px] tw-text-slate-500">
                 <Link href="/produtos" className="hover:tw-text-blue hover:tw-underline">
@@ -117,13 +118,17 @@ export default function CategoryPage({ category, products }) {
           </Reveal>
         </section>
 
-        <section className="tw-px-[20px] tw-max-w-[1240px] tw-w-full tw-mx-auto tw-mt-[14px] tw-pb-[92px] tw-grid tw-grid-cols-1 sm:tw-grid-cols-2 lg:tw-grid-cols-3 tw-gap-[18px]">
+        <RevealGroup
+          as="section"
+          className="tw-px-[20px] tw-max-w-[1240px] tw-w-full tw-mx-auto tw-mt-[14px] tw-pb-[92px] tw-grid tw-grid-cols-1 sm:tw-grid-cols-2 lg:tw-grid-cols-3 tw-gap-[18px]"
+          variant="card"
+        >
           {(products || []).map((p, idx) => {
             const description = p.description || category.description || "Confira detalhes técnicos e dimensões desta linha.";
             const itemName = category?.singleName ? `${category.singleName} ${p.name}` : p.name;
 
             return (
-              <Reveal key={p.slug} direction="up" delay={Math.min(idx * 70, 280)}>
+              <Reveal key={p.slug} variant="card">
                 <Link
                   href={`/produtos/${category.slug}/${p.slug}`}
                   className="tw-group tw-block tw-w-full tw-relative tw-isolate tw-overflow-hidden tw-rounded-[28px] tw-border tw-border-slate-200/80 tw-bg-white tw-p-[14px] tw-shadow-[0_16px_28px_-22px_rgba(15,23,42,0.58)] tw-transition-all tw-duration-300 hover:-tw-translate-y-[4px] hover:tw-shadow-[0_24px_36px_-20px_rgba(15,23,42,0.5)]"
@@ -152,10 +157,10 @@ export default function CategoryPage({ category, products }) {
               </Reveal>
             );
           })}
-        </section>
+        </RevealGroup>
 
         <section className="tw-px-[20px] tw-mt-[2px]">
-          <Reveal direction="up">
+          <Reveal variant="subtle">
             <ContactForm />
           </Reveal>
         </section>

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { AnimatePresence, useReducedMotion } from "motion/react";
 import * as m from "motion/react-m";
+import { getOverlayMotion, getSurfaceMotion } from "../animations/motionTokens";
 
 export default function ContactChannelModal({
   open,
@@ -14,10 +15,8 @@ export default function ContactChannelModal({
   const panelRef = useRef(null);
   const prevFocusRef = useRef(null);
   const shouldReduceMotion = useReducedMotion();
-  const modalTransition = shouldReduceMotion
-    ? { duration: 0.16 }
-    : { duration: 0.24, ease: [0.22, 1, 0.36, 1] };
-  const panelOffset = shouldReduceMotion ? 0 : 18;
+  const overlayMotion = getOverlayMotion(shouldReduceMotion);
+  const modalMotion = getSurfaceMotion("modal", shouldReduceMotion);
 
   useEffect(() => {
     if (!open) return;
@@ -54,19 +53,19 @@ export default function ContactChannelModal({
           <m.div
             className="tw-absolute tw-inset-0 tw-bg-black/60"
             onMouseDown={onClose}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={modalTransition}
+            initial={overlayMotion.initial}
+            animate={overlayMotion.animate}
+            exit={overlayMotion.exit}
+            transition={overlayMotion.transition}
           />
 
           <m.div
             ref={panelRef}
             className="tw-relative tw-w-full tw-max-w-[520px] tw-rounded-[12px] tw-bg-white tw-shadow-xl tw-p-[18px] md:tw-p-[22px]"
-            initial={{ opacity: 0, y: panelOffset }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: panelOffset }}
-            transition={modalTransition}
+            initial={modalMotion.initial}
+            animate={modalMotion.animate}
+            exit={modalMotion.exit}
+            transition={modalMotion.transition}
             onMouseDown={(e) => e.stopPropagation()}
           >
             <div className="tw-flex tw-items-start tw-justify-between tw-gap-[12px]">

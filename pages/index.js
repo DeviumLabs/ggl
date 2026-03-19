@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import SeoHead from "../components/layout/SeoHead";
 import ContactForm from "../components/contact/ContactForm";
 import Reveal from "../components/animations/Reveal";
+import RevealGroup from "../components/animations/RevealGroup";
 import ProductBadge from "../components/product-badge";
 import { categories } from "../lib/catalog";
 import { organizationJsonLd } from "../lib/seo/buildJsonLd";
@@ -129,8 +130,8 @@ export default function Home({ categories }) {
           <div className="tw-absolute tw-z-[1] tw-left-[-90px] tw-bottom-[-130px] tw-w-[280px] tw-h-[280px] tw-rounded-full tw-bg-blue/30 tw-blur-3xl" />
 
           <div className="tw-relative tw-z-[2] tw-max-w-[1597px] tw-px-[5%] tw-mx-auto tw-w-full tw-pt-[86px] tw-pb-[98px] md:tw-pt-[108px] md:tw-pb-[120px]">
-            <Reveal direction="up" duration={650}>
-              <div className="tw-grid tw-grid-cols-1 lg:tw-grid-cols-[1.1fr_0.9fr] tw-gap-[26px] tw-items-end">
+            <div className="tw-grid tw-grid-cols-1 lg:tw-grid-cols-[1.1fr_0.9fr] tw-gap-[26px] tw-items-end">
+              <Reveal variant="hero" direction="up">
                 <div className="tw-flex tw-flex-col tw-text-white">
                   <small className="tw-inline-flex tw-items-center tw-gap-[8px] tw-w-fit tw-rounded-full tw-bg-white/15 tw-px-[12px] tw-py-[5px] tw-tracking-[0.08em] tw-text-[12px] tw-font-semibold">
                     GGL MÓVEIS DE AÇO <span className="tw-w-[6px] tw-h-[6px] tw-rounded-full tw-bg-cyan-200" aria-hidden="true" />
@@ -157,8 +158,10 @@ export default function Home({ categories }) {
                     </a>
                   </div>
                 </div>
+              </Reveal>
 
-                <div className="tw-hidden lg:tw-flex tw-justify-end">
+              <Reveal variant="section" direction="right" delay={120} className="tw-hidden lg:tw-flex tw-justify-end">
+                <div className="tw-justify-end">
                   <div className="tw-w-full tw-max-w-[420px] tw-rounded-[30px] tw-border tw-border-white/35 tw-bg-white/10 tw-backdrop-blur-md tw-p-[20px] tw-shadow-[0_24px_38px_-26px_rgba(15,23,42,0.8)]">
                     <p className="tw-text-white tw-font-semibold tw-text-[18px]">Estrutura pensada para operação real</p>
                     <ul className="tw-mt-[14px] tw-space-y-[10px]">
@@ -177,14 +180,14 @@ export default function Home({ categories }) {
                     </ul>
                   </div>
                 </div>
-              </div>
-            </Reveal>
+              </Reveal>
+            </div>
           </div>
           <div className="tw-absolute tw-bottom-0 tw-left-0 tw-right-0 tw-h-[84px] tw-bg-[linear-gradient(to_bottom,rgba(255,255,255,0)_0%,rgba(248,250,252,0.95)_80%,rgba(248,250,252,1)_100%)]" />
         </section>
 
         <section className="tw-px-[20px] tw-relative tw-z-[3] -tw-mt-[36px]">
-          <Reveal direction="up">
+          <Reveal variant="subtle">
             <div className="tw-grid tw-grid-cols-1 md:tw-grid-cols-3 tw-gap-[12px] tw-max-w-[1100px] tw-mx-auto">
               {highlights.map((item, index) => (
                 <article
@@ -203,7 +206,7 @@ export default function Home({ categories }) {
         </section>
 
         <section className="tw-px-[20px] tw-mt-[54px] tw-mb-[88px]">
-          <Reveal direction="up">
+          <Reveal variant="section">
             <div className="tw-max-w-[1200px] tw-mx-auto tw-flex tw-items-center tw-justify-between tw-gap-[16px] tw-flex-wrap">
               <div>
                 <small className="tw-text-blue tw-font-semibold tw-tracking-[0.08em]">LINHA DE PRODUTOS</small>
@@ -215,7 +218,7 @@ export default function Home({ categories }) {
             </div>
           </Reveal>
 
-          <div className="tw-max-w-[1200px] tw-mx-auto tw-grid tw-grid-cols-1 sm:tw-grid-cols-2 lg:tw-grid-cols-4 tw-gap-[16px] tw-mt-[20px]">
+          <RevealGroup className="tw-max-w-[1200px] tw-mx-auto tw-grid tw-grid-cols-1 sm:tw-grid-cols-2 lg:tw-grid-cols-4 tw-gap-[16px] tw-mt-[20px]" variant="card">
             {(categories || []).map((category, index) => {
               const img = category.image;
               const accent = categoryAccents[index % categoryAccents.length];
@@ -226,7 +229,7 @@ export default function Home({ categories }) {
                 : `/produtos/${category.slug}`;
 
               return (
-                <Reveal key={category.slug} direction="up" delay={Math.min(index * 80, 320)}>
+                <Reveal key={category.slug} variant="card">
                   <Link
                     href={categoryHref}
                     className={[
@@ -280,11 +283,11 @@ export default function Home({ categories }) {
                 </Reveal>
               );
             })}
-          </div>
+          </RevealGroup>
         </section>
 
         <section className="tw-px-[20px] tw-max-w-[1200px] tw-w-full tw-mx-auto tw-py-[72px] md:tw-py-[88px] tw-scroll-mt-[140px]" id="catalogo" ref={catalogRef}>
-          <Reveal direction="up">
+          <Reveal variant="section">
             <div className="tw-relative tw-overflow-hidden tw-rounded-[34px] tw-bg-[linear-gradient(130deg,#0f172a_0%,#0058c2_56%,#1d4ed8_100%)] tw-text-white tw-p-[22px] md:tw-p-[34px] tw-shadow-[0_28px_44px_-28px_rgba(15,23,42,0.75)]">
               <div className="tw-absolute tw-right-[-70px] tw-top-[-70px] tw-w-[220px] tw-h-[220px] tw-rounded-full tw-bg-cyan-300/25 tw-blur-3xl" aria-hidden="true" />
               <div className="tw-absolute tw-left-[-80px] tw-bottom-[-90px] tw-w-[240px] tw-h-[240px] tw-rounded-full tw-bg-blue-300/20 tw-blur-3xl" aria-hidden="true" />
@@ -344,8 +347,8 @@ export default function Home({ categories }) {
         </section>
 
         <section className="tw-px-[20px] tw-max-w-[1200px] tw-w-full tw-mx-auto tw-py-[70px] md:tw-py-[88px] tw-scroll-mt-[140px]" id="sobre">
-          <Reveal direction="up">
-            <div className="tw-grid tw-grid-cols-1 lg:tw-grid-cols-[1fr_1.05fr] tw-gap-[26px] tw-items-center">
+          <RevealGroup className="tw-grid tw-grid-cols-1 lg:tw-grid-cols-[1fr_1.05fr] tw-gap-[26px] tw-items-center" variant="section" stagger={0.1}>
+            <Reveal variant="section">
               <div className="tw-relative tw-rounded-[30px] tw-border tw-border-slate-200 tw-bg-white tw-p-[22px] md:tw-p-[30px] tw-shadow-[0_20px_36px_-26px_rgba(15,23,42,0.45)]">
                 <span className="tw-absolute tw-right-[24px] tw-top-[22px] tw-inline-flex tw-items-center tw-rounded-full tw-bg-blue/10 tw-text-blue tw-px-[10px] tw-py-[4px] tw-text-[12px] tw-font-semibold">
                   EMPRESA
@@ -371,7 +374,9 @@ export default function Home({ categories }) {
                   </div>
                 </div>
               </div>
+            </Reveal>
 
+            <Reveal variant="section" direction="right">
               <div className="tw-relative">
                 <div className="tw-absolute -tw-inset-[10px] tw-rounded-[32px] tw-bg-gradient-to-br tw-from-blue/20 tw-via-cyan-100/45 tw-to-transparent" aria-hidden="true" />
                 <div className="tw-relative tw-rounded-[30px] tw-overflow-hidden tw-border tw-border-slate-200 tw-shadow-[0_24px_40px_-26px_rgba(15,23,42,0.55)]">
@@ -385,12 +390,12 @@ export default function Home({ categories }) {
                   />
                 </div>
               </div>
-            </div>
-          </Reveal>
+            </Reveal>
+          </RevealGroup>
         </section>
 
         <section className="tw-px-[20px] tw-mt-[6px]">
-          <Reveal direction="up">
+          <Reveal variant="subtle">
             <ContactForm />
           </Reveal>
         </section>

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { AnimatePresence, useReducedMotion } from "motion/react";
 import * as m from "motion/react-m";
+import { getOverlayMotion, getSurfaceMotion } from "./animations/motionTokens";
 import { trackClickToCall, trackLogoClick, trackNavigationClick } from "../lib/analytics/events";
 
 export default function Header() {
@@ -11,14 +12,12 @@ export default function Header() {
   const [isOpen, setOpen] = useState(false);
   const navRef = useRef(null);
   const shouldReduceMotion = useReducedMotion();
+  const overlayMotion = getOverlayMotion(shouldReduceMotion);
+  const menuMotion = getSurfaceMotion("menu", shouldReduceMotion);
 
   const sendNavEvent = (label, url) => trackNavigationClick({ location: "header", link_text: label, link_url: url });
   const sendLogoEvent = () => trackLogoClick({ location: "header" });
   const sendCallEvent = (number) => trackClickToCall({ location: "header", phone_number: number });
-  const menuTransition = shouldReduceMotion
-    ? { duration: 0.16 }
-    : { duration: 0.26, ease: [0.22, 1, 0.36, 1] };
-  const menuOffset = shouldReduceMotion ? 0 : -10;
 
   useEffect(() => {
     if (!isOpen) return;
@@ -99,10 +98,10 @@ export default function Header() {
                 className="tw-absolute tw-inset-0 tw-bg-slate-900/45 tw-backdrop-blur-[1px]"
                 onClick={() => setOpen(false)}
                 aria-label="Fechar menu"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={menuTransition}
+                initial={overlayMotion.initial}
+                animate={overlayMotion.animate}
+                exit={overlayMotion.exit}
+                transition={overlayMotion.transition}
               />
 
               <m.div
@@ -112,10 +111,10 @@ export default function Header() {
                 role="dialog"
                 aria-modal="true"
                 aria-label="Menu principal"
-                initial={{ opacity: 0, y: menuOffset }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: menuOffset }}
-                transition={menuTransition}
+                initial={menuMotion.initial}
+                animate={menuMotion.animate}
+                exit={menuMotion.exit}
+                transition={menuMotion.transition}
               >
                 <div className="tw-flex tw-items-center tw-justify-between tw-gap-[8px]">
                   <span className="tw-text-[13px] tw-font-semibold tw-tracking-[0.08em] tw-text-white/85">NAVEGAÇÃO</span>

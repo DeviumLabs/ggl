@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import SeoHead from "../components/layout/SeoHead";
 import ContactForm from "../components/contact/ContactForm";
 import Reveal from "../components/animations/Reveal";
+import RevealGroup from "../components/animations/RevealGroup";
 import { videoListJsonLd } from "../lib/seo/buildJsonLd";
 import { trackVideoClick, trackVideoImpression, trackVideoPlay, trackViewVideoList } from "../lib/analytics/events";
 
@@ -170,8 +171,8 @@ export default function Videos() {
 
       <main className="tw-pt-[110px] tw-max-w-[1920px] tw-mx-auto tw-overflow-hidden tw-bg-[radial-gradient(circle_at_12%_18%,rgba(191,219,254,0.45),transparent_42%),radial-gradient(circle_at_85%_8%,rgba(125,211,252,0.24),transparent_40%),linear-gradient(180deg,#f8fafc_0%,#ffffff_56%,#f8fafc_100%)]">
         <section className="tw-px-[20px] tw-pt-[32px] tw-pb-[40px]">
-          <Reveal direction="up">
-            <div className="tw-max-w-[1240px] tw-mx-auto tw-grid tw-grid-cols-1 lg:tw-grid-cols-[1.12fr_0.88fr] tw-gap-[22px] tw-items-stretch">
+          <div className="tw-max-w-[1240px] tw-mx-auto tw-grid tw-grid-cols-1 lg:tw-grid-cols-[1.12fr_0.88fr] tw-gap-[22px] tw-items-stretch">
+            <Reveal variant="hero">
               <article className="tw-relative tw-overflow-hidden tw-rounded-[34px] tw-bg-[linear-gradient(140deg,#0f172a_0%,#0058c2_60%,#1d4ed8_100%)] tw-text-white tw-p-[22px] md:tw-p-[34px] tw-shadow-[0_30px_44px_-28px_rgba(15,23,42,0.74)]">
                 <div className="tw-absolute tw-right-[-70px] tw-top-[-80px] tw-w-[220px] tw-h-[220px] tw-rounded-full tw-bg-cyan-300/25 tw-blur-3xl" aria-hidden="true" />
                 <div className="tw-absolute tw-left-[-60px] tw-bottom-[-90px] tw-w-[230px] tw-h-[230px] tw-rounded-full tw-bg-blue-300/20 tw-blur-3xl" aria-hidden="true" />
@@ -199,7 +200,9 @@ export default function Videos() {
                   </a>
                 </div>
               </article>
+            </Reveal>
 
+            <Reveal variant="section" direction="right" delay={120}>
               <article className="tw-relative tw-overflow-hidden tw-rounded-[34px] tw-border tw-border-slate-200/80 tw-bg-white/92 tw-p-[14px] tw-shadow-[0_22px_36px_-28px_rgba(15,23,42,0.6)]">
                 <div className="tw-absolute tw-inset-0 tw-bg-[linear-gradient(155deg,rgba(0,88,194,0.12)_0%,rgba(14,165,233,0.08)_48%,rgba(255,255,255,0.95)_100%)]" aria-hidden="true" />
                 <div className="tw-relative tw-z-[2]">
@@ -232,12 +235,12 @@ export default function Videos() {
                   </a>
                 </div>
               </article>
-            </div>
-          </Reveal>
+            </Reveal>
+          </div>
         </section>
 
         <section className="tw-px-[20px] tw-pb-[92px]" id="lista-videos">
-          <Reveal direction="up">
+          <Reveal variant="section">
             <div className="tw-max-w-[1240px] tw-mx-auto tw-flex tw-flex-wrap tw-items-end tw-justify-between tw-gap-[12px]">
               <div>
                 <small className="tw-text-blue tw-font-semibold tw-tracking-[0.08em]">BIBLIOTECA DE TUTORIAIS</small>
@@ -247,17 +250,17 @@ export default function Videos() {
             </div>
           </Reveal>
 
-          <div className="tw-max-w-[1240px] tw-mx-auto tw-pt-[20px] tw-flex tw-justify-center tw-items-start tw-flex-wrap tw-gap-[22px]">
+          <RevealGroup className="tw-max-w-[1240px] tw-mx-auto tw-pt-[20px] tw-flex tw-justify-center tw-items-start tw-flex-wrap tw-gap-[22px]" variant="card">
             {videos.map((v, index) => (
-              <Reveal key={v.id} direction="up" delay={Math.min(index * 90, 320)}>
+              <Reveal key={v.id} variant="card">
                 <VideoCard v={v} index={index} />
               </Reveal>
             ))}
-          </div>
+          </RevealGroup>
         </section>
 
         <section className="tw-px-[20px] tw-mt-[2px]">
-          <Reveal direction="up">
+          <Reveal variant="subtle">
             <ContactForm />
           </Reveal>
         </section>

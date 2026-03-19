@@ -3,10 +3,15 @@ import api from "../../../services/api";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
+import { AnimatePresence, useReducedMotion } from "motion/react";
+import * as m from "motion/react-m";
 import ContactForm from "../../../components/contact/ContactForm";
 import Navbar from "../../../components/navbar";
+import Reveal from "../../../components/animations/Reveal";
+import SmoothExpand from "../../../components/animations/SmoothExpand";
 import ProductBadge from "../../../components/product-badge";
 import ZoomLens from "../../../components/zoom-lens";
+import { motionDuration, motionEase, motionOffset } from "../../../components/animations/motionTokens";
 import { trackProductView, trackRequestQuoteClick, trackProductVariantSelect } from "../../../lib/analytics/events";
 
 export async function getServerSideProps(context) {
@@ -38,6 +43,7 @@ export async function getServerSideProps(context) {
 }
 
 export default function SingleProduct({ product, categories, categoria }) {
+  const shouldReduceMotion = useReducedMotion();
   const cat = useMemo(() => {
     const list = categories?.categoryArray || [];
     return list.find((c) => c?.slug === categoria) || list[0] || null;
@@ -71,14 +77,18 @@ export default function SingleProduct({ product, categories, categoria }) {
   const activeVariantTitle = models[activeVariantIndex]?.name || titlePrincipal;
 
   const hasManyModels = models.length > 4;
-  const mobileModelEntries = useMemo(() => {
-    const entries = models.map((model, index) => ({ model, index }));
-    if (!hasManyModels || showAllModels) return entries;
-
-    const collapsed = entries.slice(0, 4);
-    if (table >= 4 && entries[table]) collapsed.push(entries[table]);
-    return collapsed;
-  }, [models, hasManyModels, showAllModels, table]);
+  const mobileBaseEntries = useMemo(() => models.slice(0, 4).map((model, index) => ({ model, index })), [models]);
+  const mobileExtraEntries = useMemo(
+    () => models.slice(4).map((model, index) => ({ model, index: index + 4 })),
+    [models]
+  );
+  const collapsedSelectedEntry = !showAllModels && table >= 4 && models[table]
+    ? { model: models[table], index: table }
+    : null;
+  const variantSwapTransition = shouldReduceMotion
+    ? { duration: 0.16 }
+    : { duration: motionDuration.subtle, ease: motionEase.standard };
+  const variantSwapOffset = shouldReduceMotion ? 0 : motionOffset.subtle;
 
   useEffect(() => {
     setPrincipalImage(images[0]);
@@ -144,6 +154,47 @@ export default function SingleProduct({ product, categories, categoria }) {
       item_list_name: "product_thumbnails",
       location: "product_page"
     });
+  };
+
+  const renderMobileModelCard = ({ model, index }, label = "") => {
+    const isHighlighted = images.length === 1 || index === activeVariantIndex || product?.allBold;
+    const hasLinkedImage = images.length > 1 && Boolean(images[index]);
+
+    return (
+      <article
+        key={`${label || "model"}-${model.name}-${index}`}
+        onClick={() => {
+          if (hasLinkedImage) selectThumbnail(index);
+        }}
+        className={[
+          "tw-rounded-[18px] tw-border tw-bg-white tw-p-[14px] tw-shadow-[0_12px_30px_-26px_rgba(15,23,42,0.45)]",
+          isHighlighted ? "tw-border-blue tw-bg-blue/5" : "tw-border-slate-200/80",
+          hasLinkedImage ? "tw-cursor-pointer hover:tw-bg-slate-50" : ""
+        ].join(" ")}
+      >
+        {label ? <p className="tw-text-[12px] tw-font-semibold tw-text-blue tw-mb-[8px]">{label}</p> : null}
+
+        <div className="tw-flex tw-items-center tw-justify-between tw-gap-[8px]">
+          <h3 className="tw-text-[16px] tw-leading-[1.2] tw-text-darkBlue">{model.name}</h3>
+          {isHighlighted ? <span className="tw-text-[12px] tw-font-semibold tw-text-blue">Selecionado</span> : null}
+        </div>
+
+        <dl className="tw-mt-[10px] tw-grid tw-grid-cols-1 tw-gap-[6px] tw-text-[14px]">
+          <div className="tw-flex tw-items-center tw-justify-between tw-gap-[10px]">
+            <dt className="tw-text-slate-500">Altura</dt>
+            <dd className="tw-font-medium tw-text-darkBlue">{model.scale?.height ?? "-"}</dd>
+          </div>
+          <div className="tw-flex tw-items-center tw-justify-between tw-gap-[10px]">
+            <dt className="tw-text-slate-500">Largura</dt>
+            <dd className="tw-font-medium tw-text-darkBlue">{model.scale?.width ?? "-"}</dd>
+          </div>
+          <div className="tw-flex tw-items-center tw-justify-between tw-gap-[10px]">
+            <dt className="tw-text-slate-500">Profundidade</dt>
+            <dd className="tw-font-medium tw-text-darkBlue">{model.scale?.depth ?? "-"}</dd>
+          </div>
+        </dl>
+      </article>
+    );
   };
 
   const canonical = `https://www.gglmoveis.com.br/produtos/${categoria}/${product.slug}`;
@@ -219,32 +270,55 @@ export default function SingleProduct({ product, categories, categoria }) {
         <Navbar categories={categories?.categoryArray || []} />
 
         <section className="tw-flex tw-mb-[130px] tw-justify-between tw-flex-col xl:tw-flex-row tw-w-full md:tw-w-[85%] md:tw-ml-[15%] tw-px-[20px] tw-pt-[20px] md:tw-pt-0 tw-gap-[28px]">
-          <div className="tw-flex tw-w-full tw-max-w-[620px] tw-flex-col tw-items-center tw-gap-[14px] [@media(min-width:1280px)_and_(max-height:820px)]:tw-flex-row [@media(min-width:1280px)_and_(max-height:820px)]:tw-items-start [@media(min-width:1280px)_and_(max-height:820px)]:tw-gap-[10px] [@media(min-width:1280px)_and_(max-height:820px)]:tw-max-w-[640px]">
+          <Reveal
+            variant="section"
+            className="tw-flex tw-w-full tw-max-w-[620px] tw-flex-col tw-items-center tw-gap-[14px] [@media(min-width:1280px)_and_(max-height:820px)]:tw-flex-row [@media(min-width:1280px)_and_(max-height:820px)]:tw-items-start [@media(min-width:1280px)_and_(max-height:820px)]:tw-gap-[10px] [@media(min-width:1280px)_and_(max-height:820px)]:tw-max-w-[640px]"
+          >
             <div className="tw-w-full tw-max-w-[520px] [@media(min-width:1280px)_and_(max-height:820px)]:tw-flex-1 [@media(min-width:1280px)_and_(max-height:820px)]:tw-min-w-0">
               <div className="md:tw-hidden tw-relative tw-w-full tw-aspect-[4/3] tw-overflow-hidden tw-rounded-[20px] tw-border tw-border-slate-200/80 tw-bg-white tw-shadow-[0_18px_35px_-28px_rgba(15,23,42,0.45)]">
-                <Image
-                  src={activeVariantImage}
-                  alt={`${product.name} - principal`}
-                  fill
-                  sizes="100vw"
-                  className="tw-object-contain tw-object-center tw-p-[10px]"
-                  priority={false}
-                />
+                <AnimatePresence initial={false} mode="wait">
+                  <m.div
+                    key={`mobile-${activeVariantImage}`}
+                    className="tw-relative tw-w-full tw-h-full"
+                    initial={{ opacity: 0, y: variantSwapOffset }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -variantSwapOffset }}
+                    transition={variantSwapTransition}
+                  >
+                    <Image
+                      src={activeVariantImage}
+                      alt={`${product.name} - principal`}
+                      fill
+                      sizes="100vw"
+                      className="tw-object-contain tw-object-center tw-p-[10px]"
+                      priority={false}
+                    />
+                  </m.div>
+                </AnimatePresence>
               </div>
 
-              <div className="tw-hidden md:tw-block tw-rounded-[20px] tw-border tw-border-slate-200/80 tw-bg-white tw-p-[10px] tw-shadow-[0_20px_38px_-30px_rgba(15,23,42,0.42)]">
-                <ZoomLens
-                  key={activeVariantImage}
-                  src={activeVariantImage}
-                  width={520}
-                  height={450}
-                  zoom={2}
-                  item_id={product.slug}
-                  item_name={`${cat?.singleName || ""} ${product.name}`.trim()}
-                  item_category={cat?.name}
-                  item_category2={cat?.slug}
-                />
-              </div>
+              <AnimatePresence initial={false} mode="wait">
+                <m.div
+                  key={`desktop-${activeVariantImage}`}
+                  className="tw-hidden md:tw-block tw-rounded-[20px] tw-border tw-border-slate-200/80 tw-bg-white tw-p-[10px] tw-shadow-[0_20px_38px_-30px_rgba(15,23,42,0.42)]"
+                  initial={{ opacity: 0, y: variantSwapOffset }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -variantSwapOffset }}
+                  transition={variantSwapTransition}
+                >
+                  <ZoomLens
+                    key={activeVariantImage}
+                    src={activeVariantImage}
+                    width={520}
+                    height={450}
+                    zoom={2}
+                    item_id={product.slug}
+                    item_name={`${cat?.singleName || ""} ${product.name}`.trim()}
+                    item_category={cat?.name}
+                    item_category2={cat?.slug}
+                  />
+                </m.div>
+              </AnimatePresence>
             </div>
 
             {images.length > 1 ? (
@@ -300,9 +374,9 @@ export default function SingleProduct({ product, categories, categoria }) {
                 </div>
               </div>
             ) : null}
-          </div>
+          </Reveal>
 
-          <div className="tw-w-full xl:tw-flex-1 xl:tw-max-w-[560px] tw-mt-[14px] xl:tw-mt-0">
+          <Reveal variant="section" direction="right" delay={90} className="tw-w-full xl:tw-flex-1 xl:tw-max-w-[560px] tw-mt-[14px] xl:tw-mt-0">
             <nav aria-label="Breadcrumb" className="tw-flex tw-items-center tw-gap-[7px] tw-text-[13px] tw-text-slate-500 tw-mb-[10px]">
               <Link href="/produtos" className="hover:tw-text-blue hover:tw-underline">
                 Produtos
@@ -313,49 +387,34 @@ export default function SingleProduct({ product, categories, categoria }) {
               </Link>
             </nav>
             {badgeLabel ? <ProductBadge label={badgeLabel} className="tw-mb-[12px]" /> : null}
-            <h1 className="tw-text-[38px] tw-leading-[1.05] tw-text-darkBlue">{activeVariantTitle}</h1>
+            <div className="tw-min-h-[84px]">
+              <AnimatePresence initial={false} mode="wait">
+                <m.h1
+                  key={activeVariantTitle}
+                  className="tw-text-[38px] tw-leading-[1.05] tw-text-darkBlue"
+                  initial={{ opacity: 0, y: variantSwapOffset }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -variantSwapOffset }}
+                  transition={variantSwapTransition}
+                >
+                  {activeVariantTitle}
+                </m.h1>
+              </AnimatePresence>
+            </div>
             <p>{product.description}</p>
 
             <h2 className="tw-text-[32px] tw-mt-[44px]">Medidas</h2>
 
             <div className="md:tw-hidden tw-mt-[14px] tw-flex tw-flex-col tw-gap-[10px]">
-              {mobileModelEntries.map(({ model, index }) => {
-                const isHighlighted = images.length === 1 || index === activeVariantIndex || product?.allBold;
-                const hasLinkedImage = images.length > 1 && Boolean(images[index]);
-                return (
-                  <article
-                    key={`${model.name}-${index}`}
-                    onClick={() => {
-                      if (hasLinkedImage) selectThumbnail(index);
-                    }}
-                    className={[
-                      "tw-rounded-[18px] tw-border tw-bg-white tw-p-[14px] tw-shadow-[0_12px_30px_-26px_rgba(15,23,42,0.45)]",
-                      isHighlighted ? "tw-border-blue tw-bg-blue/5" : "tw-border-slate-200/80",
-                      hasLinkedImage ? "tw-cursor-pointer hover:tw-bg-slate-50" : ""
-                    ].join(" ")}
-                  >
-                    <div className="tw-flex tw-items-center tw-justify-between tw-gap-[8px]">
-                      <h3 className="tw-text-[16px] tw-leading-[1.2] tw-text-darkBlue">{model.name}</h3>
-                      {isHighlighted ? <span className="tw-text-[12px] tw-font-semibold tw-text-blue">Selecionado</span> : null}
-                    </div>
+              {mobileBaseEntries.map((entry) => renderMobileModelCard(entry))}
 
-                    <dl className="tw-mt-[10px] tw-grid tw-grid-cols-1 tw-gap-[6px] tw-text-[14px]">
-                      <div className="tw-flex tw-items-center tw-justify-between tw-gap-[10px]">
-                        <dt className="tw-text-slate-500">Altura</dt>
-                        <dd className="tw-font-medium tw-text-darkBlue">{model.scale?.height ?? "-"}</dd>
-                      </div>
-                      <div className="tw-flex tw-items-center tw-justify-between tw-gap-[10px]">
-                        <dt className="tw-text-slate-500">Largura</dt>
-                        <dd className="tw-font-medium tw-text-darkBlue">{model.scale?.width ?? "-"}</dd>
-                      </div>
-                      <div className="tw-flex tw-items-center tw-justify-between tw-gap-[10px]">
-                        <dt className="tw-text-slate-500">Profundidade</dt>
-                        <dd className="tw-font-medium tw-text-darkBlue">{model.scale?.depth ?? "-"}</dd>
-                      </div>
-                    </dl>
-                  </article>
-                );
-              })}
+              {mobileExtraEntries.length ? (
+                <SmoothExpand open={showAllModels} contentClassName="tw-flex tw-flex-col tw-gap-[10px]" expandedMarginTop={10}>
+                  {mobileExtraEntries.map((entry) => renderMobileModelCard(entry))}
+                </SmoothExpand>
+              ) : null}
+
+              {collapsedSelectedEntry ? renderMobileModelCard(collapsedSelectedEntry, "Modelo selecionado") : null}
 
               {hasManyModels ? (
                 <button
@@ -435,10 +494,12 @@ export default function SingleProduct({ product, categories, categoria }) {
                 →
               </span>
             </button>
-          </div>
+          </Reveal>
         </section>
 
-        <ContactForm budgetMessage={contactMessage} />
+        <Reveal variant="subtle">
+          <ContactForm budgetMessage={contactMessage} />
+        </Reveal>
       </main>
     </div>
   );
