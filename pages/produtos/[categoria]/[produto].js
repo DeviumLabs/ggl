@@ -12,7 +12,7 @@ import SmoothExpand from "../../../components/animations/SmoothExpand";
 import ProductBadge from "../../../components/product-badge";
 import ZoomLens from "../../../components/zoom-lens";
 import { motionDuration, motionEase, motionOffset } from "../../../components/animations/motionTokens";
-import { trackProductView, trackRequestQuoteClick, trackProductVariantSelect } from "../../../lib/analytics/events";
+import { trackProductView, trackRequestQuoteClick, trackProductVariantSelect, trackScrollDepth, trackProductEngagement } from "../../../lib/analytics/events";
 
 export async function getServerSideProps(context) {
   const categoria = String(context.params?.categoria || "");
@@ -109,6 +109,52 @@ export default function SingleProduct({ product, categories, categoria }) {
       location: "product_page"
     });
   }, [product?.slug, product?.name, cat, titlePrincipal]);
+
+  useEffect(() => {
+    if (!product?.slug || !cat || typeof window === "undefined") return;
+
+    const itemId = product.slug;
+    const itemName = `${cat.singleName || ""} ${product.name}`.trim();
+    const itemCategory = cat.name;
+    const firedDepths = new Set();
+
+    const onScroll = () => {
+      const scrolled = window.scrollY + window.innerHeight;
+      const total = document.documentElement.scrollHeight;
+      const pct = Math.round((scrolled / total) * 100);
+
+      for (const depth of [25, 50, 75, 100]) {
+        if (pct >= depth && !firedDepths.has(depth)) {
+          firedDepths.add(depth);
+          trackScrollDepth({ depth: `${depth}%`, location: "product_page", item_id: itemId });
+        }
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [product?.slug, product?.name, cat]);
+
+  useEffect(() => {
+    if (!product?.slug || !cat || typeof window === "undefined") return;
+
+    const itemId = product.slug;
+    const itemName = `${cat.singleName || ""} ${product.name}`.trim();
+    const itemCategory = cat.name;
+
+    const t30 = setTimeout(() => {
+      trackProductEngagement({ seconds: 30, item_id: itemId, item_name: itemName, item_category: itemCategory });
+    }, 30000);
+
+    const t60 = setTimeout(() => {
+      trackProductEngagement({ seconds: 60, item_id: itemId, item_name: itemName, item_category: itemCategory });
+    }, 60000);
+
+    return () => {
+      clearTimeout(t30);
+      clearTimeout(t60);
+    };
+  }, [product?.slug, product?.name, cat]);
 
   const createBudget = () => {
     setContactMessage(

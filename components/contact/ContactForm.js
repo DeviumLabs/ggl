@@ -14,7 +14,8 @@ import {
   trackContactFormSubmitError,
   trackContactFormSubmitSuccess,
   trackContactFormView,
-  trackGenerateLead
+  trackGenerateLead,
+  getLeadValue
 } from "../../lib/analytics/events";
 
 const norm = (s) => (s || "").toString().trim().toLowerCase();
@@ -260,7 +261,7 @@ export default function ContactForm({ budgetMessage }) {
       });
 
       trackGenerateLead({
-        value: 1.0,
+        value: getLeadValue(pendingPayload.tipo_pessoa),
         currency: "BRL",
         company: cleanedCompany,
         city: cleanedCity,
@@ -323,16 +324,51 @@ export default function ContactForm({ budgetMessage }) {
     const text = encodeURIComponent(lines.join("\n"));
     const href = `https://wa.me/${whatsappNumber}?text=${text}`;
 
+    const cleanedCompanyWa = (pendingPayload.razao_social || "").toString().trim();
+    const cleanedCityWa = norm(pendingPayload.cidade);
+    const cleanedRegionWa = (pendingPayload.estado || "").toString().trim().toUpperCase();
+    const cleanedEmailWa = norm(pendingPayload.email);
+    const cleanedPhoneWa = withDDI55(onlyDigits(pendingPayload.phone));
+    const { first_name: firstWa, last_name: lastWa } = splitName(pendingPayload.name);
+
     trackContactChannelSelect({
       form_id: "contact_form",
       channel: "whatsapp",
       lead_type: pendingPayload.tipo_pessoa,
-      state: (pendingPayload.estado || "").toString().trim().toUpperCase(),
-      city: norm(pendingPayload.cidade || ""),
+      state: cleanedRegionWa,
+      city: cleanedCityWa,
       source_url: pendingPayload.source_url || ""
     });
 
     trackContactFormSubmit({ form_id: "contact_form", channel: "whatsapp" });
+
+    trackContactFormSubmitSuccess({
+      form_id: "contact_form",
+      channel: "whatsapp",
+      company: cleanedCompanyWa,
+      city: cleanedCityWa,
+      state: cleanedRegionWa,
+      lead_type: pendingPayload.tipo_pessoa,
+      source_url: pendingPayload.source_url || ""
+    });
+
+    trackGenerateLead({
+      value: getLeadValue(pendingPayload.tipo_pessoa),
+      currency: "BRL",
+      company: cleanedCompanyWa,
+      city: cleanedCityWa,
+      state: cleanedRegionWa,
+      lead_type: pendingPayload.tipo_pessoa,
+      user_data: {
+        email: cleanedEmailWa,
+        phone_number: cleanedPhoneWa,
+        first_name: norm(firstWa),
+        last_name: norm(lastWa),
+        city: cleanedCityWa,
+        region: cleanedRegionWa,
+        country: "BR"
+      }
+    });
 
     const win = typeof window !== "undefined" ? window.open(href, "_blank", "noopener,noreferrer") : null;
     if (!win && typeof window !== "undefined") window.location.href = href;
