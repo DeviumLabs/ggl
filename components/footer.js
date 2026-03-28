@@ -156,8 +156,8 @@ export default function Footer() {
           </div>
 
           <div className="tw-text-center tw-border-white/30 tw-border-t tw-mt-[30px] tw-pt-[8px]">
-            <a href="https://www.devlara.com.br/" target="_blank" rel="noopener noreferrer" className="tw-text-slate-100 hover:tw-underline">
-              &copy; {new Date().getFullYear()} GGL Móveis. Todos os direitos reservados | Desenvolvido por <strong>Devlara</strong>
+            <a href="https://dotwave.com.br/" target="_blank" rel="noopener noreferrer" className="tw-text-slate-100 hover:tw-underline">
+              &copy; {new Date().getFullYear()} GGL Móveis. Todos os direitos reservados | Desenvolvido por <strong>DotWave</strong>
             </a>
           </div>
         </div>
