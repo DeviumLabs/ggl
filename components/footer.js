@@ -115,6 +115,9 @@ export default function Footer() {
                   <a href="tel:+554230255045" className="hover:tw-underline" onClick={() => sendFooterCallEvent("+554230255045")}>
                     (42) 3025 5045
                   </a>
+                  <a href="mailto:ggl@gglmoveis.com.br" className="hover:tw-underline">
+                    ggl@gglmoveis.com.br
+                  </a>
                 </p>
               </address>
 
@@ -155,10 +158,16 @@ export default function Footer() {
             </section>
           </div>
 
-          <div className="tw-text-center tw-border-white/30 tw-border-t tw-mt-[30px] tw-pt-[8px]">
-            <a href="https://dotwave.com.br/" target="_blank" rel="noopener noreferrer" className="tw-text-slate-100 hover:tw-underline">
-              &copy; {new Date().getFullYear()} GGL Móveis. Todos os direitos reservados | Desenvolvido por <strong>DotWave</strong>
-            </a>
+          <div className="tw-text-center tw-border-white/30 tw-border-t tw-mt-[30px] tw-pt-[12px] tw-flex tw-flex-col tw-gap-[4px]">
+            <p className="tw-text-slate-100 tw-text-sm">
+              GGL INDUSTRIA DE MOVEIS DE ACO LTDA - EPP | CNPJ 02.985.342/0001-33
+            </p>
+            <p className="tw-text-slate-100 tw-text-sm">
+              &copy; {new Date().getFullYear()} GGL Móveis. Todos os direitos reservados |{" "}
+              <a href="https://dotwave.com.br/" target="_blank" rel="noopener noreferrer" className="hover:tw-underline">
+                Desenvolvido por <strong>DotWave</strong>
+              </a>
+            </p>
           </div>
         </div>
       </footer>
