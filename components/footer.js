@@ -160,7 +160,7 @@ export default function Footer() {
 
           <div className="tw-text-center tw-border-white/30 tw-border-t tw-mt-[30px] tw-pt-[12px] tw-flex tw-flex-col tw-gap-[4px]">
             <p className="tw-text-slate-100 tw-text-sm">
-              GGL INDUSTRIA DE MOVEIS DE ACO LTDA - EPP | CNPJ 02.985.342/0001-33
+              GGL INDUSTRIA DE MOVEIS DE ACO LTDA | CNPJ 02.985.342/0001-33
             </p>
             <p className="tw-text-slate-100 tw-text-sm">
               &copy; {new Date().getFullYear()} GGL Móveis. Todos os direitos reservados |{" "}
