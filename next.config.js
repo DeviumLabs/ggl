@@ -1,12 +1,22 @@
 /** @type {import('next').NextConfig} */
 
+const scriptSrc = [
+  "'self'",
+  "'unsafe-inline'",
+  "https://www.googletagmanager.com",
+  "https://www.google-analytics.com",
+  "https://ssl.google-analytics.com",
+  "https://www.googleadservices.com",
+  "https://googleads.g.doubleclick.net",
+].join(" ");
+
 const scriptSrcElem = [
   "'self'",
   "https://www.googletagmanager.com",
   "https://www.google-analytics.com",
   "https://ssl.google-analytics.com",
   "https://www.googleadservices.com",
-  "https://googleads.g.doubleclick.net"
+  "https://googleads.g.doubleclick.net",
 ].join(" ");
 
 const imgSrc = [
@@ -15,7 +25,7 @@ const imgSrc = [
   "https://www.googletagmanager.com",
   "https://www.google-analytics.com",
   "https://googleads.g.doubleclick.net",
-  "https://www.google.com"
+  "https://www.google.com",
 ].join(" ");
 
 const connectSrc = [
@@ -23,13 +33,14 @@ const connectSrc = [
   "https://www.google-analytics.com",
   "https://analytics.google.com",
   "https://stats.g.doubleclick.net",
-  "https://region1.google-analytics.com"
+  "https://region1.google-analytics.com",
 ].join(" ");
 
 const cspHeader = [
+  `script-src ${scriptSrc}`,
   `script-src-elem ${scriptSrcElem}`,
   `img-src ${imgSrc}`,
-  `connect-src ${connectSrc}`
+  `connect-src ${connectSrc}`,
 ].join("; ");
 
 const nextConfig = {
@@ -43,10 +54,10 @@ const nextConfig = {
         headers: [
           {
             key: "Content-Security-Policy",
-            value: cspHeader
-          }
-        ]
-      }
+            value: cspHeader,
+          },
+        ],
+      },
     ];
   },
   async redirects() {
@@ -55,10 +66,10 @@ const nextConfig = {
         source: "/produtos/:categoria",
         has: [{ type: "query", key: "product", value: "(?<produto>.*)" }],
         destination: "/produtos/:categoria/:produto",
-        permanent: true
-      }
+        permanent: true,
+      },
     ];
-  }
+  },
 };
 
 module.exports = nextConfig;
