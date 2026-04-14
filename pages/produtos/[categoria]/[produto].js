@@ -544,7 +544,10 @@ export default function SingleProduct({ product, categories, categoria }) {
         </section>
 
         <Reveal variant="subtle">
-          <ContactForm budgetMessage={contactMessage} />
+          <ContactForm
+            budgetMessage={contactMessage}
+            itemName={`${cat?.singleName || ""} ${product.name}`.trim()}
+          />
         </Reveal>
       </main>
     </div>

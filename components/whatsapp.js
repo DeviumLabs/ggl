@@ -4,7 +4,7 @@ import { dlPush } from "../lib/analytics/dataLayer";
 
 const onlyDigits = (s = "") => s.replace(/\D/g, "");
 
-export default function Whatsapp({ message }) {
+export default function Whatsapp({ message, itemName }) {
   const raw = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "554230252200";
 
   const phoneE164 = useMemo(() => {
@@ -42,7 +42,12 @@ export default function Whatsapp({ message }) {
   }, []);
 
   const onClick = () => {
-    dlPush("whatsapp_click", { component: "whatsapp_fab" });
+    dlPush("whatsapp_click", {
+      component: "whatsapp_fab",
+      location: typeof window !== "undefined" ? window.location.pathname : "",
+      phone_number: phoneE164,
+      ...(itemName ? { item_name: itemName } : {})
+    });
   };
 
   if (!href) return null;

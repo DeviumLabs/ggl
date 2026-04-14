@@ -28,7 +28,7 @@ const splitName = (full = "") => {
 };
 const tipoLabel = (t) => (t === "empresa" ? "Empresa" : t === "orgao_publico" ? "Órgão Público" : "Pessoa Física");
 
-export default function ContactForm({ budgetMessage }) {
+export default function ContactForm({ budgetMessage, itemName = "" }) {
   const {
     control,
     register,
@@ -147,7 +147,11 @@ export default function ContactForm({ budgetMessage }) {
   }, [setValue]);
 
   useEffect(() => {
-    trackContactFormView({ form_id: "contact_form" });
+    trackContactFormView({
+      form_id: "contact_form",
+      location: typeof window !== "undefined" ? window.location.pathname : "",
+      item_name: itemName
+    });
   }, []);
 
   useEffect(() => {
@@ -257,12 +261,15 @@ export default function ContactForm({ budgetMessage }) {
         city: cleanedCity,
         state: cleanedRegion,
         lead_type: pendingPayload.tipo_pessoa,
-        source_url: pendingPayload.source_url || ""
+        source_url: pendingPayload.source_url || "",
+        item_name: itemName
       });
 
       trackGenerateLead({
         value: getLeadValue(pendingPayload.tipo_pessoa),
         currency: "BRL",
+        form_id: "contact_form",
+        item_name: itemName,
         company: cleanedCompany,
         city: cleanedCity,
         state: cleanedRegion,
@@ -349,12 +356,15 @@ export default function ContactForm({ budgetMessage }) {
       city: cleanedCityWa,
       state: cleanedRegionWa,
       lead_type: pendingPayload.tipo_pessoa,
-      source_url: pendingPayload.source_url || ""
+      source_url: pendingPayload.source_url || "",
+      item_name: itemName
     });
 
     trackGenerateLead({
       value: getLeadValue(pendingPayload.tipo_pessoa),
       currency: "BRL",
+      form_id: "contact_form",
+      item_name: itemName,
       company: cleanedCompanyWa,
       city: cleanedCityWa,
       state: cleanedRegionWa,

@@ -86,7 +86,7 @@ export default function Home({ categories }) {
     });
 
   const onCatalogDownload = (where) =>
-    trackCatalogDownload({ location: where, file: "/assets/catalogo.pdf" });
+    trackCatalogDownload({ location: where, file: "/assets/catalogo.pdf", item_name: "Catálogo GGL", item_category: "geral" });
 
   const isSvg = (src) => typeof src === "string" && /\.svg(\?.*)?$/i.test(src);
 
