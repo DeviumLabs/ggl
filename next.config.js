@@ -12,6 +12,7 @@ const scriptSrc = [
 
 const scriptSrcElem = [
   "'self'",
+  "'unsafe-inline'",
   "https://www.googletagmanager.com",
   "https://www.google-analytics.com",
   "https://ssl.google-analytics.com",
@@ -26,6 +27,9 @@ const imgSrc = [
   "https://www.google-analytics.com",
   "https://googleads.g.doubleclick.net",
   "https://www.google.com",
+  "https://i.ytimg.com",
+  "https://www.youtube.com",
+  "https://www.youtube-nocookie.com",
 ].join(" ");
 
 const connectSrc = [
@@ -34,6 +38,9 @@ const connectSrc = [
   "https://analytics.google.com",
   "https://stats.g.doubleclick.net",
   "https://region1.google-analytics.com",
+  "https://www.google.com",
+  "https://googleads.g.doubleclick.net",
+  "https://www.googleadservices.com",
 ].join(" ");
 
 const cspHeader = [
