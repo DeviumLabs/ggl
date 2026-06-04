@@ -13,6 +13,7 @@ import ProductBadge from "../../../components/product-badge";
 import ZoomLens from "../../../components/zoom-lens";
 import { motionDuration, motionEase, motionOffset } from "../../../components/animations/motionTokens";
 import { trackProductView, trackRequestQuoteClick, trackProductVariantSelect, trackScrollDepth, trackProductEngagement } from "../../../lib/analytics/events";
+import { productPageTitle } from "../../../lib/seo/pageTitle";
 
 export async function getServerSideProps(context) {
   const categoria = String(context.params?.categoria || "");
@@ -30,11 +31,15 @@ export async function getServerSideProps(context) {
     if (!productData || productData?.error) return { notFound: true };
     if (!categoriesData?.categoryArray?.length) return { notFound: true };
 
+    const category =
+      categoriesData.categoryArray.find((c) => c?.slug === categoria) || null;
+
     return {
       props: {
         product: productData,
         categories: categoriesData,
-        categoria
+        categoria,
+        category
       }
     };
   } catch (e) {
@@ -42,12 +47,13 @@ export async function getServerSideProps(context) {
   }
 }
 
-export default function SingleProduct({ product, categories, categoria }) {
+export default function SingleProduct({ product, categories, categoria, category: categoryFromServer }) {
   const shouldReduceMotion = useReducedMotion();
   const cat = useMemo(() => {
+    if (categoryFromServer) return categoryFromServer;
     const list = categories?.categoryArray || [];
     return list.find((c) => c?.slug === categoria) || list[0] || null;
-  }, [categories, categoria]);
+  }, [categories, categoria, categoryFromServer]);
 
   const images = useMemo(
     () =>
@@ -253,6 +259,7 @@ export default function SingleProduct({ product, categories, categoria }) {
     product.description ||
     cat?.description ||
     "Conheça os móveis de aço da GGL: qualidade, durabilidade e acabamento superior.";
+  const pageTitle = productPageTitle(cat?.name || categoria, product?.name);
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -293,18 +300,16 @@ export default function SingleProduct({ product, categories, categoria }) {
   return (
     <div>
       <Head>
-        <title>
-          GGL Móveis de Aço | {cat?.name} - {product.name}
-        </title>
+        <title>{pageTitle}</title>
         <meta name="description" content={metaDescription} />
         <meta name="robots" content="index, follow" />
         <meta property="og:type" content="product" />
-        <meta property="og:title" content={`GGL Móveis de Aço | ${cat?.name} - ${product.name}`} />
+        <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={metaDescription} />
         <meta property="og:url" content={canonical} />
         <meta property="og:image" content={ogImage} />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={`GGL Móveis de Aço | ${cat?.name} - ${product.name}`} />
+        <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={metaDescription} />
         <meta name="twitter:image" content={ogImage} />
         <link rel="canonical" href={canonical} />

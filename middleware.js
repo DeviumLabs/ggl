@@ -4,6 +4,13 @@ export function middleware(req) {
   const url = req.nextUrl;
   const { pathname, searchParams } = url;
 
+  // ── Blog feature flag ──────────────────────────────────────────────────────
+  // Se o blog não está habilitado, redirecionar qualquer rota /blog* para home.
+  if (pathname.startsWith("/blog") && process.env.BLOG_ENABLED !== "true") {
+    return NextResponse.redirect(new URL("/", req.url));
+  }
+  // ── fim do guard do blog ───────────────────────────────────────────────────
+
   if (!pathname.startsWith("/produtos/")) return NextResponse.next();
 
   const product = searchParams.get("product");
@@ -22,5 +29,5 @@ export function middleware(req) {
 }
 
 export const config = {
-  matcher: ["/produtos/:path*"]
+  matcher: ["/produtos/:path*", "/blog/:path*"],
 };

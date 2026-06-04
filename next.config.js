@@ -30,6 +30,7 @@ const imgSrc = [
   "https://i.ytimg.com",
   "https://www.youtube.com",
   "https://www.youtube-nocookie.com",
+  "https://res.cloudinary.com",
 ].join(" ");
 
 const connectSrc = [
@@ -41,6 +42,7 @@ const connectSrc = [
   "https://www.google.com",
   "https://googleads.g.doubleclick.net",
   "https://www.googleadservices.com",
+  "http://localhost:3000",
 ].join(" ");
 
 const cspHeader = [
@@ -54,6 +56,14 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   compress: true,
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+      },
+    ],
+  },
   async headers() {
     return [
       {

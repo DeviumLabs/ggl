@@ -9,3 +9,35 @@ html {
 body {
   margin: 0;
 }
+
+/* ── Blog tokens ── */
+:root {
+  --blog-content-width: 720px;
+  --blog-wide-width: 1024px;
+  --blog-prose-leading: 1.75;
+  --blog-line-height-tight: 1.25;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+
+  --blog-space-4: 1rem;
+  --blog-space-6: 1.5rem;
+  --blog-space-8: 2rem;
+  --blog-space-12: 3rem;
+
+  --blog-color-text: #212121;
+  --blog-color-text-muted: #78909c;
+  --blog-color-border: #cfd8dc;
+  --blog-color-primary: #1e2d3d;
+  --blog-color-surface: #ffffff;
+
+  --blog-radius-sm: 4px;
+  --blog-video-embed-height: 450px;
+  --blog-card-cover-height: 200px;
+}
