@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
-export function middleware(req) {
+// Next 16: o arquivo `middleware.js` foi renomeado para `proxy.js` (mesma lógica).
+export function proxy(req) {
   const url = req.nextUrl;
   const { pathname, searchParams } = url;
 

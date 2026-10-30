@@ -1,4 +1,4 @@
-# AGENTS.md — GGL Móveis de Aço (Next.js 15 / Pages Router)
+# AGENTS.md — GGL Móveis de Aço (Next.js 16 / Pages Router)
 
 ## Product context
 - Institutional website for GGL Móveis de Aço (B2B).
@@ -6,7 +6,8 @@
 - Copy language: pt-BR.
 
 ## Stack
-- Next.js 15 (Pages Router), React 18
+- Next.js 16 (Pages Router), React 18 (deprecated by Next 16; plan React 19 upgrade)
+- Middleware lives in proxy.js (Next 16 convention)
 - TailwindCSS (prefix: tw-), PostCSS
 - Axios service wrapper (SSR-safe baseURL)
 - Resend email API (/pages/api/mail.js)
@@ -15,11 +16,12 @@
 - Redirects and middleware support legacy URLs
 
 ## Commands
-- Install: npm i
-- Dev: npm run dev
-- Build: npm run build
-- Start: npm run start
-- Lint: npm run lint
+- Install: pnpm install --frozen-lockfile (or `make setup`)
+- Dev: pnpm run dev (or `make dev`)
+- Build: pnpm run build
+- Start: pnpm run start
+- Lint: pnpm run lint
+- Package manager: pnpm only (pnpm-lock.yaml is the single lockfile; do not add package-lock.json or yarn.lock)
 
 ## Non-negotiables (do not break)
 - Keep Pages Router (do not migrate to App Router unless explicitly requested).

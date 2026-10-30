@@ -61,6 +61,8 @@ const nextConfig = {
   poweredByHeader: false,
   compress: true,
   images: {
+    // Next 16 exige declarar as qualidades usadas em <Image quality={...}> (ex.: pages/index.js usa 90)
+    qualities: [75, 90],
     remotePatterns: [
       {
         protocol: "https",
@@ -81,16 +83,8 @@ const nextConfig = {
       },
     ];
   },
-  async redirects() {
-    return [
-      {
-        source: "/produtos/:categoria",
-        has: [{ type: "query", key: "product", value: "(?<produto>.*)" }],
-        destination: "/produtos/:categoria/:produto",
-        permanent: true,
-      },
-    ];
-  },
+  // Redirect legado ?product= -> /produtos/:categoria/:produto (301) fica no proxy.js,
+  // porque o redirect de config mantinha o query string (308 com ?product=).
 };
 
 module.exports = nextConfig;
