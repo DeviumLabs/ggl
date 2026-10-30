@@ -10,7 +10,7 @@ const outFile = path.join(root, "public", "sitemap.xml");
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.gglmoveis.com.br";
 
-const { getAllCategorySlugs, getAllProductRoutes } = await import(path.join(root, "lib", "catalog", "index.js"));
+const { getAllCategorySlugs, getAllProductPaths } = await import(path.join(root, "lib", "catalog", "index.js"));
 
 const urls = [];
 
@@ -22,8 +22,8 @@ for (const slug of getAllCategorySlugs()) {
   urls.push({ loc: `${siteUrl}/produtos/${slug}`, changefreq: "monthly", priority: "0.8" });
 }
 
-for (const { categoria, produto } of getAllProductRoutes()) {
-  urls.push({ loc: `${siteUrl}/produtos/${categoria}/${produto}`, changefreq: "yearly", priority: "0.7" });
+for (const { params } of getAllProductPaths()) {
+  urls.push({ loc: `${siteUrl}/produtos/${params.categoria}/${params.produto}`, changefreq: "yearly", priority: "0.7" });
 }
 
 const xml =
