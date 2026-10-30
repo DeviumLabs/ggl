@@ -2,7 +2,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
-import InputMask from "react-input-mask";
+import { formatPhoneBR } from "../../lib/format/phone";
 import ContactChannelModal from "./ContactChannelModal";
 import CustomSelect from "../custom-select";
 import {
@@ -47,7 +47,6 @@ export default function ContactForm({ budgetMessage, itemName = "" }) {
     }
   });
 
-  const phoneWatcher = watch("phone");
   const tipoPessoa = watch("tipo_pessoa");
   const exigeRazao = tipoPessoa === "empresa" || tipoPessoa === "orgao_publico";
 
@@ -588,22 +587,25 @@ export default function ContactForm({ budgetMessage, itemName = "" }) {
             <label htmlFor="phone" className={fieldLabelClass}>
               Telefone:
             </label>
-            <InputMask
-              mask={phoneWatcher && phoneWatcher.replace(/\D/g, "").length > 10 ? "(99) 99999-9999" : "(99) 9999-99999"}
-              maskChar={null}
-              {...register("phone", { required: true, onChange: handleFieldChange })}
-            >
-              {(inputProps) => (
+            {(() => {
+              const phoneField = register("phone", { required: true, onChange: handleFieldChange });
+              return (
                 <input
-                  {...inputProps}
                   id="phone"
                   type="tel"
                   autoComplete="tel"
                   inputMode="tel"
                   className={fieldInputClass}
+                  name={phoneField.name}
+                  ref={phoneField.ref}
+                  onBlur={phoneField.onBlur}
+                  onChange={(e) => {
+                    e.target.value = formatPhoneBR(e.target.value);
+                    phoneField.onChange(e);
+                  }}
                 />
-              )}
-            </InputMask>
+              );
+            })()}
             {errors.phone ? <span className={fieldErrorClass}>*Campo obrigatório</span> : null}
           </div>
 

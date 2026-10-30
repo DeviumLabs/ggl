@@ -52,37 +52,34 @@ importers:
         version: 1.21.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
       hamburger-react:
         specifier: 2.5.2
-        version: 2.5.2(react@18.3.1)
+        version: 2.5.2(react@19.2.8)
       motion:
         specifier: 12.43.0
-        version: 12.43.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 12.43.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       next:
         specifier: 16.4.3
-        version: 16.4.3(@babel/core@7.29.7(supports-color@7.2.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 16.4.3(@babel/core@7.29.7(supports-color@7.2.0))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       react:
-        specifier: 18.3.1
-        version: 18.3.1
+        specifier: 19.2.8
+        version: 19.2.8
       react-cookie-consent:
         specifier: 10.0.2
-        version: 10.0.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 10.0.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       react-dom:
-        specifier: 18.3.1
-        version: 18.3.1(react@18.3.1)
+        specifier: 19.2.8
+        version: 19.2.8(react@19.2.8)
       react-hook-form:
         specifier: 7.71.1
-        version: 7.71.1(react@18.3.1)
+        version: 7.71.1(react@19.2.8)
       react-icons:
         specifier: 5.5.0
-        version: 5.5.0(react@18.3.1)
-      react-input-mask:
-        specifier: 2.0.4
-        version: 2.0.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 5.5.0(react@19.2.8)
       react-toastify:
         specifier: 10.0.6
-        version: 10.0.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 10.0.6(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       resend:
         specifier: 4.8.0
-        version: 4.8.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 4.8.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
     devDependencies:
       autoprefixer:
         specifier: 10.4.21
@@ -1358,9 +1355,6 @@ packages:
     resolution: {integrity: sha512-4gd7VpWNQNB4UKKCFFVcp1AVv+FMOgs9NKzjHKusc8jTMhd5eL1NqQqOpE0KzMds804/yHlglp3uxgluOqAPLw==}
     engines: {node: '>= 0.4'}
 
-  invariant@2.2.4:
-    resolution: {integrity: sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==}
-
   is-array-buffer@3.0.5:
     resolution: {integrity: sha512-DDfANUiiG2wC1qawP66qlTugJeL5HyzMpfr8lLK+jMQirGzNod0B12cFB/9q838Ru27sBwfw78/rdoU7RERz6A==}
     engines: {node: '>= 0.4'}
@@ -1834,10 +1828,10 @@ packages:
       react: '>=18'
       react-dom: '>=18'
 
-  react-dom@18.3.1:
-    resolution: {integrity: sha512-5m4nQKp+rZRb09LNH59GM4BxTh9251/ylbKIbpe7TpGxfJ+9kv6BLkLBXIjjspbgbnIBNqlI23tRnTWT0snUIw==}
+  react-dom@19.2.8:
+    resolution: {integrity: sha512-rVprimfGBG3DR+Tq0IQG2DT5PxKth1WIGDmj5yPmlzr4YBe7uyE+Du4oVqTDXZSHGGGXRtTJEGSSePyQCMBglQ==}
     peerDependencies:
-      react: ^18.3.1
+      react: ^19.2.8
 
   react-hook-form@7.71.1:
     resolution: {integrity: sha512-9SUJKCGKo8HUSsCO+y0CtqkqI5nNuaDqTxyqPsZPqIwudpj4rCrAz/jZV+jn57bx5gtZKOh3neQu94DXMc+w5w==}
@@ -1849,12 +1843,6 @@ packages:
     resolution: {integrity: sha512-MEFcXdkP3dLo8uumGI5xN3lDFNsRtrjbOEKDLD7yv76v4wpnEq2Lt2qeHaQOr34I/wPN3s3+N08WkQ+CW37Xiw==}
     peerDependencies:
       react: '*'
-
-  react-input-mask@2.0.4:
-    resolution: {integrity: sha512-1hwzMr/aO9tXfiroiVCx5EtKohKwLk/NT8QlJXHQ4N+yJJFyUuMT+zfTpLBwX/lK3PkuMlievIffncpMZ3HGRQ==}
-    peerDependencies:
-      react: '>=0.14.0'
-      react-dom: '>=0.14.0'
 
   react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
@@ -1868,8 +1856,8 @@ packages:
       react: '>=18'
       react-dom: '>=18'
 
-  react@18.3.1:
-    resolution: {integrity: sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==}
+  react@19.2.8:
+    resolution: {integrity: sha512-PWaYA1L/q9u2u7xYQi+Y3L3Yfnie7XyLeaJICV1MGD6LprsBxcAqGjYyr0eY3p+QdsA+x/Irkt4Qif8D63+Sbw==}
     engines: {node: '>=0.10.0'}
 
   read-cache@1.0.0:
@@ -1927,8 +1915,8 @@ packages:
     resolution: {integrity: sha512-x/+Cz4YrimQxQccJf5mKEbIa1NzeCRNI5Ecl/ekmlYaampdNLPalVyIcCZNNH3MvmqBugV5TMYZXv0ljslUlaw==}
     engines: {node: '>= 0.4'}
 
-  scheduler@0.23.2:
-    resolution: {integrity: sha512-UOShsPwz7NrMUqhR6t0hWjFduvOzbtv7toDH1/hIrfRNIDBnnBWd0CwJTGvTpngVlmwGCdP9/Zl/tVrDqcuYzQ==}
+  scheduler@0.27.0:
+    resolution: {integrity: sha512-eNv+WrVbKu1f3vbYJT/xtiF5syA5HPIMtf9IgY/nKg0sWqzAUEvqY/xm7OcZc/qafLx/iO9FgOmeSAp4v5ti/Q==}
 
   selderee@0.11.0:
     resolution: {integrity: sha512-5TF+l7p4+OsnP8BCCvSyZiSPc4x4//p5uPwK8TCnVPJYRmU2aYKMpOXvw8zM5a5JvuuCGN1jmsMwuU2W02ukfA==}
@@ -2140,9 +2128,6 @@ packages:
 
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
-
-  warning@4.0.3:
-    resolution: {integrity: sha512-rpJyN222KWIvHJ/F53XSZv0Zl/accqHR8et1kpaMTD/fLCRxtV8iX8czMzY7sVZupTI3zcUTg8eycS2kNF9l6w==}
 
   which-boxed-primitive@1.1.1:
     resolution: {integrity: sha512-TbX3mj8n0odCBFVlY8AxkqcHASw3L60jIuF8jFP78az3C2YhmGvqbHBpAjTRH2/xqYunrJ9g1jSyjCjpoWzIAA==}
@@ -2552,12 +2537,12 @@ snapshots:
 
   '@nolyfill/is-core-module@1.0.39': {}
 
-  '@react-email/render@1.1.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@react-email/render@1.1.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
     dependencies:
       html-to-text: 9.0.5
       prettier: 3.8.1
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
+      react: 19.2.8
+      react-dom: 19.2.8(react@19.2.8)
       react-promise-suspense: 0.3.4
 
   '@rtsao/scc@1.1.0': {}
@@ -3440,14 +3425,14 @@ snapshots:
 
   fraction.js@4.3.7: {}
 
-  framer-motion@12.43.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  framer-motion@12.43.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
     dependencies:
       motion-dom: 12.43.0
       motion-utils: 12.39.0
       tslib: 2.8.1
     optionalDependencies:
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
+      react: 19.2.8
+      react-dom: 19.2.8(react@19.2.8)
 
   fsevents@2.3.3:
     optional: true
@@ -3516,9 +3501,9 @@ snapshots:
 
   gopd@1.2.0: {}
 
-  hamburger-react@2.5.2(react@18.3.1):
+  hamburger-react@2.5.2(react@19.2.8):
     dependencies:
-      react: 18.3.1
+      react: 19.2.8
 
   has-bigints@1.1.0: {}
 
@@ -3586,10 +3571,6 @@ snapshots:
       es-errors: 1.3.0
       hasown: 2.0.4
       side-channel: 1.1.0
-
-  invariant@2.2.4:
-    dependencies:
-      loose-envify: 1.4.0
 
   is-array-buffer@3.0.5:
     dependencies:
@@ -3817,13 +3798,13 @@ snapshots:
 
   motion-utils@12.39.0: {}
 
-  motion@12.43.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  motion@12.43.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
     dependencies:
-      framer-motion: 12.43.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      framer-motion: 12.43.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       tslib: 2.8.1
     optionalDependencies:
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
+      react: 19.2.8
+      react-dom: 19.2.8(react@19.2.8)
 
   ms@2.1.3: {}
 
@@ -3839,16 +3820,16 @@ snapshots:
 
   natural-compare@1.4.0: {}
 
-  next@16.4.3(@babel/core@7.29.7(supports-color@7.2.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  next@16.4.3(@babel/core@7.29.7(supports-color@7.2.0))(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
     dependencies:
       '@next/env': 16.4.3
       '@swc/helpers': 0.5.23
       baseline-browser-mapping: 2.11.34
       caniuse-lite: 1.0.30001820
       postcss: 8.5.23
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-      styled-jsx: 5.1.6(@babel/core@7.29.7(supports-color@7.2.0))(react@18.3.1)
+      react: 19.2.8
+      react-dom: 19.2.8(react@19.2.8)
+      styled-jsx: 5.1.6(@babel/core@7.29.7(supports-color@7.2.0))(react@19.2.8)
     optionalDependencies:
       '@next/swc-darwin-arm64': 16.4.3
       '@next/swc-darwin-x64': 16.4.3
@@ -4032,32 +4013,24 @@ snapshots:
 
   queue-microtask@1.2.3: {}
 
-  react-cookie-consent@10.0.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  react-cookie-consent@10.0.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
     dependencies:
       js-cookie: 3.0.8
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
+      react: 19.2.8
+      react-dom: 19.2.8(react@19.2.8)
 
-  react-dom@18.3.1(react@18.3.1):
+  react-dom@19.2.8(react@19.2.8):
     dependencies:
-      loose-envify: 1.4.0
-      react: 18.3.1
-      scheduler: 0.23.2
+      react: 19.2.8
+      scheduler: 0.27.0
 
-  react-hook-form@7.71.1(react@18.3.1):
+  react-hook-form@7.71.1(react@19.2.8):
     dependencies:
-      react: 18.3.1
+      react: 19.2.8
 
-  react-icons@5.5.0(react@18.3.1):
+  react-icons@5.5.0(react@19.2.8):
     dependencies:
-      react: 18.3.1
-
-  react-input-mask@2.0.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
-    dependencies:
-      invariant: 2.2.4
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-      warning: 4.0.3
+      react: 19.2.8
 
   react-is@16.13.1: {}
 
@@ -4065,15 +4038,13 @@ snapshots:
     dependencies:
       fast-deep-equal: 2.0.1
 
-  react-toastify@10.0.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  react-toastify@10.0.6(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
     dependencies:
       clsx: 2.1.1
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
+      react: 19.2.8
+      react-dom: 19.2.8(react@19.2.8)
 
-  react@18.3.1:
-    dependencies:
-      loose-envify: 1.4.0
+  react@19.2.8: {}
 
   read-cache@1.0.0:
     dependencies:
@@ -4103,9 +4074,9 @@ snapshots:
       gopd: 1.2.0
       set-function-name: 2.0.2
 
-  resend@4.8.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  resend@4.8.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
     dependencies:
-      '@react-email/render': 1.1.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@react-email/render': 1.1.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
     transitivePeerDependencies:
       - react
       - react-dom
@@ -4154,9 +4125,7 @@ snapshots:
       es-errors: 1.3.0
       is-regex: 1.2.1
 
-  scheduler@0.23.2:
-    dependencies:
-      loose-envify: 1.4.0
+  scheduler@0.27.0: {}
 
   selderee@0.11.0:
     dependencies:
@@ -4318,10 +4287,10 @@ snapshots:
 
   strip-json-comments@3.1.1: {}
 
-  styled-jsx@5.1.6(@babel/core@7.29.7(supports-color@7.2.0))(react@18.3.1):
+  styled-jsx@5.1.6(@babel/core@7.29.7(supports-color@7.2.0))(react@19.2.8):
     dependencies:
       client-only: 0.0.1
-      react: 18.3.1
+      react: 19.2.8
     optionalDependencies:
       '@babel/core': 7.29.7(supports-color@7.2.0)
 
@@ -4492,10 +4461,6 @@ snapshots:
       punycode: 2.3.1
 
   util-deprecate@1.0.2: {}
-
-  warning@4.0.3:
-    dependencies:
-      loose-envify: 1.4.0
 
   which-boxed-primitive@1.1.1:
     dependencies:
