@@ -13,20 +13,20 @@ ENSURE_NODE = if [ "$$(node -p 'process.versions.node.split(".")[0]' 2>/dev/null
 help: ## Lista os comandos disponíveis
 	@grep -E '^[a-zA-Z_-]+:.*## ' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  make %-8s %s\n", $$1, $$2}'
 
-setup: ## Instala as dependências (npm install)
-	@$(ENSURE_NODE) npm install
+setup: ## Instala as dependências exatamente como travadas no pnpm-lock.yaml
+	@$(ENSURE_NODE) (command -v pnpm >/dev/null || corepack enable) && pnpm install --frozen-lockfile
 
 dev: ## Sobe o servidor de dev em http://localhost:3000
-	@$(ENSURE_NODE) npm run dev
+	@$(ENSURE_NODE) pnpm run dev
 
 build: ## Gera o build de produção
-	@$(ENSURE_NODE) npm run build
+	@$(ENSURE_NODE) pnpm run build
 
 start: ## Roda o build de produção
-	@$(ENSURE_NODE) npm run start
+	@$(ENSURE_NODE) pnpm run start
 
 lint: ## Roda o ESLint
-	@$(ENSURE_NODE) npm run lint
+	@$(ENSURE_NODE) pnpm run lint
 
 clean: ## Remove .next e node_modules
 	rm -rf .next node_modules

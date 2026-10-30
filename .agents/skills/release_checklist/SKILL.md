@@ -2,8 +2,8 @@
 
 ## Steps
 
-1. npm run lint
-2. npm run build
+1. pnpm run lint
+2. pnpm run build
 3. Quick manual checks:
    - Home loads, Header and Footer present once
    - /produtos pages load and internal nav works

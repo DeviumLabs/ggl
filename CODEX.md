@@ -12,7 +12,7 @@
 - "Review /pages/api/mail.js for validation, rate limit, and safe HTML escaping."
 
 ## Definition of done
-- npm run build succeeds
+- pnpm run build succeeds
 - no routing errors on navigation
 - product pages render with canonical + JSON-LD
 - mobile layout: navbar does not cover content
