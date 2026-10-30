@@ -1,8 +1,12 @@
 /** @type {import('next').NextConfig} */
 
+const isDev = process.env.NODE_ENV !== "production";
+
 const scriptSrc = [
   "'self'",
   "'unsafe-inline'",
+  // React Refresh (HMR) do next dev avalia strings como JS; não usar em produção
+  ...(isDev ? ["'unsafe-eval'"] : []),
   "https://www.googletagmanager.com",
   "https://www.google-analytics.com",
   "https://ssl.google-analytics.com",

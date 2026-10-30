@@ -100,10 +100,10 @@ export default function Produtos({ categories }) {
               const totalModels = Array.isArray(category.products) ? category.products.length : 0;
 
               return (
-                <Reveal key={category.slug} variant="card">
+                <Reveal key={category.slug} variant="card" className="tw-h-full">
                   <Link
                     href={href}
-                    className="tw-group tw-block tw-w-full tw-relative tw-isolate tw-overflow-hidden tw-rounded-[30px] tw-border tw-border-slate-200/80 tw-bg-white tw-p-[14px] tw-shadow-[0_16px_30px_-24px_rgba(15,23,42,0.62)] tw-transition-all tw-duration-300 hover:-tw-translate-y-[4px] hover:tw-shadow-[0_24px_38px_-22px_rgba(15,23,42,0.5)]"
+                    className="tw-group tw-block tw-h-full tw-w-full tw-relative tw-isolate tw-overflow-hidden tw-rounded-[30px] tw-border tw-border-slate-200/80 tw-bg-white tw-p-[14px] tw-shadow-[0_16px_30px_-24px_rgba(15,23,42,0.62)] tw-transition-all tw-duration-300 hover:-tw-translate-y-[4px] hover:tw-shadow-[0_24px_38px_-22px_rgba(15,23,42,0.5)]"
                     onClick={() => onCategoryClick(category, idx)}
                   >
                     <div

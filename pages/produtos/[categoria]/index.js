@@ -25,7 +25,7 @@ export async function getStaticProps({ params }) {
   if (!category || !catalog) return { notFound: true };
 
   const products = (catalog.products || []).map((p) => {
-    const firstImage = Array.isArray(p.images) && p.images.length ? p.images[0] : "/assets/placeholder.png";
+    const firstImage = p.cover || (Array.isArray(p.images) && p.images.length ? p.images[0] : "/assets/placeholder.png");
     return { ...p, firstImage };
   });
 
@@ -128,10 +128,10 @@ export default function CategoryPage({ category, products }) {
             const itemName = category?.singleName ? `${category.singleName} ${p.name}` : p.name;
 
             return (
-              <Reveal key={p.slug} variant="card">
+              <Reveal key={p.slug} variant="card" className="tw-h-full">
                 <Link
                   href={`/produtos/${category.slug}/${p.slug}`}
-                  className="tw-group tw-block tw-w-full tw-relative tw-isolate tw-overflow-hidden tw-rounded-[28px] tw-border tw-border-slate-200/80 tw-bg-white tw-p-[14px] tw-shadow-[0_16px_28px_-22px_rgba(15,23,42,0.58)] tw-transition-all tw-duration-300 hover:-tw-translate-y-[4px] hover:tw-shadow-[0_24px_36px_-20px_rgba(15,23,42,0.5)]"
+                  className="tw-group tw-block tw-h-full tw-w-full tw-relative tw-isolate tw-overflow-hidden tw-rounded-[28px] tw-border tw-border-slate-200/80 tw-bg-white tw-p-[14px] tw-shadow-[0_16px_28px_-22px_rgba(15,23,42,0.58)] tw-transition-all tw-duration-300 hover:-tw-translate-y-[4px] hover:tw-shadow-[0_24px_36px_-20px_rgba(15,23,42,0.5)]"
                   onClick={() => onProductClick(p, idx)}
                 >
                   <div
